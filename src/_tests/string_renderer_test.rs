@@ -9,7 +9,11 @@ type Frame = Vec<Vec<char>>;
 
 struct StringRenderer {
     frame: Frame,
-    sprites: HashMap<u8, (u8, u8)>
+    width: usize,
+    height: usize,
+    sprites: HashMap<u8, (u8, u8)>,
+    scale_factor: u8
+
 }
 
 impl GameRenderer for StringRenderer {
@@ -30,13 +34,27 @@ impl GameRenderer for StringRenderer {
 impl StringRenderer {
     pub fn new(width: usize, height: usize) -> Self {
         StringRenderer {
-            frame: vec![vec!['.'; width]; height],
-            sprites: HashMap::with_capacity(10)
+            frame: Self::new_frame(width, height),
+            width,
+            height,
+            sprites: HashMap::with_capacity(10),
+            scale_factor: 1
         }
     }
 
     pub fn with_sprite(&mut self, id: u8, width: u8, height: u8) {
         self.sprites.insert(id, (width, height));
+    }
+
+    pub fn scale_down_by(&mut self, factor: u8) {
+        self.scale_factor = factor;
+        self.width /= (factor as usize);
+        self.height /= (factor as usize);
+        self.frame = Self::new_frame(self.width, self.height);
+    }
+
+    fn new_frame(width: usize, height: usize) -> Frame {
+        vec![vec!['.'; width]; height]
     }
 
     fn assert_frame(&self, expected_frame: Vec<&str>) {
@@ -81,5 +99,25 @@ fn draw_sprite_fills_rect_with_sprite_id() {
         ".77...",
         ".77...",
         "......"
+    ])
+}
+
+#[test]
+fn setting_a_scale() {
+    let mut sr = StringRenderer::new(32, 48);
+    sr.scale_down_by(4);
+    sr.assert_frame(vec![
+        "........",
+        "........",
+        "........",
+        "........",
+        "........",
+        "........",
+        "........",
+        "........",
+        "........",
+        "........",
+        "........",
+        "........",
     ])
 }
