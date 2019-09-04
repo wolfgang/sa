@@ -6,7 +6,6 @@ trait GameRenderer {
 }
 
 type Frame = Vec<Vec<char>>;
-
 struct StringRenderer {
     frame: Frame,
     width: usize,
@@ -21,10 +20,15 @@ impl GameRenderer for StringRenderer {
         let (width, height) = self.sprites.get(&id).unwrap();
         let id_char = char::from_digit(id as u32, 10).unwrap();
 
-        for row in 0..*height {
-            for column in 0..*width {
-                let pixel_x = (column as u32 + x) as usize;
-                let pixel_y = (row as u32 + y) as usize;
+        let width_scaled = width / self.scale_factor;
+        let height_scaled = height / self.scale_factor;
+        let x_scaled = x / (self.scale_factor as u32);
+        let y_scaled = y / (self.scale_factor as u32);
+
+        for row in 0..height_scaled {
+            for column in 0..width_scaled {
+                let pixel_x = (column as u32 + x_scaled) as usize;
+                let pixel_y = (row as u32 + y_scaled) as usize;
                 self.frame[pixel_y][pixel_x] = id_char;
             }
         }
@@ -48,8 +52,8 @@ impl StringRenderer {
 
     pub fn scale_down_by(&mut self, factor: u8) {
         self.scale_factor = factor;
-        self.width /= (factor as usize);
-        self.height /= (factor as usize);
+        self.width /= factor as usize;
+        self.height /= factor as usize;
         self.frame = Self::new_frame(self.width, self.height);
     }
 
@@ -103,16 +107,20 @@ fn draw_sprite_fills_rect_with_sprite_id() {
 }
 
 #[test]
-fn setting_a_scale() {
+fn setting_a_scale_causes_everything_to_shrink() {
     let mut sr = StringRenderer::new(32, 48);
     sr.scale_down_by(4);
+
+    sr.with_sprite(7, 16, 16);
+    sr.draw_sprite(7, 4, 8);
+
     sr.assert_frame(vec![
         "........",
         "........",
-        "........",
-        "........",
-        "........",
-        "........",
+        ".7777...",
+        ".7777...",
+        ".7777...",
+        ".7777...",
         "........",
         "........",
         "........",
