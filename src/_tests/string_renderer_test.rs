@@ -8,10 +8,7 @@ trait GameRenderer {
 type Frame = Vec<Vec<char>>;
 struct StringRenderer {
     frame: Frame,
-    width: usize,
-    height: usize,
-    sprites: HashMap<u8, (u8, u8)>,
-    scale_factor: u8
+    sprites: HashMap<u8, (u8, u8)>
 
 }
 
@@ -20,15 +17,10 @@ impl GameRenderer for StringRenderer {
         let (width, height) = self.sprites.get(&id).unwrap();
         let id_char = char::from_digit(id as u32, 10).unwrap();
 
-        let width_scaled = width / self.scale_factor;
-        let height_scaled = height / self.scale_factor;
-        let x_scaled = x / (self.scale_factor as u32);
-        let y_scaled = y / (self.scale_factor as u32);
-
-        for row in 0..height_scaled {
-            for column in 0..width_scaled {
-                let pixel_x = (column as u32 + x_scaled) as usize;
-                let pixel_y = (row as u32 + y_scaled) as usize;
+        for row in 0..*height {
+            for column in 0..*width {
+                let pixel_x = (column as u32 + x) as usize;
+                let pixel_y = (row as u32 + y) as usize;
                 self.frame[pixel_y][pixel_x] = id_char;
             }
         }
@@ -39,22 +31,12 @@ impl StringRenderer {
     pub fn new(width: usize, height: usize) -> Self {
         StringRenderer {
             frame: Self::new_frame(width, height),
-            width,
-            height,
-            sprites: HashMap::with_capacity(10),
-            scale_factor: 1
+            sprites: HashMap::with_capacity(10)
         }
     }
 
     pub fn register_sprite(&mut self, id: u8, width: u8, height: u8) {
         self.sprites.insert(id, (width, height));
-    }
-
-    pub fn scale_down_by(&mut self, factor: u8) {
-        self.scale_factor = factor;
-        self.width /= factor as usize;
-        self.height /= factor as usize;
-        self.frame = Self::new_frame(self.width, self.height);
     }
 
     fn new_frame(width: usize, height: usize) -> Frame {
@@ -81,7 +63,6 @@ impl StringRenderer {
 #[test]
 fn frame_is_empty_after_construction() {
     let sr = StringRenderer::new(3, 4);
-
     sr.assert_frame(vec![
         "...",
         "...",
