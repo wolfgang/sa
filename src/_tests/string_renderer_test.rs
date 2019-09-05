@@ -1,9 +1,7 @@
 use std::char;
 use std::collections::HashMap;
 
-trait GameRenderer {
-    fn draw_sprite(&mut self, id: u8, x: u32, y: u32);
-}
+use crate::gfx::game_renderer::GameRenderer;
 
 type Frame = Vec<Vec<char>>;
 struct StringRenderer {
