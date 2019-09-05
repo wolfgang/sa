@@ -1,5 +1,3 @@
-use std::time::{SystemTime, UNIX_EPOCH};
-
 use raylib::{Color, Rectangle, Vector2};
 use raylib::consts::{KEY_LEFT, KEY_RIGHT};
 
@@ -20,38 +18,37 @@ fn main() {
 
     let mut ship_pos = Vector2 { x: 100.0, y: 600.0 };
 
-    let mut last_millis = get_now_millis();
+    let fps = 60.0;
+    let speed = 600.0;
 
-    rl.set_target_fps(60);
+    rl.set_target_fps(fps as i32);
 
-    let mut last_seconds = rl.get_time();
+    let mut last_frame_time = 0.0;
+    let mut last_info_time = 0.0;
 
-    let speed = 240.0;
 
     while !rl.window_should_close() {
-        let delta_millis = get_now_millis() - last_millis;
-        let delta_seconds = (rl.get_time() - last_seconds);
-        last_seconds = rl.get_time();
-//        println!("{}", delta_seconds);
-        last_millis = get_now_millis();
         if rl.is_key_down(KEY_LEFT as i32) {
-            ship_pos.x -= 2.0;
+            ship_pos.x -= speed / fps;
         }
 
         if rl.is_key_down(KEY_RIGHT as i32) {
-            ship_pos.x += 2.0;
+            ship_pos.x += speed / fps;
+        }
+
+        if rl.get_time() - last_info_time > 0.5 {
+            last_info_time = rl.get_time();
+            last_frame_time = rl.get_frame_time();
+
         }
 
         rl.begin_drawing();
         rl.clear_background(Color::BLACK);
-        rl.draw_text(&format!("{}", rl.get_fps()), 0, 0, 24, Color::RED);
+        rl.draw_text(&format!("Frame time: {} Effective FPS: {}", last_frame_time, 1.0 / last_frame_time), 10, 10, 20, Color::RED);
 
+        rl.draw_circle_v(Vector2 { x: ship_pos.x + 50.0, y: ship_pos.y - 100.0 }, 50.0, Color::MAROON);
         rl.draw_texture_rec(&sprite_sheet, source_rec, ship_pos, Color::WHITE);
 
         rl.end_drawing();
     }
-}
-
-fn get_now_millis() -> u64 {
-    SystemTime::now().duration_since(UNIX_EPOCH).unwrap().as_millis() as u64
 }
