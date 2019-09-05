@@ -39,6 +39,6 @@ impl Game {
 
     pub fn render(&self, renderer: &mut dyn GameRenderer) {
         let x = self.dimensions.0 / 2 - self.ship_dimensions.0 / 2;
-        renderer.draw_sprite(0, x, self.dimensions.1 - 1);
+        renderer.draw_sprite(0, x, self.dimensions.1 - self.ship_dimensions.1);
     }
 }
