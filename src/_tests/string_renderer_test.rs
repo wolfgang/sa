@@ -46,7 +46,7 @@ impl StringRenderer {
         }
     }
 
-    pub fn with_sprite(&mut self, id: u8, width: u8, height: u8) {
+    pub fn register_sprite(&mut self, id: u8, width: u8, height: u8) {
         self.sprites.insert(id, (width, height));
     }
 
@@ -90,42 +90,23 @@ fn frame_is_empty_after_construction() {
     ])
 }
 
+const SPRITE1: u8 = 1;
+const SPRITE2: u8 = 2;
+
 #[test]
 fn draw_sprite_fills_rect_with_sprite_id() {
     let mut sr = StringRenderer::new(6, 6);
-    sr.with_sprite(7, 2, 3);
-    sr.draw_sprite(7, 1, 2);
+    sr.register_sprite(SPRITE1, 2, 3);
+    sr.register_sprite(SPRITE2, 3, 1);
+    sr.draw_sprite(SPRITE1, 1, 2);
+    sr.draw_sprite(SPRITE2, 1, 0);
 
     sr.assert_frame(vec![
+        ".222..",
         "......",
-        "......",
-        ".77...",
-        ".77...",
-        ".77...",
+        ".11...",
+        ".11...",
+        ".11...",
         "......"
-    ])
-}
-
-#[test]
-fn setting_a_scale_causes_everything_to_shrink() {
-    let mut sr = StringRenderer::new(32, 48);
-    sr.scale_down_by(4);
-
-    sr.with_sprite(7, 16, 16);
-    sr.draw_sprite(7, 4, 8);
-
-    sr.assert_frame(vec![
-        "........",
-        "........",
-        ".7777...",
-        ".7777...",
-        ".7777...",
-        ".7777...",
-        "........",
-        "........",
-        "........",
-        "........",
-        "........",
-        "........",
     ])
 }
