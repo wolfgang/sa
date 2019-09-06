@@ -77,6 +77,11 @@ impl TestableGame {
         self.game.render(&mut self.renderer);
     }
 
+    pub fn renders_frame(&mut self, expected_frame: Vec<&str>) {
+        self.render();
+        self.assert_frame(expected_frame);
+    }
+
     pub fn assert_frame(&self, expected_frame: Vec<&str>) {
         self.renderer.assert_frame(expected_frame)
     }
