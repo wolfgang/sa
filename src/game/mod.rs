@@ -7,6 +7,7 @@ use renderer::GameRenderer;
 pub mod builder;
 pub mod input;
 pub mod renderer;
+pub mod player_ship;
 
 pub struct Game {
     dimensions: (u32, u32),
