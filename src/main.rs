@@ -2,7 +2,7 @@ use std::rc::Rc;
 
 use raylib::{Color, Rectangle};
 
-use sa::game::game::Game;
+use sa::game::Game;
 use sa::raylib::{input::RaylibInput, renderer::RaylibRenderer};
 
 fn main() {

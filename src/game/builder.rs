@@ -1,4 +1,4 @@
-use crate::game::game::Game;
+use crate::game::Game;
 use crate::game::input::{InputNull, InputRef};
 
 #[derive(Clone)]
