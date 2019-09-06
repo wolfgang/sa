@@ -31,4 +31,6 @@ impl GameRenderer for RaylibRenderer {
         let position = Vector2 { x: x as f32, y: y as f32 };
         self.rl.draw_texture_rec(&self.sprite_sheet, source_rec, position, Color::WHITE)
     }
+
+    fn clear(&mut self) {}
 }

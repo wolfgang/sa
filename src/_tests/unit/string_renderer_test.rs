@@ -32,3 +32,24 @@ fn draw_sprite_fills_rect_with_sprite_id() {
         "......"
     ])
 }
+
+#[test]
+fn clear_clears_frame() {
+    let mut sr = StringRenderer::new(6, 3);
+    sr.register_sprite(SPRITE2, 3, 1);
+    sr.draw_sprite(SPRITE2, 1, 1);
+
+    sr.assert_frame(vec![
+        "......",
+        ".222..",
+        "......",
+    ]);
+
+    sr.clear();
+
+    sr.assert_frame(vec![
+        "......",
+        "......",
+        "......",
+    ]);
+}

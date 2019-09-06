@@ -1,7 +1,7 @@
 use std::cell::RefCell;
 use std::rc::Rc;
 
-pub type TInputRef = Rc<RefCell<dyn Input>>;
+pub type InputRef = Rc<RefCell<dyn Input>>;
 
 pub trait Input {
     fn is_key_down(&self, key: u32) -> bool;
@@ -10,7 +10,7 @@ pub trait Input {
 pub struct InputNull {}
 
 impl InputNull {
-    pub fn new_rc() -> TInputRef {
+    pub fn new_rc() -> InputRef {
         Rc::new(RefCell::new(Self {}))
     }
 }

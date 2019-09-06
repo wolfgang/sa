@@ -6,8 +6,10 @@ use crate::gfx::game_renderer::GameRenderer;
 type Frame = Vec<Vec<char>>;
 
 pub struct StringRenderer {
+    width: usize,
+    height: usize,
     frame: Frame,
-    sprites: HashMap<u8, (u8, u8)>,
+    sprites: HashMap<u8, (u8, u8)>
 }
 
 impl GameRenderer for StringRenderer {
@@ -23,11 +25,17 @@ impl GameRenderer for StringRenderer {
             }
         }
     }
+
+    fn clear(&mut self) {
+        self.frame = Self::new_frame(self.width, self.height)
+    }
 }
 
 impl StringRenderer {
     pub fn new(width: usize, height: usize) -> Self {
         StringRenderer {
+            width,
+            height,
             frame: Self::new_frame(width, height),
             sprites: HashMap::with_capacity(10),
         }
