@@ -1,7 +1,9 @@
 use crate::_tests::helpers::input_stub::{InputStub, InputStubRef};
 use crate::_tests::helpers::string_renderer::StringRenderer;
 use crate::game::game::{Game, GameBuilder};
-use crate::game::input::InputRef;
+
+const DEFAULT_SHIP_WIDTH: u32 = 4;
+const DEFAULT_SHIP_HEIGHT: u32 = 1;
 
 pub struct TestableGameBuilder {
     game_builder: GameBuilder
@@ -33,12 +35,12 @@ impl TestableGameBuilder {
         let input = InputStub::new_rc();
         let game = self.game_builder
             .with_input(input.clone())
-            .with_ship_dimensions(4, 1)
+            .with_ship_dimensions(DEFAULT_SHIP_WIDTH, DEFAULT_SHIP_HEIGHT)
             .build();
 
         let (width, height) = self.game_builder.dimensions;
         let mut renderer = StringRenderer::new(width as usize, height as usize);
-        renderer.register_sprite(0, 4, 1);
+        renderer.register_sprite(0, DEFAULT_SHIP_WIDTH as u8, DEFAULT_SHIP_HEIGHT as u8);
 
         TestableGame {
             input: input.clone(),
@@ -61,6 +63,10 @@ impl TestableGame {
 
     pub fn key_is_down(&mut self, key: u32) {
         self.input.borrow_mut().key_is_down(key)
+    }
+
+    pub fn key_is_up(&mut self, key: u32) {
+        self.input.borrow_mut().key_is_up(key)
     }
 
     pub fn tick(&mut self) {
