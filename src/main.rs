@@ -1,6 +1,6 @@
 use std::rc::Rc;
 
-use raylib::Color;
+use raylib::{Color, Rectangle};
 
 use sa::game::game::Game;
 use sa::game::raylib_input::RaylibInput;
@@ -23,6 +23,17 @@ fn main() {
         .build();
 
     let mut renderer = RaylibRenderer::new(rl.clone());
+
+    let ship_rec = Rectangle {
+        x: 325.0,
+        y: 0.0,
+        width: 98.0,
+        height: 75.0,
+    };
+
+    renderer.register_sprite(0, ship_rec);
+
+
 
     let fps = 60.0;
     rl.set_target_fps(fps as i32);
