@@ -3,6 +3,7 @@ use std::rc::Rc;
 use raylib::Color;
 
 use sa::game::game::Game;
+use sa::game::raylib_input::RaylibInput;
 use sa::gfx::raylib_renderer::RaylibRenderer;
 
 fn main() {
@@ -13,9 +14,12 @@ fn main() {
             .build());
 
 
-    let game = Game::init()
+    let mut game = Game::init()
+        .with_input(RaylibInput::new_rc(rl.clone()))
         .with_dimensions(1024, 700)
         .with_ship_dimensions(98, 75)
+        .with_fps(60)
+        .with_ship_speed(300)
         .build();
 
     let mut renderer = RaylibRenderer::new(rl.clone());
@@ -24,6 +28,7 @@ fn main() {
     rl.set_target_fps(fps as i32);
 
     while !rl.window_should_close() {
+        game.tick();
         rl.begin_drawing();
         rl.clear_background(Color::BLACK);
         game.render(&mut renderer);
