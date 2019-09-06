@@ -43,9 +43,11 @@ impl GameBuilder {
         let ship_y = self.dimensions.1 - self.ship_dimensions.1;
         Game {
             input: self.input.clone(),
+            fps: self.fps,
             dimensions: self.dimensions,
             ship_dimensions: self.ship_dimensions,
-            ship_position: Vector2 { x: ship_x as f32, y: ship_y as f32 }
+            ship_position: Vector2 { x: ship_x as f32, y: ship_y as f32 },
+            ship_speed: self.ship_speed
         }
     }
 }
@@ -54,7 +56,9 @@ pub struct Game {
     pub dimensions: (u32, u32),
     pub ship_dimensions: (u32, u32),
     pub ship_position: Vector2,
-    pub input: InputRef
+    pub input: InputRef,
+    pub fps: u32,
+    pub ship_speed: u32
 }
 
 impl Game {
@@ -70,7 +74,7 @@ impl Game {
 
     pub fn tick(&mut self) {
         if self.input.borrow().is_key_down(KEY_LEFT) {
-            self.ship_position.x -= 2.0;
+            self.ship_position.x -= self.ship_speed as f32 / self.fps as f32;
         }
     }
 

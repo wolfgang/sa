@@ -35,7 +35,7 @@ fn ship_movement() {
         .with_dimensions(10, 3)
         .with_ship_dimensions(4, 1)
         .with_fps(60)
-        .with_ship_speed(2)
+        .with_ship_speed(120)
         .build();
 
     let mut renderer = StringRenderer::new(10, 3);
