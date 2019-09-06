@@ -7,18 +7,24 @@ use sa::game::raylib_input::RaylibInput;
 use sa::gfx::raylib_renderer::RaylibRenderer;
 
 fn main() {
+    let screen_width = 1024;
+    let screen_height = 700;
+    let ship_width = 98;
+    let ship_height = 75;
+    let fps = 60;
+
     let rl = Rc::new(
         raylib::init()
-            .size(1024, 700)
+            .size(screen_width, screen_height)
             .title("Staggered Assault")
             .build());
 
 
     let mut game = Game::init()
         .with_input(RaylibInput::new_rc(rl.clone()))
-        .with_dimensions(1024, 700)
-        .with_ship_dimensions(98, 75)
-        .with_fps(60)
+        .with_dimensions(screen_width as u32, screen_height as u32)
+        .with_ship_dimensions(ship_width, ship_height)
+        .with_fps(fps)
         .with_ship_speed(300)
         .build();
 
@@ -27,15 +33,12 @@ fn main() {
     let ship_rec = Rectangle {
         x: 325.0,
         y: 0.0,
-        width: 98.0,
-        height: 75.0,
+        width: ship_width as f32,
+        height: ship_height as f32,
     };
 
     renderer.register_sprite(0, ship_rec);
 
-
-
-    let fps = 60.0;
     rl.set_target_fps(fps as i32);
 
     while !rl.window_should_close() {
