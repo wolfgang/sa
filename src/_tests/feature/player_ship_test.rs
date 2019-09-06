@@ -1,4 +1,4 @@
-use raylib::consts::{KEY_LEFT, KEY_RIGHT};
+use raylib::consts::*;
 
 use crate::_tests::helpers::testable_game::TestableGame;
 
@@ -56,5 +56,35 @@ fn ship_movement() {
     game.renders_frame(vec![
         "..........",
         ".....0000.",
+    ]);
+}
+
+#[test]
+fn ship_collides_with_edges() {
+    let mut game = TestableGame::init()
+        .with_dimensions(10, 2)
+        .with_fps(60)
+        .with_ship_speed(120)
+        .build();
+
+    game.key_is_down(KEY_LEFT);
+    game.tick();
+    game.tick();
+
+    game.renders_frame(vec![
+        "..........",
+        "0000......",
+    ]);
+
+    game.key_is_up(KEY_LEFT);
+    game.key_is_down(KEY_RIGHT);
+    game.tick();
+    game.tick();
+    game.tick();
+    game.tick();
+
+    game.renders_frame(vec![
+        "..........",
+        "......0000",
     ]);
 }

@@ -80,12 +80,15 @@ impl Game {
     pub fn tick(&mut self) {
         if self.input.borrow().is_key_down(KEY_LEFT) {
             self.ship_position.x -= self.ship_speed as f32 / self.fps as f32;
+            if self.ship_position.x < 0.0 { self.ship_position.x = 0.0 }
         }
 
         if self.input.borrow().is_key_down(KEY_RIGHT) {
             self.ship_position.x += self.ship_speed as f32 / self.fps as f32;
+            if self.ship_position.x >= (self.dimensions.0 - self.ship_dimensions.0) as f32 {
+                self.ship_position.x = (self.dimensions.0 - self.ship_dimensions.0) as f32
+            }
         }
-
     }
 
     pub fn render(&self, renderer: &mut dyn GameRenderer) {

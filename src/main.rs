@@ -7,8 +7,8 @@ use sa::game::raylib_input::RaylibInput;
 use sa::gfx::raylib_renderer::RaylibRenderer;
 
 fn main() {
-    let screen_width = 1024;
-    let screen_height = 700;
+    let screen_width = 400;
+    let screen_height = 800;
     let ship_width = 98;
     let ship_height = 75;
     let fps = 60;
