@@ -27,7 +27,7 @@ impl RaylibRenderer {
 }
 
 impl GameRenderer for RaylibRenderer {
-    fn draw_sprite(&mut self, id: u8, x: u32, y: u32) {
+    fn draw_sprite(&mut self, id: u8, x: i32, y: i32) {
         let source_rec = self.sprites.get(&id).unwrap();
 
         let position = Vector2 { x: x as f32, y: y as f32 };

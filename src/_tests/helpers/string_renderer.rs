@@ -9,19 +9,22 @@ pub struct StringRenderer {
     width: usize,
     height: usize,
     frame: Frame,
-    sprites: HashMap<u8, (u8, u8)>
+    sprites: HashMap<u8, (u8, u8)>,
 }
 
 impl GameRenderer for StringRenderer {
-    fn draw_sprite(&mut self, id: u8, x: u32, y: u32) {
+    fn draw_sprite(&mut self, id: u8, x: i32, y: i32) {
         let (width, height) = self.sprites.get(&id).unwrap();
         let id_char = char::from_digit(id as u32, 10).unwrap();
 
         for row in 0..*height {
             for column in 0..*width {
-                let pixel_x = (column as u32 + x) as usize;
-                let pixel_y = (row as u32 + y) as usize;
-                self.frame[pixel_y][pixel_x] = id_char;
+                let pixel_x = column as i32 + x;
+                let pixel_y = row as i32 + y;
+                if pixel_x >= 0 && pixel_x < self.width as i32 &&
+                    pixel_y >= 0 && pixel_y < self.height as i32 {
+                    self.frame[pixel_y as usize][pixel_x as usize] = id_char;
+                }
             }
         }
     }

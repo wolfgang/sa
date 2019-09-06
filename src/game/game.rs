@@ -93,6 +93,6 @@ impl Game {
 
     pub fn render(&self, renderer: &mut dyn GameRenderer) {
         renderer.clear();
-        renderer.draw_sprite(0, self.ship_position.x as u32, self.ship_position.y as u32);
+        renderer.draw_sprite(0, self.ship_position.x as i32, self.ship_position.y as i32);
     }
 }

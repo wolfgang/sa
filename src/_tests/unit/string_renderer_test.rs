@@ -53,3 +53,19 @@ fn clear_clears_frame() {
         "......",
     ]);
 }
+
+#[test]
+fn ignore_pixels_out_of_bounds() {
+    let mut sr = StringRenderer::new(4, 4);
+    sr.register_sprite(SPRITE1, 5, 6);
+    sr.register_sprite(SPRITE2, 2, 2);
+    sr.draw_sprite(SPRITE1, 1, 2);
+    sr.draw_sprite(SPRITE2, -1, 0);
+
+    sr.assert_frame(vec![
+        "2...",
+        "2...",
+        ".111",
+        ".111"
+    ]);
+}
