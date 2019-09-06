@@ -4,7 +4,7 @@ use raylib::{Color, Rectangle};
 
 use sa::game::game::Game;
 use sa::game::raylib_input::RaylibInput;
-use sa::gfx::raylib_renderer::RaylibRenderer;
+use sa::gfx::renderer::RaylibRenderer;
 
 fn main() {
     let screen_width = 400;

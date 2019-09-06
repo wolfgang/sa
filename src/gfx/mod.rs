@@ -1,1 +1,1 @@
-pub mod raylib_renderer;
+pub mod renderer;
