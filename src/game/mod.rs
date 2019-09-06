@@ -2,20 +2,22 @@ use raylib::consts::*;
 
 use builder::GameBuilder;
 use input::InputRef;
+use player_bullet::PlayerBullet;
+use player_ship::PlayerShip;
 use renderer::GameRenderer;
-
-use crate::game::player_ship::PlayerShip;
 
 pub mod builder;
 pub mod input;
 pub mod renderer;
 pub mod player_ship;
+pub mod player_bullet;
 
 pub struct Game {
     input: InputRef,
     fps: u32,
     ship_speed: u32,
-    player_ship: PlayerShip
+    player_ship: PlayerShip,
+    player_bullets: Vec<PlayerBullet>
 }
 
 impl Game {
@@ -29,6 +31,7 @@ impl Game {
             fps: builder.fps,
             player_ship: PlayerShip::new(builder.ship_dimensions, builder.dimensions),
             ship_speed: builder.ship_speed,
+            player_bullets: Vec::with_capacity(10)
         }
     }
 
@@ -41,10 +44,18 @@ impl Game {
         if self.input.borrow().is_key_down(KEY_RIGHT) {
             self.player_ship.move_horizontally(offset);
         }
+
+        if self.input.borrow().is_key_down(KEY_SPACE) {
+            self.player_bullets.push(PlayerBullet::new(4, 2))
+        }
     }
 
     pub fn render(&self, renderer: &mut dyn GameRenderer) {
         renderer.clear();
         self.player_ship.render(renderer);
+
+        for bullet in &self.player_bullets {
+            bullet.render(renderer);
+        }
     }
 }

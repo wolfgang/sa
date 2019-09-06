@@ -85,6 +85,10 @@ impl TestableGame {
         self.game.render(&mut self.renderer);
     }
 
+    pub fn register_sprite(&mut self, id: u8, width: u8, height: u8) {
+        self.renderer.register_sprite(id, width, height)
+    }
+
     pub fn renders_frame(&mut self, expected_frame: Vec<&str>) {
         self.render();
         self.assert_frame(expected_frame);
