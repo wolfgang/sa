@@ -13,6 +13,16 @@ pub struct GameBuilder {
 }
 
 impl GameBuilder {
+    pub fn new() -> Self {
+        GameBuilder {
+            input: InputNull::new_rc(),
+            dimensions: (0, 0),
+            ship_dimensions: (0, 0),
+            fps: 30,
+            ship_speed: 1,
+        }
+    }
+
     pub fn with_dimensions(&mut self, width: u32, height: u32) -> &mut Self {
         self.dimensions = (width, height);
         self
@@ -63,13 +73,7 @@ pub struct Game {
 
 impl Game {
     pub fn init() -> GameBuilder {
-        GameBuilder {
-            dimensions: (0, 0),
-            ship_dimensions: (0, 0),
-            input: InputNull::new_rc(),
-            fps: 30,
-            ship_speed: 0
-        }
+        GameBuilder::new()
     }
 
     pub fn tick(&mut self) {
