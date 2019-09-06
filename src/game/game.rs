@@ -50,31 +50,35 @@ impl GameBuilder {
     }
 
     pub fn build(&self) -> Game {
-        let ship_x = self.dimensions.0 / 2 - self.ship_dimensions.0 / 2;
-        let ship_y = self.dimensions.1 - self.ship_dimensions.1;
-        Game {
-            input: self.input.clone(),
-            fps: self.fps,
-            dimensions: self.dimensions,
-            ship_dimensions: self.ship_dimensions,
-            ship_position: Vector2 { x: ship_x as f32, y: ship_y as f32 },
-            ship_speed: self.ship_speed
-        }
+        Game::from_builder(self)
     }
 }
 
 pub struct Game {
-    pub dimensions: (u32, u32),
-    pub ship_dimensions: (u32, u32),
-    pub ship_position: Vector2,
-    pub input: InputRef,
-    pub fps: u32,
-    pub ship_speed: u32
+    dimensions: (u32, u32),
+    ship_dimensions: (u32, u32),
+    ship_position: Vector2,
+    input: InputRef,
+    fps: u32,
+    ship_speed: u32
 }
 
 impl Game {
     pub fn init() -> GameBuilder {
         GameBuilder::new()
+    }
+
+    pub fn from_builder(builder: &GameBuilder) -> Self {
+        let ship_x = builder.dimensions.0 / 2 - builder.ship_dimensions.0 / 2;
+        let ship_y = builder.dimensions.1 - builder.ship_dimensions.1;
+        Game {
+            input: builder.input.clone(),
+            fps: builder.fps,
+            dimensions: builder.dimensions,
+            ship_dimensions: builder.ship_dimensions,
+            ship_position: Vector2 { x: ship_x as f32, y: ship_y as f32 },
+            ship_speed: builder.ship_speed,
+        }
     }
 
     pub fn tick(&mut self) {
