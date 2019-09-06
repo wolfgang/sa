@@ -1,8 +1,12 @@
+use crate::game::input::{InputNull, TInputRef};
 use crate::gfx::game_renderer::GameRenderer;
 
 pub struct GameBuilder {
     dimensions: (u32, u32),
     ship_dimensions: (u32, u32),
+    input: TInputRef,
+    fps: u32,
+    ship_speed: u32
 }
 
 impl GameBuilder {
@@ -13,6 +17,21 @@ impl GameBuilder {
 
     pub fn with_ship_dimensions(&mut self, width: u32, height: u32) -> &mut Self {
         self.ship_dimensions = (width, height);
+        self
+    }
+
+    pub fn with_input(&mut self, input: TInputRef) -> &mut Self {
+        self.input = input;
+        self
+    }
+
+    pub fn with_fps(&mut self, fps: u32) -> &mut Self {
+        self.fps = fps;
+        self
+    }
+
+    pub fn with_ship_speed(&mut self, ship_speed: u32) -> &mut Self {
+        self.ship_speed = ship_speed;
         self
     }
 
@@ -34,8 +53,13 @@ impl Game {
         GameBuilder {
             dimensions: (0, 0),
             ship_dimensions: (0, 0),
+            input: InputNull::new_rc(),
+            fps: 30,
+            ship_speed: 0
         }
     }
+
+    pub fn tick(&mut self) {}
 
     pub fn render(&self, renderer: &mut dyn GameRenderer) {
         let x = self.dimensions.0 / 2 - self.ship_dimensions.0 / 2;
