@@ -1,4 +1,4 @@
-use raylib::consts::KEY_LEFT;
+use raylib::consts::{KEY_LEFT, KEY_RIGHT};
 use raylib::Vector2;
 
 use crate::game::input::{InputNull, InputRef};
@@ -80,6 +80,11 @@ impl Game {
         if self.input.borrow().is_key_down(KEY_LEFT) {
             self.ship_position.x -= self.ship_speed as f32 / self.fps as f32;
         }
+
+        if self.input.borrow().is_key_down(KEY_RIGHT) {
+            self.ship_position.x += self.ship_speed as f32 / self.fps as f32;
+        }
+
     }
 
     pub fn render(&self, renderer: &mut dyn GameRenderer) {

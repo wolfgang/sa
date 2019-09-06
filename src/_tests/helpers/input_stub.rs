@@ -20,10 +20,15 @@ impl InputStub {
     pub fn key_is_down(&mut self, key: u32) {
         self.key_states.insert(key, true);
     }
+
+    pub fn key_is_up(&mut self, key: u32) {
+        self.key_states.insert(key, false);
+    }
+
 }
 
 impl Input for InputStub {
     fn is_key_down(&self, key: u32) -> bool {
-        *self.key_states.get(&key).unwrap()
+        *self.key_states.get(&key).unwrap_or(&false)
     }
 }

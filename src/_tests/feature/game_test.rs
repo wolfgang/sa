@@ -1,4 +1,4 @@
-use raylib::consts::KEY_LEFT;
+use raylib::consts::{KEY_LEFT, KEY_RIGHT};
 
 use crate::_tests::helpers::input_stub::InputStub;
 use crate::_tests::helpers::string_renderer::StringRenderer;
@@ -58,4 +58,19 @@ fn ship_movement() {
         "..........",
         ".0000.....",
     ]);
+
+
+    input.borrow_mut().key_is_up(KEY_LEFT);
+    input.borrow_mut().key_is_down(KEY_RIGHT);
+    game.tick();
+    game.tick();
+
+    game.render(&mut renderer);
+    renderer.assert_frame(vec![
+        "..........",
+        "..........",
+        ".....0000.",
+    ]);
+
+
 }
