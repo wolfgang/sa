@@ -34,5 +34,7 @@ impl GameRenderer for RaylibRenderer {
         self.rl.draw_texture_rec(&self.sprite_sheet, *source_rec, position, Color::WHITE)
     }
 
-    fn clear(&mut self) {}
+    fn clear(&mut self) {
+        self.rl.clear_background(Color::BLACK);
+    }
 }

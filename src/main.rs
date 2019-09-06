@@ -1,6 +1,6 @@
 use std::rc::Rc;
 
-use raylib::{Color, Rectangle};
+use raylib::Rectangle;
 
 use sa::game::Game;
 use sa::raylib::{input::RaylibInput, renderer::RaylibRenderer};
@@ -43,7 +43,6 @@ fn main() {
     while !rl.window_should_close() {
         game.tick();
         rl.begin_drawing();
-        rl.clear_background(Color::BLACK);
         game.render(&mut renderer);
         rl.end_drawing();
     }
