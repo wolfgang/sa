@@ -1,7 +1,7 @@
 use std::char;
 use std::collections::HashMap;
 
-use crate::gfx::game_renderer::GameRenderer;
+use crate::game::renderer::GameRenderer;
 
 type Frame = Vec<Vec<char>>;
 

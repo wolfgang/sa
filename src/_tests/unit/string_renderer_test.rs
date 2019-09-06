@@ -1,5 +1,5 @@
 use crate::_tests::helpers::string_renderer::StringRenderer;
-use crate::gfx::game_renderer::GameRenderer;
+use crate::game::renderer::GameRenderer;
 
 #[test]
 fn frame_is_empty_after_construction() {

@@ -3,7 +3,7 @@ use std::rc::Rc;
 
 use raylib::{Color, RaylibHandle, Rectangle, Texture2D, Vector2};
 
-use crate::gfx::game_renderer::GameRenderer;
+use crate::game::renderer::GameRenderer;
 
 pub struct RaylibRenderer {
     rl: Rc<RaylibHandle>,

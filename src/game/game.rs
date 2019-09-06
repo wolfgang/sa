@@ -3,7 +3,7 @@ use raylib::Vector2;
 
 use crate::game::builder::GameBuilder;
 use crate::game::input::InputRef;
-use crate::gfx::game_renderer::GameRenderer;
+use crate::game::renderer::GameRenderer;
 
 pub struct Game {
     dimensions: (u32, u32),
