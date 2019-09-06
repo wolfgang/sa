@@ -4,7 +4,7 @@ use std::rc::Rc;
 
 use crate::game::input::Input;
 
-type InputStubRef = Rc<RefCell<InputStub>>;
+pub type InputStubRef = Rc<RefCell<InputStub>>;
 
 pub struct InputStub {
     key_states: HashMap<u32, bool>

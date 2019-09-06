@@ -4,12 +4,13 @@ use raylib::Vector2;
 use crate::game::input::{InputNull, InputRef};
 use crate::gfx::game_renderer::GameRenderer;
 
+#[derive(Clone)]
 pub struct GameBuilder {
-    dimensions: (u32, u32),
-    ship_dimensions: (u32, u32),
-    input: InputRef,
-    fps: u32,
-    ship_speed: u32
+    pub dimensions: (u32, u32),
+    pub ship_dimensions: (u32, u32),
+    pub input: InputRef,
+    pub fps: u32,
+    pub ship_speed: u32
 }
 
 impl GameBuilder {
