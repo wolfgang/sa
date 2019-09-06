@@ -69,6 +69,14 @@ impl TestableGame {
         self.input.borrow_mut().key_is_up(key)
     }
 
+    pub fn tick_twice(&mut self) {
+        self.tick_times(2);
+    }
+
+    pub fn tick_times(&mut self, times: u32) {
+        for _ in 0..times { self.tick() }
+    }
+
     pub fn tick(&mut self) {
         self.game.tick();
     }

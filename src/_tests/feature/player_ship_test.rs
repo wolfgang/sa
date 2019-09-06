@@ -41,8 +41,7 @@ fn ship_movement() {
 
     game.key_is_up(KEY_LEFT);
     game.key_is_down(KEY_RIGHT);
-    game.tick();
-    game.tick();
+    game.tick_twice();
 
     game.renders_frame(vec![
         "..........",
@@ -50,8 +49,7 @@ fn ship_movement() {
     ]);
 
     game.key_is_up(KEY_RIGHT);
-    game.tick();
-    game.tick();
+    game.tick_twice();
 
     game.renders_frame(vec![
         "..........",
@@ -68,8 +66,7 @@ fn ship_collides_with_edges() {
         .build();
 
     game.key_is_down(KEY_LEFT);
-    game.tick();
-    game.tick();
+    game.tick_twice();
 
     game.renders_frame(vec![
         "..........",
@@ -78,10 +75,7 @@ fn ship_collides_with_edges() {
 
     game.key_is_up(KEY_LEFT);
     game.key_is_down(KEY_RIGHT);
-    game.tick();
-    game.tick();
-    game.tick();
-    game.tick();
+    game.tick_times(4);
 
     game.renders_frame(vec![
         "..........",
