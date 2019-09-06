@@ -3,8 +3,7 @@ use std::rc::Rc;
 use raylib::{Color, Rectangle};
 
 use sa::game::game::Game;
-use sa::gfx::input::RaylibInput;
-use sa::gfx::renderer::RaylibRenderer;
+use sa::raylib::{input::RaylibInput, renderer::RaylibRenderer};
 
 fn main() {
     let screen_width = 400;
