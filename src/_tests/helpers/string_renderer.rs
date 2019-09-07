@@ -14,6 +14,11 @@ pub struct StringRenderer {
 }
 
 impl GameRenderer for StringRenderer {
+    fn draw_sprite_obj<T: Positioned>(&mut self, id: u8, obj: &T) {
+        let (x, y) = obj.position();
+        self.draw_sprite(id, x, y)
+    }
+
     fn draw_sprite(&mut self, id: u8, x: i32, y: i32) {
         let (width, height) = self.sprites.get(&id).unwrap();
         let id_char = char::from_digit(id as u32, 10).unwrap();
@@ -43,11 +48,6 @@ impl StringRenderer {
             frame: Self::new_frame(width, height),
             sprites: HashMap::with_capacity(10),
         }
-    }
-
-    pub fn draw_sprite_obj<T: Positioned>(&mut self, id: u8, obj: &T) {
-        let (x, y) = obj.position();
-        self.draw_sprite(id, x, y)
     }
 
     pub fn register_sprite(&mut self, id: u8, width: u8, height: u8) {
