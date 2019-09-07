@@ -11,11 +11,13 @@ pub struct BulletsManager {
     bullet_dimensions: (u32, u32),
     last_bullet_tick: u32,
     current_tick: u32,
-    pub fps: u32,
+    fps: u32,
+    bullet_speed: u32
+
 }
 
 impl BulletsManager {
-    pub fn new(player_ship: Rc<RefCell<PlayerShip>>, fps: u32, bullet_dimensions: (u32, u32)) -> Self {
+    pub fn new(player_ship: Rc<RefCell<PlayerShip>>, fps: u32, bullet_dimensions: (u32, u32), bullet_speed: u32) -> Self {
         BulletsManager {
             player_ship: player_ship.clone(),
             bullets: Vec::with_capacity(10),
@@ -23,6 +25,7 @@ impl BulletsManager {
             fps,
             last_bullet_tick: 0,
             current_tick: 1000,
+            bullet_speed
         }
     }
 
@@ -40,7 +43,7 @@ impl BulletsManager {
             self.last_bullet_tick = self.current_tick;
             let (bullet_width, bullet_height) = self.bullet_dimensions;
             let (x, y) = self.player_ship.borrow().bullet_spawn_position(bullet_width as i32, bullet_height as i32);
-            self.bullets.push(PlayerBullet::new(x, y, self.fps))
+            self.bullets.push(PlayerBullet::new(x, y, self.fps, self.bullet_speed))
         }
     }
 

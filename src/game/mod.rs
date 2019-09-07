@@ -38,7 +38,7 @@ impl Game {
             fps: builder.fps,
             player_ship: player_ship.clone(),
             ship_speed: builder.ship_speed,
-            bullets_manager: BulletsManager::new(player_ship.clone(), builder.fps, builder.bullet_dimensions)
+            bullets_manager: BulletsManager::new(player_ship.clone(), builder.fps, builder.bullet_dimensions, builder.bullet_speed)
         }
     }
 

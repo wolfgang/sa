@@ -9,6 +9,7 @@ pub struct GameBuilder {
     pub input: InputRef,
     pub fps: u32,
     pub ship_speed: u32,
+    pub bullet_speed: u32
 }
 
 impl GameBuilder {
@@ -19,7 +20,8 @@ impl GameBuilder {
             ship_dimensions: (0, 0),
             bullet_dimensions: (0, 0),
             fps: 30,
-            ship_speed: 1,
+            ship_speed: 0,
+            bullet_speed: 0
         }
     }
 
@@ -50,6 +52,11 @@ impl GameBuilder {
 
     pub fn with_ship_speed(&mut self, ship_speed: u32) -> &mut Self {
         self.ship_speed = ship_speed;
+        self
+    }
+
+    pub fn with_bullet_speed(&mut self, ship_speed: u32) -> &mut Self {
+        self.bullet_speed = ship_speed;
         self
     }
 

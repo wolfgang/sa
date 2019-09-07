@@ -8,6 +8,8 @@ const DEFAULT_SHIP_HEIGHT: u32 = 1;
 const DEFAULT_BULLET_WIDTH: u32 = 2;
 const DEFAULT_BULLET_HEIGHT: u32 = 1;
 
+const DEFAULT_BULLET_SPEED: u32 = 60;
+
 pub struct TestableGameBuilder {
     game_builder: GameBuilder
 }
@@ -40,6 +42,7 @@ impl TestableGameBuilder {
             .with_input(input.clone())
             .with_ship_dimensions(DEFAULT_SHIP_WIDTH, DEFAULT_SHIP_HEIGHT)
             .with_bullet_dimensions(DEFAULT_BULLET_WIDTH, DEFAULT_BULLET_HEIGHT)
+            .with_bullet_speed(DEFAULT_BULLET_SPEED)
             .build();
 
         let (width, height) = self.game_builder.dimensions;
