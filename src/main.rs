@@ -28,6 +28,7 @@ fn main() {
         .with_bullet_dimensions(bullet_width, bullet_height)
         .with_fps(fps)
         .with_ship_speed(300)
+        .with_bullet_speed(500)
         .build();
 
     let mut renderer = RaylibRenderer::new(rl.clone());
