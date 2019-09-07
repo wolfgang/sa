@@ -6,7 +6,7 @@ use sa::game::Game;
 use sa::raylib::{input::RaylibInput, renderer::RaylibRenderer};
 
 fn main() {
-    let screen_width = 400;
+    let screen_width = 650;
     let screen_height = 800;
     let ship_width = 98;
     let ship_height = 75;
@@ -27,7 +27,7 @@ fn main() {
         .with_ship_dimensions(ship_width, ship_height)
         .with_bullet_dimensions(bullet_width, bullet_height)
         .with_fps(fps)
-        .with_ship_speed(300)
+        .with_ship_speed(360)
         .with_bullet_speed(540)
         .build();
 
