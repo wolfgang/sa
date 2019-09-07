@@ -1,4 +1,4 @@
-use crate::_tests::helpers::string_renderer::StringRenderer;
+use crate::_tests::helpers::string_renderer::{Positioned, StringRenderer};
 use crate::game::renderer::GameRenderer;
 
 #[test]
@@ -67,5 +67,33 @@ fn ignore_pixels_out_of_bounds() {
         "2...",
         ".111",
         ".111"
+    ]);
+}
+
+struct TestObj {
+    x: i32,
+    y: i32,
+}
+
+impl Positioned for TestObj {
+    fn position(&self) -> (i32, i32) {
+        (self.x, self.y)
+    }
+}
+
+#[test]
+fn draw_sprite_from_trait_object() {
+    let mut sr = StringRenderer::new(4, 4);
+    sr.register_sprite(SPRITE1, 2, 2);
+
+    let obj = TestObj { x: 1, y: 1 };
+
+    sr.draw_sprite_obj(SPRITE1, &obj);
+
+    sr.assert_frame(vec![
+        "....",
+        ".11.",
+        ".11.",
+        "...."
     ]);
 }

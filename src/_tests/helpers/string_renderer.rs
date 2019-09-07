@@ -3,6 +3,11 @@ use std::collections::HashMap;
 
 use crate::game::renderer::GameRenderer;
 
+pub trait Positioned {
+    fn position(&self) -> (i32, i32);
+}
+
+
 type Frame = Vec<Vec<char>>;
 
 pub struct StringRenderer {
@@ -42,6 +47,11 @@ impl StringRenderer {
             frame: Self::new_frame(width, height),
             sprites: HashMap::with_capacity(10),
         }
+    }
+
+    pub fn draw_sprite_obj<T: Positioned>(&mut self, id: u8, obj: &T) {
+        let (x, y) = obj.position();
+        self.draw_sprite(id, x, y)
     }
 
     pub fn register_sprite(&mut self, id: u8, width: u8, height: u8) {
