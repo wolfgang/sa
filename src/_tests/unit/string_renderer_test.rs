@@ -107,9 +107,14 @@ fn sprite_log_returns_list_of_sprites_rendered() {
 
     sr.draw_sprite(SPRITE1, 0, 1);
     sr.draw_sprite(SPRITE2, 3, 1);
+    sr.draw_sprite(SPRITE2, 4, 2);
 
-    sr.assert_sprite_log(vec![
-        "1, 0, 1",
-        "2, 3, 1"
+    sr.assert_sprite_log_for(1, vec![
+        "1, 0, 1"
+    ]);
+
+    sr.assert_sprite_log_for(2, vec![
+        "2, 3, 1",
+        "2, 4, 2"
     ])
 }

@@ -97,7 +97,7 @@ impl TestableGame {
         self.renderer.assert_frame(expected_frame)
     }
 
-    pub fn assert_sprite_log(&self, expected_log: Vec<&str>) {
-        self.renderer.assert_sprite_log(expected_log)
+    pub fn assert_sprite_log_for(&self, id: u8, expected_log: Vec<&str>) {
+        self.renderer.assert_sprite_log_for(id, expected_log)
     }
 }

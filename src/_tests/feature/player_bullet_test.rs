@@ -123,15 +123,10 @@ fn bullet_is_removed_after_leaving_screen() {
     game.tick();
     game.render();
 
-    game.assert_sprite_log(vec![
-        "0, 3, 4",
+    game.assert_sprite_log_for(1, vec![
         "1, 4, 2",
-        "0, 3, 4",
         "1, 4, 1",
-        "0, 3, 4",
         "1, 4, 0",
-        "0, 3, 4",
-        "0, 3, 4",
     ])
 }
 
