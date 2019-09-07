@@ -5,6 +5,7 @@ use crate::game::input::{InputNull, InputRef};
 pub struct GameBuilder {
     pub dimensions: (u32, u32),
     pub ship_dimensions: (u32, u32),
+    pub bullet_dimensions: (u32, u32),
     pub input: InputRef,
     pub fps: u32,
     pub ship_speed: u32,
@@ -16,6 +17,7 @@ impl GameBuilder {
             input: InputNull::new_rc(),
             dimensions: (0, 0),
             ship_dimensions: (0, 0),
+            bullet_dimensions: (0, 0),
             fps: 30,
             ship_speed: 1,
         }
@@ -28,6 +30,11 @@ impl GameBuilder {
 
     pub fn with_ship_dimensions(&mut self, width: u32, height: u32) -> &mut Self {
         self.ship_dimensions = (width, height);
+        self
+    }
+
+    pub fn with_bullet_dimensions(&mut self, width: u32, height: u32) -> &mut Self {
+        self.bullet_dimensions = (width, height);
         self
     }
 

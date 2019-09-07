@@ -17,7 +17,8 @@ pub struct Game {
     fps: u32,
     ship_speed: u32,
     player_ship: PlayerShip,
-    player_bullets: Vec<PlayerBullet>
+    player_bullets: Vec<PlayerBullet>,
+    bullet_dimensions: (u32, u32)
 }
 
 impl Game {
@@ -31,7 +32,8 @@ impl Game {
             fps: builder.fps,
             player_ship: PlayerShip::new(builder.ship_dimensions, builder.dimensions),
             ship_speed: builder.ship_speed,
-            player_bullets: Vec::with_capacity(10)
+            player_bullets: Vec::with_capacity(10),
+            bullet_dimensions: builder.bullet_dimensions
         }
     }
 
@@ -46,7 +48,8 @@ impl Game {
         }
 
         if self.input.borrow().is_key_down(KEY_SPACE) {
-            let (x, y) = self.player_ship.bullet_spawn_position(2, 2);
+            let (bullet_width, bullet_height) = self.bullet_dimensions;
+            let (x, y) = self.player_ship.bullet_spawn_position(bullet_width as i32, bullet_height as i32);
             self.player_bullets.push(PlayerBullet::new(x, y))
         }
     }
