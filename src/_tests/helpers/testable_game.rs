@@ -5,6 +5,9 @@ use crate::game::{builder::GameBuilder, Game};
 const DEFAULT_SHIP_WIDTH: u32 = 4;
 const DEFAULT_SHIP_HEIGHT: u32 = 1;
 
+const DEFAULT_SHIP_SPEED: u32 = 120;
+const DEFAULT_FPS: u32 = 60;
+
 const DEFAULT_BULLET_WIDTH: u32 = 2;
 const DEFAULT_BULLET_HEIGHT: u32 = 1;
 
@@ -18,6 +21,12 @@ impl TestableGameBuilder {
     pub fn new() -> Self {
         Self {
             game_builder: GameBuilder::new()
+                .with_fps(DEFAULT_FPS)
+                .with_ship_speed(DEFAULT_SHIP_SPEED)
+                .with_ship_dimensions(DEFAULT_SHIP_WIDTH, DEFAULT_SHIP_HEIGHT)
+                .with_bullet_dimensions(DEFAULT_BULLET_WIDTH, DEFAULT_BULLET_HEIGHT)
+                .with_bullet_speed(DEFAULT_BULLET_SPEED)
+                .clone()
         }
     }
 
@@ -40,9 +49,6 @@ impl TestableGameBuilder {
         let input = InputStub::new_rc();
         let game = self.game_builder
             .with_input(input.clone())
-            .with_ship_dimensions(DEFAULT_SHIP_WIDTH, DEFAULT_SHIP_HEIGHT)
-            .with_bullet_dimensions(DEFAULT_BULLET_WIDTH, DEFAULT_BULLET_HEIGHT)
-            .with_bullet_speed(DEFAULT_BULLET_SPEED)
             .build();
 
         let (width, height) = self.game_builder.dimensions;
@@ -53,7 +59,7 @@ impl TestableGameBuilder {
         TestableGame {
             input: input.clone(),
             renderer,
-            game
+            game,
         }
     }
 }
