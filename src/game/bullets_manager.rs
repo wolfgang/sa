@@ -12,7 +12,7 @@ pub struct BulletsManager {
     last_bullet_tick: u32,
     current_tick: u32,
     autofire_ticks: u32,
-    bullet_speed: u32
+    bullet_speed: u32,
 }
 
 impl BulletsManager {
@@ -24,20 +24,13 @@ impl BulletsManager {
             last_bullet_tick: 0,
             current_tick: 1000,
             bullet_speed,
-            autofire_ticks: (0.5 * (fps as f32)) as u32
+            autofire_ticks: (0.5 * (fps as f32)) as u32,
         }
     }
 
     pub fn tick(&mut self) {
-        let mut keep = Vec::with_capacity(self.bullets.len());
-        for bullet in &mut self.bullets {
-            if bullet.tick() {
-                keep.push(bullet.clone())
-            }
-        }
-
-        self.bullets = keep;
-
+        for bullet in &mut self.bullets { bullet.tick() }
+        self.bullets.retain(|bullet| { bullet.is_alive() });
         self.current_tick += 1;
     }
 

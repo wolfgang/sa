@@ -5,7 +5,7 @@ use crate::game::renderer::GameRenderer;
 pub struct PlayerBullet {
     x: i32,
     y: i32,
-    speed: u32
+    speed: u32,
 }
 
 impl PlayerBullet {
@@ -13,8 +13,11 @@ impl PlayerBullet {
         Self { x, y, speed }
     }
 
-    pub fn tick(&mut self) -> bool {
+    pub fn tick(&mut self) {
         self.y -= self.speed as i32;
+    }
+
+    pub fn is_alive(&self) -> bool {
         self.y >= 0
     }
 
