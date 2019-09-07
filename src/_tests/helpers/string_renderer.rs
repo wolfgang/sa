@@ -1,12 +1,8 @@
 use std::char;
 use std::collections::HashMap;
 
+use crate::game::positioned::Positioned;
 use crate::game::renderer::GameRenderer;
-
-pub trait Positioned {
-    fn position(&self) -> (i32, i32);
-}
-
 
 type Frame = Vec<Vec<char>>;
 

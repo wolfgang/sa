@@ -9,6 +9,7 @@ use renderer::GameRenderer;
 pub mod builder;
 pub mod input;
 pub mod renderer;
+pub mod positioned;
 pub mod player_ship;
 pub mod player_bullet;
 

@@ -1,4 +1,5 @@
-use crate::_tests::helpers::string_renderer::{Positioned, StringRenderer};
+use crate::_tests::helpers::string_renderer::StringRenderer;
+use crate::game::positioned::Positioned;
 use crate::game::renderer::GameRenderer;
 
 #[test]
