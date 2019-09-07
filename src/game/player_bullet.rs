@@ -1,6 +1,8 @@
 use crate::game::positioned::Positioned;
 use crate::game::renderer::GameRenderer;
 
+const BULLET_SPEED: u32 = 60;
+
 pub struct PlayerBullet {
     x: i32,
     y: i32,
@@ -9,6 +11,10 @@ pub struct PlayerBullet {
 impl PlayerBullet {
     pub fn new(x: i32, y: i32) -> Self {
         Self { x, y }
+    }
+
+    pub fn tick(&mut self) {
+        self.y = (self.y as f32 - BULLET_SPEED as f32 / 60.0) as i32
     }
 
     pub fn render(&self, renderer: &mut dyn GameRenderer) {

@@ -3,7 +3,7 @@ use raylib::consts::*;
 use crate::_tests::helpers::testable_game::TestableGame;
 
 #[test]
-fn pressing_space_spawn_bullet_in_front_of_player_ship() {
+fn pressing_space_spawns_bullet_which_flies_up_1_pixel_per_frame() {
     let mut game = make_game();
 
     game.key_is_down(KEY_RIGHT);
@@ -11,15 +11,26 @@ fn pressing_space_spawn_bullet_in_front_of_player_ship() {
 
     game.key_is_up(KEY_RIGHT);
     game.key_is_down(KEY_SPACE);
-    game.tick();
 
+    game.tick();
     game.renders_frame(vec![
         "..........",
         "..........",
+        "......11..",
+        "..........",
+        ".....0000.",
+    ]);
+
+    game.tick();
+    game.renders_frame(vec![
         "..........",
         "......11..",
+        "..........",
+        "..........",
         ".....0000.",
-    ])
+    ]);
+
+
 }
 
 
@@ -32,8 +43,8 @@ fn wait_half_second_before_spawning_another_bullet() {
     game.renders_frame(vec![
         "..........",
         "..........",
-        "..........",
         "....11....",
+        "..........",
         "...0000...",
     ]);
 
@@ -44,7 +55,7 @@ fn wait_half_second_before_spawning_another_bullet() {
         "..........",
         "..........",
         "..........",
-        "....11....",
+        "..........",
         "0000......",
     ]);
 
@@ -54,8 +65,8 @@ fn wait_half_second_before_spawning_another_bullet() {
     game.renders_frame(vec![
         "..........",
         "..........",
+        ".11.......",
         "..........",
-        ".11.11....",
         "0000......",
     ])
 }

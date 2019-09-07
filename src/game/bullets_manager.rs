@@ -27,6 +27,9 @@ impl BulletsManager {
     }
 
     pub fn tick(&mut self) {
+        for bullet in &mut self.bullets {
+            bullet.tick();
+        }
         self.current_tick += 1;
     }
 
