@@ -1,3 +1,4 @@
+use crate::game::positioned::Positioned;
 use crate::game::renderer::GameRenderer;
 
 pub struct PlayerBullet {
@@ -11,6 +12,12 @@ impl PlayerBullet {
     }
 
     pub fn render(&self, renderer: &mut dyn GameRenderer) {
-        renderer.draw_sprite(1, self.x, self.y);
+        renderer.draw_sprite_obj(1, self);
+    }
+}
+
+impl Positioned for PlayerBullet {
+    fn position(&self) -> (i32, i32) {
+        (self.x, self.y)
     }
 }

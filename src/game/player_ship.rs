@@ -1,3 +1,4 @@
+use crate::game::positioned::Positioned;
 use crate::game::renderer::GameRenderer;
 
 pub struct PlayerShip {
@@ -24,7 +25,7 @@ impl PlayerShip {
 
 
     pub fn render(&self, renderer: &mut dyn GameRenderer) {
-        renderer.draw_sprite(0, self.x as i32, self.y as i32)
+        renderer.draw_sprite_obj(0, self)
     }
 
     pub fn move_horizontally(&mut self, offset: i32) {
@@ -35,5 +36,11 @@ impl PlayerShip {
 
     pub fn bullet_spawn_position(&self, bullet_width: i32, bullet_height: i32) -> (i32, i32) {
         return (self.x + self.width as i32 / 2 - bullet_width / 2, self.y - bullet_height);
+    }
+}
+
+impl Positioned for PlayerShip {
+    fn position(&self) -> (i32, i32) {
+        (self.x, self.y)
     }
 }
