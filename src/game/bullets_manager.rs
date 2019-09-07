@@ -47,7 +47,7 @@ impl BulletsManager {
             self.last_bullet_tick = self.current_tick;
             let (bullet_width, bullet_height) = self.bullet_dimensions;
             let (x, y) = self.player_ship.borrow().bullet_spawn_position(bullet_width as i32, bullet_height as i32);
-            self.bullets.push(PlayerBullet::new(x, y, self.fps, self.bullet_speed))
+            self.bullets.push(PlayerBullet::new(x, y, self.bullet_speed))
         }
     }
 
