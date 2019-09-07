@@ -98,3 +98,18 @@ fn draw_sprite_from_trait_object() {
         "...."
     ]);
 }
+
+#[test]
+fn sprite_log_returns_list_of_sprites_rendered() {
+    let mut sr = StringRenderer::new(4, 4);
+    sr.register_sprite(SPRITE1, 1, 2);
+    sr.register_sprite(SPRITE2, 3, 4);
+
+    sr.draw_sprite(SPRITE1, 0, 1);
+    sr.draw_sprite(SPRITE2, 3, 1);
+
+    sr.assert_sprite_log(vec![
+        "1, 0, 1",
+        "2, 3, 1"
+    ])
+}
