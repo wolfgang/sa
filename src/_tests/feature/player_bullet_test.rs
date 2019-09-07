@@ -4,11 +4,7 @@ use crate::_tests::helpers::testable_game::TestableGame;
 
 #[test]
 fn pressing_space_spawn_bullet_in_front_of_player_ship() {
-    let mut game = TestableGame::init()
-        .with_dimensions(10, 5)
-        .with_fps(60)
-        .with_ship_speed(120)
-        .build();
+    let mut game = make_game();
 
     game.key_is_down(KEY_RIGHT);
     game.tick();
@@ -29,11 +25,7 @@ fn pressing_space_spawn_bullet_in_front_of_player_ship() {
 
 #[test]
 fn wait_half_second_before_spawning_another_bullet() {
-    let mut game = TestableGame::init()
-        .with_dimensions(10, 5)
-        .with_fps(60)
-        .with_ship_speed(120)
-        .build();
+    let mut game = make_game();
 
     game.key_is_down(KEY_SPACE);
     game.tick();
@@ -66,4 +58,12 @@ fn wait_half_second_before_spawning_another_bullet() {
         ".11.11....",
         "0000......",
     ])
+}
+
+fn make_game() -> TestableGame {
+    TestableGame::init()
+        .with_dimensions(10, 5)
+        .with_fps(60)
+        .with_ship_speed(120)
+        .build()
 }
