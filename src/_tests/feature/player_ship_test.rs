@@ -3,27 +3,8 @@ use raylib::consts::*;
 use crate::_tests::helpers::testable_game::TestableGame;
 
 #[test]
-fn render_player_ship_at_bottom_of_screen_centered() {
-    let mut game = TestableGame::init()
-        .with_dimensions(10, 5)
-        .build();
-
-    game.renders_frame(vec![
-        "..........",
-        "..........",
-        "..........",
-        "..........",
-        "...0000...",
-    ])
-}
-
-#[test]
 fn ship_movement() {
-    let mut game = TestableGame::init()
-        .with_dimensions(10, 2)
-        .with_fps(60)
-        .with_ship_speed(120)
-        .build();
+    let mut game = make_game();
 
     game.renders_frame(vec![
         "..........",
@@ -59,11 +40,7 @@ fn ship_movement() {
 
 #[test]
 fn ship_collides_with_edges() {
-    let mut game = TestableGame::init()
-        .with_dimensions(10, 2)
-        .with_fps(60)
-        .with_ship_speed(120)
-        .build();
+    let mut game = make_game();
 
     game.key_is_down(KEY_LEFT);
     game.tick_twice();
@@ -81,4 +58,12 @@ fn ship_collides_with_edges() {
         "..........",
         "......0000",
     ]);
+}
+
+fn make_game() -> TestableGame {
+    TestableGame::init()
+        .with_dimensions(10, 2)
+        .with_fps(60)
+        .with_ship_speed(120)
+        .build()
 }
