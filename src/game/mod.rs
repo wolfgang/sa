@@ -20,7 +20,6 @@ pub mod bullets_manager;
 
 pub struct Game {
     input: InputRef,
-    fps: u32,
     ship_speed: u32,
     player_ship: Rc<RefCell<PlayerShip>>,
     bullets_manager: BulletsManager
@@ -35,7 +34,6 @@ impl Game {
         let player_ship = Rc::new(RefCell::new(PlayerShip::new(builder.ship_dimensions, builder.dimensions)));
         Game {
             input: builder.input.clone(),
-            fps: builder.fps,
             player_ship: player_ship.clone(),
             ship_speed: builder.ship_speed / builder.fps,
             bullets_manager: BulletsManager::new(player_ship.clone(), builder.fps, builder.bullet_dimensions, builder.bullet_speed / builder.fps)

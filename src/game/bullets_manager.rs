@@ -13,7 +13,6 @@ pub struct BulletsManager {
     current_tick: u32,
     fps: u32,
     bullet_speed: u32
-
 }
 
 impl BulletsManager {
