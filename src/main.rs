@@ -28,7 +28,7 @@ fn main() {
         .with_bullet_dimensions(bullet_width, bullet_height)
         .with_fps(fps)
         .with_ship_speed(300)
-        .with_bullet_speed(500)
+        .with_bullet_speed(540)
         .build();
 
     let mut renderer = RaylibRenderer::new(rl.clone());
@@ -50,12 +50,21 @@ fn main() {
     renderer.register_sprite(0, ship_rec);
     renderer.register_sprite(1, bullet_rec);
 
-    rl.set_target_fps(fps as i32);
+    let frame_time = 1.0 / fps as f64;
+
+    let mut current_delta = 0.0;
+    let mut last_time = rl.get_time();
 
     while !rl.window_should_close() {
-        game.tick();
-        rl.begin_drawing();
-        game.render(&mut renderer);
-        rl.end_drawing();
+        let time = rl.get_time();
+        current_delta += time - last_time;
+        last_time = time;
+        while current_delta >= frame_time {
+            current_delta -= frame_time;
+            game.tick();
+            rl.begin_drawing();
+            game.render(&mut renderer);
+            rl.end_drawing();
+        }
     }
 }
