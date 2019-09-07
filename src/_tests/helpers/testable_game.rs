@@ -2,15 +2,14 @@ use crate::_tests::helpers::input_stub::{InputStub, InputStubRef};
 use crate::_tests::helpers::string_renderer::StringRenderer;
 use crate::game::{builder::GameBuilder, Game};
 
+const DEFAULT_FPS: u32 = 60;
+
 const DEFAULT_SHIP_WIDTH: u32 = 4;
 const DEFAULT_SHIP_HEIGHT: u32 = 1;
-
 const DEFAULT_SHIP_SPEED: u32 = 120;
-const DEFAULT_FPS: u32 = 60;
 
 const DEFAULT_BULLET_WIDTH: u32 = 2;
 const DEFAULT_BULLET_HEIGHT: u32 = 1;
-
 const DEFAULT_BULLET_SPEED: u32 = 60;
 
 pub struct TestableGameBuilder {
@@ -32,16 +31,6 @@ impl TestableGameBuilder {
 
     pub fn with_dimensions(&mut self, width: u32, height: u32) -> &mut Self {
         self.game_builder = self.game_builder.with_dimensions(width, height).clone();
-        self
-    }
-
-    pub fn with_fps(&mut self, fps: u32) -> &mut Self {
-        self.game_builder = self.game_builder.with_fps(fps).clone();
-        self
-    }
-
-    pub fn with_ship_speed(&mut self, ship_speed: u32) -> &mut Self {
-        self.game_builder = self.game_builder.with_ship_speed(ship_speed).clone();
         self
     }
 

@@ -103,7 +103,5 @@ fn releasing_space_makes_next_bullet_spawn_immediately() {
 fn make_game() -> TestableGame {
     TestableGame::init()
         .with_dimensions(10, 5)
-        .with_fps(60)
-        .with_ship_speed(120)
         .build()
 }

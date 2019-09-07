@@ -63,7 +63,5 @@ fn ship_collides_with_edges() {
 fn make_game() -> TestableGame {
     TestableGame::init()
         .with_dimensions(10, 2)
-        .with_fps(60)
-        .with_ship_speed(120)
         .build()
 }
