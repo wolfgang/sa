@@ -36,6 +36,10 @@ impl BulletsManager {
         self.current_tick += 1;
     }
 
+    pub fn reset(&mut self) {
+        self.last_bullet_tick = 0;
+    }
+
     pub fn spawn_bullet(&mut self) {
         let seconds_since_last = (self.current_tick - self.last_bullet_tick) as f32 / self.fps as f32;
 

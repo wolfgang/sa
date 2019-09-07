@@ -35,7 +35,7 @@ fn pressing_space_spawns_bullet_which_flies_up_1_pixel_per_frame() {
 
 
 #[test]
-fn wait_half_second_before_spawning_another_bullet() {
+fn wait_half_second_before_spawning_another_bullet_when_space_is_down() {
     let mut game = make_game();
 
     game.key_is_down(KEY_SPACE);
@@ -70,6 +70,35 @@ fn wait_half_second_before_spawning_another_bullet() {
         "0000......",
     ])
 }
+
+#[test]
+fn releasing_space_makes_next_bullet_spawn_immediately() {
+    let mut game = make_game();
+
+    game.key_is_down(KEY_SPACE);
+    game.tick();
+    game.renders_frame(vec![
+        "..........",
+        "..........",
+        "....11....",
+        "..........",
+        "...0000...",
+    ]);
+
+    game.key_is_up(KEY_SPACE);
+    game.tick();
+    game.key_is_down(KEY_SPACE);
+    game.tick();
+
+    game.renders_frame(vec![
+        "....11....",
+        "..........",
+        "....11....",
+        "..........",
+        "...0000...",
+    ]);
+}
+
 
 fn make_game() -> TestableGame {
     TestableGame::init()

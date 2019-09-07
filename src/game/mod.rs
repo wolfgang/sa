@@ -54,9 +54,10 @@ impl Game {
 
         if self.input.borrow().is_key_down(KEY_SPACE) {
             self.bullets_manager.spawn_bullet();
+        } else {
+            self.bullets_manager.reset();
         }
         self.bullets_manager.tick();
-
     }
 
     pub fn render(&self, renderer: &mut dyn GameRenderer) {
