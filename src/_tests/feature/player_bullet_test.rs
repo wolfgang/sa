@@ -99,6 +99,42 @@ fn releasing_space_makes_next_bullet_spawn_immediately() {
     ]);
 }
 
+#[test]
+fn bullet_is_removed_after_leaving_screen() {
+    let mut game = make_game();
+
+    game.key_is_down(KEY_SPACE);
+    game.tick();
+    game.renders_frame(vec![
+        "..........",
+        "..........",
+        "....11....",
+        "..........",
+        "...0000...",
+    ]);
+
+    game.key_is_up(KEY_SPACE);
+    game.tick();
+    game.render();
+    game.tick();
+    game.render();
+    game.tick();
+    game.render();
+    game.tick();
+    game.render();
+
+    game.assert_sprite_log(vec![
+        "0, 3, 4",
+        "1, 4, 2",
+        "0, 3, 4",
+        "1, 4, 1",
+        "0, 3, 4",
+        "1, 4, 0",
+        "0, 3, 4",
+        "0, 3, 4",
+    ])
+}
+
 
 fn make_game() -> TestableGame {
     TestableGame::init()

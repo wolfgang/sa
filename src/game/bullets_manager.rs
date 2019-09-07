@@ -29,9 +29,15 @@ impl BulletsManager {
     }
 
     pub fn tick(&mut self) {
+        let mut keep = Vec::with_capacity(self.bullets.len());
         for bullet in &mut self.bullets {
-            bullet.tick();
+            if bullet.tick() {
+                keep.push(bullet.clone())
+            }
         }
+
+        self.bullets = keep;
+
         self.current_tick += 1;
     }
 
