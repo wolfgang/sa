@@ -27,8 +27,8 @@ fn main() {
         .with_ship_dimensions(ship_width, ship_height)
         .with_bullet_dimensions(bullet_width, bullet_height)
         .with_fps(fps)
-        .with_ship_speed(300)
-        .with_bullet_speed(540)
+        .with_ship_speed(5)
+        .with_bullet_speed(9)
         .build();
 
     let mut renderer = RaylibRenderer::new(rl.clone());

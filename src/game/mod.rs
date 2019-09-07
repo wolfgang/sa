@@ -43,7 +43,7 @@ impl Game {
     }
 
     pub fn tick(&mut self) {
-        let offset = (self.ship_speed / self.fps) as i32;
+        let offset = self.ship_speed as i32;
         if self.input.borrow().is_key_down(KEY_LEFT) {
             self.player_ship.borrow_mut().move_horizontally(-1 * offset);
         }

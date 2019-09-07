@@ -6,11 +6,11 @@ const DEFAULT_FPS: u32 = 60;
 
 const DEFAULT_SHIP_WIDTH: u32 = 4;
 const DEFAULT_SHIP_HEIGHT: u32 = 1;
-const DEFAULT_SHIP_SPEED: u32 = 120;
+const DEFAULT_SHIP_SPEED: u32 = 2;
 
 const DEFAULT_BULLET_WIDTH: u32 = 2;
 const DEFAULT_BULLET_HEIGHT: u32 = 1;
-const DEFAULT_BULLET_SPEED: u32 = 60;
+const DEFAULT_BULLET_SPEED: u32 = 1;
 
 pub struct TestableGameBuilder {
     game_builder: GameBuilder

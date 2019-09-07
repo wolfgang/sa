@@ -14,7 +14,7 @@ impl PlayerBullet {
     }
 
     pub fn tick(&mut self) {
-        self.y = (self.y as f32 - self.speed / self.fps) as i32
+        self.y = (self.y as f32 - self.speed) as i32
     }
 
     pub fn render(&self, renderer: &mut dyn GameRenderer) {
