@@ -11,7 +11,7 @@ pub struct BulletsManager {
     bullet_dimensions: (u32, u32),
     last_bullet_tick: u32,
     current_tick: u32,
-    fps: u32,
+    autofire_ticks: u32,
     bullet_speed: u32
 }
 
@@ -21,10 +21,10 @@ impl BulletsManager {
             player_ship: player_ship.clone(),
             bullets: Vec::with_capacity(10),
             bullet_dimensions,
-            fps,
             last_bullet_tick: 0,
             current_tick: 1000,
-            bullet_speed
+            bullet_speed,
+            autofire_ticks: (0.5 * (fps as f32)) as u32
         }
     }
 
@@ -40,9 +40,9 @@ impl BulletsManager {
     }
 
     pub fn spawn_bullet(&mut self) {
-        let seconds_since_last = (self.current_tick - self.last_bullet_tick) as f32 / self.fps as f32;
+        let ticks_since_last = self.current_tick - self.last_bullet_tick;
 
-        if seconds_since_last >= 0.5 {
+        if ticks_since_last >= self.autofire_ticks {
             self.last_bullet_tick = self.current_tick;
             let (bullet_width, bullet_height) = self.bullet_dimensions;
             let (x, y) = self.player_ship.borrow().bullet_spawn_position(bullet_width as i32, bullet_height as i32);
