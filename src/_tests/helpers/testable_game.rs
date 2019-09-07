@@ -5,7 +5,8 @@ use crate::game::{builder::GameBuilder, Game};
 const DEFAULT_SHIP_WIDTH: u32 = 4;
 const DEFAULT_SHIP_HEIGHT: u32 = 1;
 
-const DEFAULT_BULLET_SIZE: u32 = 2;
+const DEFAULT_BULLET_WIDTH: u32 = 2;
+const DEFAULT_BULLET_HEIGHT: u32 = 1;
 
 pub struct TestableGameBuilder {
     game_builder: GameBuilder
@@ -38,13 +39,13 @@ impl TestableGameBuilder {
         let game = self.game_builder
             .with_input(input.clone())
             .with_ship_dimensions(DEFAULT_SHIP_WIDTH, DEFAULT_SHIP_HEIGHT)
-            .with_bullet_dimensions(DEFAULT_BULLET_SIZE, DEFAULT_BULLET_SIZE)
+            .with_bullet_dimensions(DEFAULT_BULLET_WIDTH, DEFAULT_BULLET_HEIGHT)
             .build();
 
         let (width, height) = self.game_builder.dimensions;
         let mut renderer = StringRenderer::new(width as usize, height as usize);
         renderer.register_sprite(0, DEFAULT_SHIP_WIDTH as u8, DEFAULT_SHIP_HEIGHT as u8);
-        renderer.register_sprite(1, DEFAULT_BULLET_SIZE as u8, DEFAULT_BULLET_SIZE as u8);
+        renderer.register_sprite(1, DEFAULT_BULLET_WIDTH as u8, DEFAULT_BULLET_HEIGHT as u8);
 
         TestableGame {
             input: input.clone(),
