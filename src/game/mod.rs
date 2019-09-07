@@ -6,12 +6,15 @@ use player_bullet::PlayerBullet;
 use player_ship::PlayerShip;
 use renderer::GameRenderer;
 
+use crate::game::bullets_manager::BulletsManager;
+
 pub mod builder;
 pub mod input;
 pub mod renderer;
 pub mod positioned;
 pub mod player_ship;
 pub mod player_bullet;
+pub mod bullets_manager;
 
 pub struct Game {
     input: InputRef,
@@ -38,7 +41,7 @@ impl Game {
             player_bullets: Vec::with_capacity(10),
             bullet_dimensions: builder.bullet_dimensions,
             last_bullet_tick: 0,
-            current_tick: 1000
+            current_tick: 1000,
         }
     }
 
