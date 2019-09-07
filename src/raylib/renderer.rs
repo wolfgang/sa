@@ -3,7 +3,6 @@ use std::rc::Rc;
 
 use raylib::{Color, RaylibHandle, Rectangle, Texture2D, Vector2};
 
-use crate::game::positioned::Positioned;
 use crate::game::renderer::GameRenderer;
 
 pub struct RaylibRenderer {
@@ -28,11 +27,6 @@ impl RaylibRenderer {
 }
 
 impl GameRenderer for RaylibRenderer {
-    fn draw_sprite_obj<T: Positioned>(&mut self, id: u8, obj: &T) {
-        let (x, y) = obj.position();
-        self.draw_sprite(id, x, y)
-    }
-
     fn draw_sprite(&mut self, id: u8, x: i32, y: i32) {
         let source_rec = self.sprites.get(&id).unwrap();
 

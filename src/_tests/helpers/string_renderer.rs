@@ -1,7 +1,6 @@
 use std::char;
 use std::collections::HashMap;
 
-use crate::game::positioned::Positioned;
 use crate::game::renderer::GameRenderer;
 
 type Frame = Vec<Vec<char>>;
@@ -14,11 +13,6 @@ pub struct StringRenderer {
 }
 
 impl GameRenderer for StringRenderer {
-    fn draw_sprite_obj<T: Positioned>(&mut self, id: u8, obj: &T) {
-        let (x, y) = obj.position();
-        self.draw_sprite(id, x, y)
-    }
-
     fn draw_sprite(&mut self, id: u8, x: i32, y: i32) {
         let (width, height) = self.sprites.get(&id).unwrap();
         let id_char = char::from_digit(id as u32, 10).unwrap();
