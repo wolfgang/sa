@@ -46,7 +46,8 @@ impl Game {
         }
 
         if self.input.borrow().is_key_down(KEY_SPACE) {
-            self.player_bullets.push(PlayerBullet::new(4, 2))
+            let (x, y) = self.player_ship.bullet_spawn_position(2, 2);
+            self.player_bullets.push(PlayerBullet::new(x, y))
         }
     }
 
