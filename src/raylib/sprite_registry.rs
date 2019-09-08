@@ -10,30 +10,25 @@ pub struct SpriteRegistry {
 
 impl SpriteRegistry {
     pub fn from_xml(source_xml: String) -> Self {
-        Self { recs: Self::parse(source_xml) }
+        let mut registry = Self { recs: HashMap::with_capacity(100) };
+        registry.parse(source_xml);
+        registry
     }
 
-    fn parse(source_xml: String) -> HashMap<String, Rectangle> {
-        let mut recs: HashMap<String, Rectangle> = HashMap::with_capacity(100);
+    fn parse(&mut self, source_xml: String) {
         let mut current_name = String::from("");
-        let mut current_rec = Self::new_rec();
-
-
         for token in xmlparser::Tokenizer::from(source_xml.as_str()) {
             match token {
                 Ok(xml::Token::Attribute { prefix: _, local, value, span: _ }) => {
                     match local.as_str() {
                         "name" => {
-                            if !current_name.is_empty() {
-                                recs.insert(current_name.to_string(), current_rec);
-                            }
+                            self.recs.insert(value.to_string(), Self::new_rec());
                             current_name = value.to_string();
-                            current_rec = Self::new_rec();
                         }
-                        "x" => { current_rec.x = Self::value_to_float(value) }
-                        "y" => { current_rec.y = Self::value_to_float(value) }
-                        "width" => { current_rec.width = Self::value_to_float(value) }
-                        "height" => { current_rec.height = Self::value_to_float(value) }
+                        "x" => { self.current_rec(&current_name).x = Self::value_to_float(value) }
+                        "y" => { self.current_rec(&current_name).y = Self::value_to_float(value) }
+                        "width" => { self.current_rec(&current_name).width = Self::value_to_float(value) }
+                        "height" => { self.current_rec(&current_name).height = Self::value_to_float(value) }
 
                         _ => {}
                     }
@@ -41,14 +36,14 @@ impl SpriteRegistry {
                 _ => {}
             }
         }
-
-        recs.insert(current_name.to_string(), current_rec);
-        recs
-
     }
 
     pub fn get_source_rec(&self, name: &str) -> Rectangle {
         self.recs.get(name).unwrap().clone()
+    }
+
+    fn current_rec(&mut self, name: &String) -> &mut Rectangle {
+        self.recs.get_mut(name.as_str()).unwrap()
     }
 
     fn value_to_float(value: StrSpan) -> f32 {
