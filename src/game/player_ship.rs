@@ -1,3 +1,4 @@
+use crate::game::builder::GameBuilder;
 use crate::game::positioned::Positioned;
 use crate::game::renderer::GameRenderer;
 
@@ -11,9 +12,9 @@ pub struct PlayerShip {
 }
 
 impl PlayerShip {
-    pub fn new(dimensions: (u32, u32), game_dimensions: (u32, u32), speed: u32) -> Self {
-        let (width, height) = dimensions;
-        let (game_width, game_height) = game_dimensions;
+    pub fn from_game_builder(builder: &GameBuilder) -> Self {
+        let (width, height) = builder.ship_dimensions;
+        let (game_width, game_height) = builder.dimensions;
         let ship_x = game_width / 2 - width / 2;
         let ship_y = game_height - height;
 
@@ -21,12 +22,11 @@ impl PlayerShip {
             x: ship_x as i32,
             y: ship_y as i32,
             width,
-            speed,
+            speed: builder.ship_speed(),
             current_speed: 0,
             max_x: game_width - width,
         }
     }
-
 
     pub fn render(&self, renderer: &mut dyn GameRenderer) {
         renderer.draw_sprite_obj(0, self)
