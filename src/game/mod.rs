@@ -30,11 +30,11 @@ impl Game {
     }
 
     pub fn from_builder(builder: &GameBuilder) -> Self {
-        let player_ship = Rc::new(RefCell::new(PlayerShip::new(builder.ship_dimensions, builder.dimensions, builder.ship_speed / builder.fps)));
+        let player_ship = Rc::new(RefCell::new(PlayerShip::new(builder.ship_dimensions, builder.dimensions, builder.ship_speed())));
         Game {
             input: builder.input.clone(),
             player_ship: player_ship.clone(),
-            bullets_manager: BulletsManager::new(player_ship.clone(), builder.fps, builder.bullet_dimensions, builder.bullet_speed / builder.fps),
+            bullets_manager: BulletsManager::new(player_ship.clone(), builder.bullet_interval(), builder.bullet_dimensions, builder.bullet_speed()),
         }
     }
 

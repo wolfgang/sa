@@ -16,7 +16,7 @@ pub struct BulletsManager {
 }
 
 impl BulletsManager {
-    pub fn new(player_ship: Rc<RefCell<PlayerShip>>, fps: u32, bullet_dimensions: (u32, u32), bullet_speed: u32) -> Self {
+    pub fn new(player_ship: Rc<RefCell<PlayerShip>>, autofire_ticks: u32, bullet_dimensions: (u32, u32), bullet_speed: u32) -> Self {
         BulletsManager {
             player_ship: player_ship.clone(),
             bullets: Vec::with_capacity(10),
@@ -24,7 +24,7 @@ impl BulletsManager {
             last_bullet_tick: 0,
             current_tick: 1000,
             bullet_speed,
-            autofire_ticks: (0.5 * (fps as f32)) as u32,
+            autofire_ticks
         }
     }
 
