@@ -17,20 +17,22 @@ pub struct PlayerShip {
 }
 
 impl PlayerShip {
-    pub fn from_game_builder(builder: &GameBuilder) -> Self {
+    pub fn from_game_builder_rc(builder: &GameBuilder) -> PlayerShipRef {
         let (width, height) = builder.ship_dimensions;
         let (game_width, game_height) = builder.dimensions;
         let ship_x = game_width / 2 - width / 2;
         let ship_y = game_height - height;
 
-        Self {
-            x: ship_x as i32,
-            y: ship_y as i32,
-            width,
-            speed: builder.ship_speed(),
-            current_speed: 0,
-            max_x: game_width - width,
-        }
+        Rc::new(RefCell::new(
+            Self {
+                x: ship_x as i32,
+                y: ship_y as i32,
+                width,
+                speed: builder.ship_speed(),
+                current_speed: 0,
+                max_x: game_width - width,
+            }
+        ))
     }
 
     pub fn render(&self, renderer: &mut dyn GameRenderer) {

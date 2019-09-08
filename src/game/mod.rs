@@ -1,6 +1,3 @@
-use std::cell::RefCell;
-use std::rc::Rc;
-
 use raylib::consts::*;
 
 use builder::GameBuilder;
@@ -31,7 +28,7 @@ impl Game {
     }
 
     pub fn from_builder(builder: &GameBuilder) -> Self {
-        let player_ship = Rc::new(RefCell::new(PlayerShip::from_game_builder(builder)));
+        let player_ship = PlayerShip::from_game_builder_rc(builder);
         Game {
             input: builder.input.clone(),
             player_ship: player_ship.clone(),
