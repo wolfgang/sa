@@ -20,9 +20,8 @@ pub mod bullets_manager;
 
 pub struct Game {
     input: InputRef,
-    ship_speed: u32,
     player_ship: Rc<RefCell<PlayerShip>>,
-    bullets_manager: BulletsManager
+    bullets_manager: BulletsManager,
 }
 
 impl Game {
@@ -31,30 +30,27 @@ impl Game {
     }
 
     pub fn from_builder(builder: &GameBuilder) -> Self {
-        let player_ship = Rc::new(RefCell::new(PlayerShip::new(builder.ship_dimensions, builder.dimensions)));
+        let player_ship = Rc::new(RefCell::new(PlayerShip::new(builder.ship_dimensions, builder.dimensions, builder.ship_speed / builder.fps)));
         Game {
             input: builder.input.clone(),
             player_ship: player_ship.clone(),
-            ship_speed: builder.ship_speed / builder.fps,
-            bullets_manager: BulletsManager::new(player_ship.clone(), builder.fps, builder.bullet_dimensions, builder.bullet_speed / builder.fps)
+            bullets_manager: BulletsManager::new(player_ship.clone(), builder.fps, builder.bullet_dimensions, builder.bullet_speed / builder.fps),
         }
     }
 
     pub fn tick(&mut self) {
-        let offset = self.ship_speed as i32;
         if self.input.borrow().is_key_down(KEY_LEFT) {
-            self.player_ship.borrow_mut().move_horizontally(-1 * offset);
-        }
-
-        if self.input.borrow().is_key_down(KEY_RIGHT) {
-            self.player_ship.borrow_mut().move_horizontally(offset);
-        }
+            self.player_ship.borrow_mut().move_left();
+        } else if self.input.borrow().is_key_down(KEY_RIGHT) {
+            self.player_ship.borrow_mut().move_right();
+        } else { self.player_ship.borrow_mut().stop() }
 
         if self.input.borrow().is_key_down(KEY_SPACE) {
             self.bullets_manager.spawn_bullet();
         } else {
             self.bullets_manager.reset();
         }
+        self.player_ship.borrow_mut().tick();
         self.bullets_manager.tick();
     }
 
