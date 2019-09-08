@@ -34,7 +34,7 @@ impl Game {
         Game {
             input: builder.input.clone(),
             player_ship: player_ship.clone(),
-            bullets_manager: BulletsManager::new(player_ship.clone(), builder.bullet_interval(), builder.bullet_dimensions, builder.bullet_speed()),
+            bullets_manager: BulletsManager::from_game_builder(&builder, player_ship)
         }
     }
 

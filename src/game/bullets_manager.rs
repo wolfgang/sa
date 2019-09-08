@@ -1,6 +1,7 @@
 use std::cell::RefCell;
 use std::rc::Rc;
 
+use crate::game::builder::GameBuilder;
 use crate::game::player_bullet::PlayerBullet;
 use crate::game::player_ship::PlayerShip;
 use crate::game::renderer::GameRenderer;
@@ -16,15 +17,15 @@ pub struct BulletsManager {
 }
 
 impl BulletsManager {
-    pub fn new(player_ship: Rc<RefCell<PlayerShip>>, autofire_ticks: u32, bullet_dimensions: (u32, u32), bullet_speed: u32) -> Self {
+    pub fn from_game_builder(builder: &GameBuilder, player_ship: Rc<RefCell<PlayerShip>>) -> Self {
         BulletsManager {
+            bullet_speed: builder.bullet_speed(),
+            autofire_ticks: builder.autofire_ticks(),
+            bullet_dimensions: builder.bullet_dimensions,
             player_ship: player_ship.clone(),
             bullets: Vec::with_capacity(10),
-            bullet_dimensions,
             last_bullet_tick: 0,
             current_tick: 1000,
-            bullet_speed,
-            autofire_ticks
         }
     }
 

@@ -68,7 +68,7 @@ impl GameBuilder {
         self.bullet_speed / self.fps
     }
 
-    pub fn bullet_interval(&self) -> u32 {
+    pub fn autofire_ticks(&self) -> u32 {
         (0.5 * (self.fps as f32)) as u32
     }
 
