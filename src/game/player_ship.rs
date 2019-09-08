@@ -1,6 +1,11 @@
+use std::cell::RefCell;
+use std::rc::Rc;
+
 use crate::game::builder::GameBuilder;
 use crate::game::positioned::Positioned;
 use crate::game::renderer::GameRenderer;
+
+pub type PlayerShipRef = Rc<RefCell<PlayerShip>>;
 
 pub struct PlayerShip {
     x: i32,

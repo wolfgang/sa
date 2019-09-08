@@ -9,6 +9,7 @@ use player_ship::PlayerShip;
 use renderer::GameRenderer;
 
 use crate::game::bullets_manager::BulletsManager;
+use crate::game::player_ship::PlayerShipRef;
 
 pub mod builder;
 pub mod input;
@@ -20,7 +21,7 @@ pub mod bullets_manager;
 
 pub struct Game {
     input: InputRef,
-    player_ship: Rc<RefCell<PlayerShip>>,
+    player_ship: PlayerShipRef,
     bullets_manager: BulletsManager,
 }
 

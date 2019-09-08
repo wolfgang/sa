@@ -3,7 +3,7 @@ use std::rc::Rc;
 
 use crate::game::builder::GameBuilder;
 use crate::game::player_bullet::PlayerBullet;
-use crate::game::player_ship::PlayerShip;
+use crate::game::player_ship::{PlayerShip, PlayerShipRef};
 use crate::game::renderer::GameRenderer;
 
 pub struct BulletsManager {
@@ -17,7 +17,7 @@ pub struct BulletsManager {
 }
 
 impl BulletsManager {
-    pub fn from_game_builder(builder: &GameBuilder, player_ship: Rc<RefCell<PlayerShip>>) -> Self {
+    pub fn from_game_builder(builder: &GameBuilder, player_ship: PlayerShipRef) -> Self {
         BulletsManager {
             bullet_speed: builder.bullet_speed(),
             autofire_ticks: builder.autofire_ticks(),
