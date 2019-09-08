@@ -11,6 +11,7 @@ pub struct PlayerShip {
     x: i32,
     y: i32,
     width: u32,
+    bullet_dimensions: (u32, u32),
     speed: u32,
     current_speed: i32,
     max_x: u32,
@@ -28,6 +29,7 @@ impl PlayerShip {
                 x: ship_x as i32,
                 y: ship_y as i32,
                 width,
+                bullet_dimensions: builder.bullet_dimensions,
                 speed: builder.ship_speed(),
                 current_speed: 0,
                 max_x: game_width - width,
@@ -51,15 +53,15 @@ impl PlayerShip {
         self.current_speed = 0;
     }
 
-
     pub fn tick(&mut self) {
         self.x += self.current_speed;
         if self.x < 0 { self.x = 0 };
         if self.x >= self.max_x as i32 { self.x = self.max_x as i32 }
     }
 
-    pub fn bullet_spawn_position(&self, bullet_width: i32, bullet_height: i32) -> (i32, i32) {
-        return (self.x + self.width as i32 / 2 - bullet_width / 2, self.y - bullet_height);
+    pub fn bullet_spawn_position(&self) -> (i32, i32) {
+        let (bullet_width, bullet_height) = self.bullet_dimensions;
+        (self.x + self.width as i32 / 2 - bullet_width as i32 / 2, self.y - bullet_height as i32)
     }
 }
 

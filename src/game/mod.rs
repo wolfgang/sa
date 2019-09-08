@@ -32,7 +32,7 @@ impl Game {
         Game {
             input: builder.input.clone(),
             player_ship: player_ship.clone(),
-            bullets_manager: BulletsManager::from_game_builder(builder, player_ship)
+            bullets_manager: BulletsManager::from_game_builder(builder)
         }
     }
 
@@ -44,7 +44,7 @@ impl Game {
         } else { self.player_ship.borrow_mut().stop() }
 
         if self.input.borrow().is_key_down(KEY_SPACE) {
-            self.bullets_manager.spawn_bullet();
+            self.bullets_manager.spawn_bullet_at(self.player_ship.borrow().bullet_spawn_position());
         } else {
             self.bullets_manager.reset();
         }
