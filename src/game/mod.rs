@@ -54,7 +54,7 @@ impl Game {
 
     pub fn render(&self, renderer: &mut dyn GameRenderer) {
         renderer.clear();
-        self.player_ship.borrow_mut().render(renderer);
+        self.player_ship.borrow().render(renderer);
         self.bullets_manager.render_bullets(renderer);
     }
 }
