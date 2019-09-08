@@ -1,6 +1,5 @@
 use crate::game::builder::GameBuilder;
 use crate::game::player_bullet::PlayerBullet;
-use crate::game::player_ship::{PlayerShip, PlayerShipRef};
 use crate::game::renderer::GameRenderer;
 
 pub struct BulletsManager {
@@ -41,7 +40,6 @@ impl BulletsManager {
             self.bullets.push(PlayerBullet::new(position.0, position.1, self.bullet_speed))
         }
     }
-
 
     pub fn render_bullets(&self, renderer: &mut dyn GameRenderer) {
         for bullet in &self.bullets {

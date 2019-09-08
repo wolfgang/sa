@@ -1,11 +1,6 @@
-use std::cell::RefCell;
-use std::rc::Rc;
-
 use crate::game::builder::GameBuilder;
 use crate::game::positioned::Positioned;
 use crate::game::renderer::GameRenderer;
-
-pub type PlayerShipRef = Rc<RefCell<PlayerShip>>;
 
 pub struct PlayerShip {
     x: i32,
@@ -18,23 +13,21 @@ pub struct PlayerShip {
 }
 
 impl PlayerShip {
-    pub fn from_game_builder_rc(builder: &GameBuilder) -> PlayerShipRef {
+    pub fn from_game_builder(builder: &GameBuilder) -> PlayerShip {
         let (width, height) = builder.ship_dimensions;
         let (game_width, game_height) = builder.dimensions;
         let ship_x = game_width / 2 - width / 2;
         let ship_y = game_height - height;
 
-        Rc::new(RefCell::new(
-            Self {
-                x: ship_x as i32,
-                y: ship_y as i32,
-                width,
-                bullet_dimensions: builder.bullet_dimensions,
-                speed: builder.ship_speed(),
-                current_speed: 0,
-                max_x: game_width - width,
-            }
-        ))
+        Self {
+            x: ship_x as i32,
+            y: ship_y as i32,
+            width,
+            bullet_dimensions: builder.bullet_dimensions,
+            speed: builder.ship_speed(),
+            current_speed: 0,
+            max_x: game_width - width,
+        }
     }
 
     pub fn render(&self, renderer: &mut dyn GameRenderer) {

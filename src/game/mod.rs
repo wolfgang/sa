@@ -6,7 +6,6 @@ use player_ship::PlayerShip;
 use renderer::GameRenderer;
 
 use crate::game::bullets_manager::BulletsManager;
-use crate::game::player_ship::PlayerShipRef;
 
 pub mod builder;
 pub mod input;
@@ -18,7 +17,7 @@ pub mod bullets_manager;
 
 pub struct Game {
     input: InputRef,
-    player_ship: PlayerShipRef,
+    player_ship: PlayerShip,
     bullets_manager: BulletsManager,
 }
 
@@ -28,33 +27,33 @@ impl Game {
     }
 
     pub fn from_builder(builder: &GameBuilder) -> Self {
-        let player_ship = PlayerShip::from_game_builder_rc(builder);
+        let player_ship = PlayerShip::from_game_builder(builder);
         Game {
             input: builder.input.clone(),
-            player_ship: player_ship.clone(),
+            player_ship,
             bullets_manager: BulletsManager::from_game_builder(builder)
         }
     }
 
     pub fn tick(&mut self) {
         if self.input.borrow().is_key_down(KEY_LEFT) {
-            self.player_ship.borrow_mut().move_left();
+            self.player_ship.move_left();
         } else if self.input.borrow().is_key_down(KEY_RIGHT) {
-            self.player_ship.borrow_mut().move_right();
-        } else { self.player_ship.borrow_mut().stop() }
+            self.player_ship.move_right();
+        } else { self.player_ship.stop() }
 
         if self.input.borrow().is_key_down(KEY_SPACE) {
-            self.bullets_manager.spawn_bullet_at(self.player_ship.borrow().bullet_spawn_position());
+            self.bullets_manager.spawn_bullet_at(self.player_ship.bullet_spawn_position());
         } else {
             self.bullets_manager.reset();
         }
-        self.player_ship.borrow_mut().tick();
+        self.player_ship.tick();
         self.bullets_manager.tick();
     }
 
     pub fn render(&self, renderer: &mut dyn GameRenderer) {
         renderer.clear();
-        self.player_ship.borrow().render(renderer);
+        self.player_ship.render(renderer);
         self.bullets_manager.render_bullets(renderer);
     }
 }
