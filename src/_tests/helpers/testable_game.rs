@@ -80,6 +80,13 @@ impl TestableGame {
         for _ in 0..times { self.tick() }
     }
 
+    pub fn loop_times(&mut self, times: u32) {
+        for _ in 0..times {
+            self.tick();
+            self.render();
+        }
+    }
+
     pub fn tick(&mut self) {
         self.game.tick();
     }

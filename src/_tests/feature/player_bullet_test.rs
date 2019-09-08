@@ -114,14 +114,7 @@ fn bullet_is_removed_after_leaving_screen() {
     ]);
 
     game.key_is_up(KEY_SPACE);
-    game.tick();
-    game.render();
-    game.tick();
-    game.render();
-    game.tick();
-    game.render();
-    game.tick();
-    game.render();
+    game.loop_times(10);
 
     game.assert_sprite_log_for(1, vec![
         "1, 4, 2",
