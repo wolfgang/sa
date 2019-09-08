@@ -6,3 +6,5 @@ edition = "2018"
 
 [dependencies]
 raylib = "0.9.1"
+quick-xml = "0.16.1"
+xmlparser = "0.9.0"
