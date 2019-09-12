@@ -26,6 +26,12 @@ impl GameObject {
         self.y += self.move_direction.1 * self.speed.1 as i32;
     }
 
+
+    pub fn tick_and<F>(&mut self, and: F) where F: Fn(&mut Self) {
+        self.tick();
+        and(self);
+    }
+
     pub fn render<T>(&self, renderer: &mut T) where T: GameRenderer {
         renderer.draw_sprite_obj(self.sprite_id, self)
     }
