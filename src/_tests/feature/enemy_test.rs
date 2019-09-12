@@ -57,3 +57,32 @@ fn enemy_goes_from_left_to_right() {
     ]);
 
 }
+
+#[test]
+fn enemy_goes_down() {
+    let mut game = TestableGame::init()
+        .with_dimensions(10, 6)
+        .with_enemy_speed(120, 60)
+        .with_enemy_dimensions(2, 2)
+        .build();
+
+    game.renders_frame(vec![
+        "22........",
+        "22........",
+        "..........",
+        "..........",
+        "..........",
+        "...0000..."
+    ]);
+
+    game.tick();
+
+    game.renders_frame(vec![
+        "..........",
+        "..22......",
+        "..22......",
+        "..........",
+        "..........",
+        "...0000..."
+    ]);
+}

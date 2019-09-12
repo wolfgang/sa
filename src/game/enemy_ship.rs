@@ -11,7 +11,7 @@ pub struct EnemyShip {
 impl EnemyShip {
     pub fn from_game_builder(builder: &GameBuilder) -> Self {
         let mut game_object = GameObject::new(2, 0, 0, builder.enemy_speed());
-        game_object.set_move_direction(1, 0);
+        game_object.set_move_direction(1, 1);
         Self {
             width: builder.enemy_dimensions.0,
             max_x: builder.dimensions.0,
@@ -26,13 +26,13 @@ impl EnemyShip {
 
         if x <= 0 {
             self.game_object.set_position(0, y);
-            self.game_object.set_move_direction(1, 0);
+            self.game_object.set_move_direction(1, 1);
         }
 
         let max_x = (self.max_x - self.width) as i32;
         if x >= max_x {
             self.game_object.set_position(max_x, y);
-            self.game_object.set_move_direction(-1, 0);
+            self.game_object.set_move_direction(-1, 1);
         }
     }
 
