@@ -49,8 +49,8 @@ impl StringRenderer {
         }
     }
 
-    pub fn register_sprite(&mut self, id: u8, width: u8, height: u8) {
-        self.sprites.insert(id, (width, height));
+    pub fn register_sprite(&mut self, id: u8, dimensions: (u8, u8)) {
+        self.sprites.insert(id, dimensions);
     }
 
     pub(crate) fn assert_frame(&self, expected_frame: Vec<&str>) {
