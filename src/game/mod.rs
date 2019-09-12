@@ -53,6 +53,7 @@ impl Game {
 
     pub fn render<T>(&self, renderer: &mut T) where T: GameRenderer {
         renderer.clear();
+//        renderer.draw_sprite(2, 0, 0);
         self.player_ship.render(renderer);
         self.bullets_manager.render_bullets(renderer);
     }
