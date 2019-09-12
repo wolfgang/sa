@@ -1,34 +1,27 @@
-use crate::game::positioned::Positioned;
+use crate::game::game_object::GameObject;
 use crate::game::renderer::GameRenderer;
 
-#[derive(Clone)]
 pub struct PlayerBullet {
-    x: i32,
-    y: i32,
-    speed: u32,
-    move_direction: i32,
+    game_object: GameObject
 }
 
 impl PlayerBullet {
     pub fn new(x: i32, y: i32, speed: u32) -> Self {
-        Self { x, y, speed, move_direction: -1 }
+        let mut game_object = GameObject::new(1, x, y, (0, speed));
+        game_object.set_move_direction(0, -1);
+        Self { game_object }
     }
 
     pub fn tick(&mut self) {
-        self.y += self.move_direction * self.speed as i32;
+        self.game_object.tick();
     }
 
     pub fn is_alive(&self) -> bool {
-        self.y >= 0
+        let y = self.game_object.get_position().1;
+        y >= 0
     }
 
     pub fn render<T>(&self, renderer: &mut T) where T: GameRenderer {
-        renderer.draw_sprite_obj(1, self);
-    }
-}
-
-impl Positioned for PlayerBullet {
-    fn position(&self) -> (i32, i32) {
-        (self.x, self.y)
+        self.game_object.render(renderer)
     }
 }
