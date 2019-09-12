@@ -38,7 +38,7 @@ impl Game {
             input: builder.input.clone(),
             player_ship,
             enemy_ship,
-            enemies_enabled: builder.enemy_speed().0 > 0.0,
+            enemies_enabled: builder.enemy_speed().0 > 0,
             bullets_manager: BulletsManager::from_game_builder(builder)
         }
     }

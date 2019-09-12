@@ -25,7 +25,7 @@ impl GameBuilder {
             ship_speed: 0,
             bullet_speed: 0,
             enemy_speed: (0, 0),
-            enemy_dimensions: (0, 0)
+            enemy_dimensions: (0, 0),
         }
     }
 
@@ -83,8 +83,8 @@ impl GameBuilder {
         self.bullet_speed / self.fps
     }
 
-    pub fn enemy_speed(&self) -> (f32, f32) {
-        (self.enemy_speed.0 as f32 / self.fps as f32, self.enemy_speed.1 as f32 / self.fps as f32)
+    pub fn enemy_speed(&self) -> (u32, u32) {
+        (self.enemy_speed.0 / self.fps, self.enemy_speed.1 / self.fps)
     }
 
     pub fn autofire_ticks(&self) -> u32 {
