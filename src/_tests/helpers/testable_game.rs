@@ -42,6 +42,11 @@ impl TestableGameBuilder {
         self
     }
 
+    pub fn with_enemy_dimensions(&mut self, width: u32, height: u32) -> &mut Self {
+        self.game_builder = self.game_builder.with_enemy_dimensions(width, height).clone();
+        self
+    }
+
     pub fn build(&mut self) -> TestableGame {
         let input = InputStub::new_rc();
         let game = self.game_builder

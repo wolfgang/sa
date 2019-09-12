@@ -28,10 +28,11 @@ fn main() {
         .with_dimensions(screen_width as u32, screen_height as u32)
         .with_ship_dimensions(ship_rec.width as u32, ship_rec.height as u32)
         .with_bullet_dimensions(bullet_rec.width as u32, bullet_rec.height as u32)
+        .with_enemy_dimensions(enemy_rec.width as u32, enemy_rec.height as u32)
         .with_fps(fps)
         .with_ship_speed(360)
         .with_bullet_speed(540)
-        .with_enemy_speed(60, 30)
+        .with_enemy_speed(240, 30)
         .build();
 
     let mut renderer = RaylibRenderer::new(rl.clone());

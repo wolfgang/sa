@@ -6,11 +6,12 @@ pub struct GameBuilder {
     pub dimensions: (u32, u32),
     pub ship_dimensions: (u32, u32),
     pub bullet_dimensions: (u32, u32),
+    pub enemy_dimensions: (u32, u32),
     pub input: InputRef,
     fps: u32,
     ship_speed: u32,
     bullet_speed: u32,
-    enemy_speed: (u32, u32)
+    enemy_speed: (u32, u32),
 }
 
 impl GameBuilder {
@@ -23,7 +24,8 @@ impl GameBuilder {
             fps: 30,
             ship_speed: 0,
             bullet_speed: 0,
-            enemy_speed: (0, 0)
+            enemy_speed: (0, 0),
+            enemy_dimensions: (0, 0)
         }
     }
 
@@ -41,6 +43,12 @@ impl GameBuilder {
         self.bullet_dimensions = (width, height);
         self
     }
+
+    pub fn with_enemy_dimensions(&mut self, width: u32, height: u32) -> &mut Self {
+        self.enemy_dimensions = (width, height);
+        self
+    }
+
 
     pub fn with_input(&mut self, input: InputRef) -> &mut Self {
         self.input = input;
