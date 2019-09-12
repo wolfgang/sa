@@ -8,7 +8,7 @@ pub struct PlayerShip {
     width: u32,
     bullet_dimensions: (u32, u32),
     speed: u32,
-    current_speed: i32,
+    move_direction: i32,
     max_x: u32,
 }
 
@@ -25,7 +25,7 @@ impl PlayerShip {
             width,
             bullet_dimensions: builder.bullet_dimensions,
             speed: builder.ship_speed(),
-            current_speed: 0,
+            move_direction: 0,
             max_x: game_width - width,
         }
     }
@@ -35,19 +35,19 @@ impl PlayerShip {
     }
 
     pub fn move_left(&mut self) {
-        self.current_speed = -1 * (self.speed as i32);
+        self.move_direction = -1
     }
 
     pub fn move_right(&mut self) {
-        self.current_speed = self.speed as i32;
+        self.move_direction = 1;
     }
 
     pub fn stop(&mut self) {
-        self.current_speed = 0;
+        self.move_direction = 0;
     }
 
     pub fn tick(&mut self) {
-        self.x += self.current_speed;
+        self.x += self.move_direction * self.speed as i32;
         if self.x < 0 { self.x = 0 };
         if self.x >= self.max_x as i32 { self.x = self.max_x as i32 }
     }

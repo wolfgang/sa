@@ -6,15 +6,16 @@ pub struct PlayerBullet {
     x: i32,
     y: i32,
     speed: u32,
+    move_direction: i32,
 }
 
 impl PlayerBullet {
     pub fn new(x: i32, y: i32, speed: u32) -> Self {
-        Self { x, y, speed }
+        Self { x, y, speed, move_direction: -1 }
     }
 
     pub fn tick(&mut self) {
-        self.y -= self.speed as i32;
+        self.y += self.move_direction * self.speed as i32;
     }
 
     pub fn is_alive(&self) -> bool {

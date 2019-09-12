@@ -10,7 +10,7 @@ pub struct EnemyShip {
     y: i32,
     width: u32,
     max_x: u32,
-    current_direction: i32,
+    move_direction: i32,
 }
 
 impl EnemyShip {
@@ -21,16 +21,16 @@ impl EnemyShip {
             y: 0,
             width: builder.enemy_dimensions.0,
             max_x: builder.dimensions.0,
-            current_direction: 1,
+            move_direction: 1,
         }
     }
 
     pub fn tick(&mut self) {
-        let mut new_x = self.x + (self.current_direction * self.speed.0 as i32) as i32;
+        let mut new_x = self.x + (self.move_direction * self.speed.0 as i32) as i32;
         let max_x = (self.max_x - self.width) as i32;
         if new_x >= max_x || new_x <= 0 {
             new_x = min(max_x, max(new_x, 0));
-            self.current_direction *= -1;
+            self.move_direction *= -1;
         }
         self.x = new_x;
     }
