@@ -21,7 +21,7 @@ impl PlayerBullet {
         self.y >= 0
     }
 
-    pub fn render(&self, renderer: &mut dyn GameRenderer) {
+    pub fn render<T>(&self, renderer: &mut T) where T: GameRenderer {
         renderer.draw_sprite_obj(1, self);
     }
 }
