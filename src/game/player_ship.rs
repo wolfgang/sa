@@ -30,7 +30,7 @@ impl PlayerShip {
         }
     }
 
-    pub fn render(&self, renderer: &mut dyn GameRenderer) {
+    pub fn render<T>(&self, renderer: &mut T) where T: GameRenderer {
         renderer.draw_sprite_obj(0, self)
     }
 

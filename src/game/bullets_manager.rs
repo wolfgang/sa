@@ -41,7 +41,7 @@ impl BulletsManager {
         }
     }
 
-    pub fn render_bullets(&self, renderer: &mut dyn GameRenderer) {
+    pub fn render_bullets<T>(&self, renderer: &mut T) where T: GameRenderer {
         for bullet in &self.bullets {
             bullet.render(renderer);
         }
