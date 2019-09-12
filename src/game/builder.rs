@@ -9,7 +9,8 @@ pub struct GameBuilder {
     pub input: InputRef,
     fps: u32,
     ship_speed: u32,
-    bullet_speed: u32
+    bullet_speed: u32,
+    enemy_speed: (u32, u32)
 }
 
 impl GameBuilder {
@@ -21,7 +22,8 @@ impl GameBuilder {
             bullet_dimensions: (0, 0),
             fps: 30,
             ship_speed: 0,
-            bullet_speed: 0
+            bullet_speed: 0,
+            enemy_speed: (0, 0)
         }
     }
 
@@ -60,12 +62,21 @@ impl GameBuilder {
         self
     }
 
+    pub fn with_enemy_speed(&mut self, dx: u32, dy: u32) -> &mut Self {
+        self.enemy_speed = (dx, dy);
+        self
+    }
+
     pub fn ship_speed(&self) -> u32 {
         self.ship_speed / self.fps
     }
 
     pub fn bullet_speed(&self) -> u32 {
         self.bullet_speed / self.fps
+    }
+
+    pub fn enemy_speed(&self) -> (f32, f32) {
+        (self.enemy_speed.0 as f32 / self.fps as f32, self.enemy_speed.1 as f32 / self.fps as f32)
     }
 
     pub fn autofire_ticks(&self) -> u32 {

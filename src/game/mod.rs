@@ -1,6 +1,7 @@
 use raylib::consts::*;
 
 use builder::GameBuilder;
+use enemy_ship::EnemyShip;
 use input::InputRef;
 use player_ship::PlayerShip;
 use renderer::GameRenderer;
@@ -14,11 +15,14 @@ pub mod positioned;
 pub mod player_ship;
 pub mod player_bullet;
 pub mod bullets_manager;
+pub mod enemy_ship;
 
 pub struct Game {
     input: InputRef,
     player_ship: PlayerShip,
+    enemy_ship: EnemyShip,
     bullets_manager: BulletsManager,
+    enemies_enabled: bool
 }
 
 impl Game {
@@ -28,9 +32,12 @@ impl Game {
 
     pub fn from_builder(builder: &GameBuilder) -> Self {
         let player_ship = PlayerShip::from_game_builder(builder);
+        let enemy_ship = EnemyShip::from_game_builder(builder);
         Game {
             input: builder.input.clone(),
             player_ship,
+            enemy_ship,
+            enemies_enabled: builder.enemy_speed().0 > 0.0,
             bullets_manager: BulletsManager::from_game_builder(builder)
         }
     }
@@ -48,12 +55,13 @@ impl Game {
             self.bullets_manager.reset();
         }
         self.player_ship.tick();
+        self.enemy_ship.tick();
         self.bullets_manager.tick();
     }
 
     pub fn render<T>(&self, renderer: &mut T) where T: GameRenderer {
         renderer.clear();
-//        renderer.draw_sprite(2, 0, 0);
+        if self.enemies_enabled { self.enemy_ship.render(renderer) }
         self.player_ship.render(renderer);
         self.bullets_manager.render_bullets(renderer);
     }
