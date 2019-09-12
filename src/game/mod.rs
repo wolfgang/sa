@@ -51,7 +51,7 @@ impl Game {
         self.bullets_manager.tick();
     }
 
-    pub fn render(&self, renderer: &mut dyn GameRenderer) {
+    pub fn render<T>(&self, renderer: &mut T) where T: GameRenderer {
         renderer.clear();
         self.player_ship.render(renderer);
         self.bullets_manager.render_bullets(renderer);
