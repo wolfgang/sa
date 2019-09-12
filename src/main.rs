@@ -21,6 +21,7 @@ fn main() {
 
     let ship_rec = sprite_registry.get_source_rec("playerShip3_red.png");
     let bullet_rec = sprite_registry.get_source_rec("laserBlue08.png");
+    let enemy_rec = sprite_registry.get_source_rec("enemyBlack2.png");
 
     let mut game = Game::init()
         .with_input(RaylibInput::new_rc(rl.clone()))
@@ -30,11 +31,13 @@ fn main() {
         .with_fps(fps)
         .with_ship_speed(360)
         .with_bullet_speed(540)
+        .with_enemy_speed(60, 30)
         .build();
 
     let mut renderer = RaylibRenderer::new(rl.clone());
     renderer.register_sprite(0, ship_rec);
     renderer.register_sprite(1, bullet_rec);
+    renderer.register_sprite(2, enemy_rec);
 
     let frame_time = 1.0 / fps as f64;
     let mut current_delta = 0.0;
