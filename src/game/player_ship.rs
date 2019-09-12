@@ -1,10 +1,11 @@
 use crate::game::builder::GameBuilder;
 use crate::game::game_object::GameObject;
+use crate::game::geometry::Vector2;
 use crate::game::renderer::GameRenderer;
 
 pub struct PlayerShip {
     width: u32,
-    bullet_dimensions: (u32, u32),
+    bullet_dimensions: Vector2<u32>,
     max_x: u32,
     game_object: GameObject
 }
@@ -20,7 +21,7 @@ impl PlayerShip {
 
         Self {
             width,
-            bullet_dimensions: builder.bullet_dimensions,
+            bullet_dimensions: Vector2::from(builder.bullet_dimensions),
             max_x: game_width - width,
             game_object
         }
@@ -51,7 +52,7 @@ impl PlayerShip {
     }
 
     pub fn bullet_spawn_position(&self) -> (i32, i32) {
-        let (bullet_width, bullet_height) = self.bullet_dimensions;
+        let (bullet_width, bullet_height) = self.bullet_dimensions.into();
         let (x, y) = self.game_object.get_position();
         (x + self.width as i32 / 2 - bullet_width as i32 / 2, y - bullet_height as i32)
     }

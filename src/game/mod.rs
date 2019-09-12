@@ -8,6 +8,7 @@ use renderer::GameRenderer;
 
 use crate::game::bullets_manager::BulletsManager;
 
+pub mod geometry;
 pub mod builder;
 pub mod input;
 pub mod renderer;
