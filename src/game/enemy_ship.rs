@@ -1,3 +1,5 @@
+use std::cmp::{max, min};
+
 use crate::game::builder::GameBuilder;
 use crate::game::positioned::Positioned;
 use crate::game::renderer::GameRenderer;
@@ -25,12 +27,9 @@ impl EnemyShip {
 
     pub fn tick(&mut self) {
         let mut new_x = self.x + (self.current_direction * self.speed.0 as i32) as i32;
-        if new_x >= (self.max_x - self.width) as i32 {
-            new_x = (self.max_x - self.width) as i32;
-            self.current_direction *= -1;
-        }
-        if new_x <= 0 {
-            new_x = 0;
+        let max_x = (self.max_x - self.width) as i32;
+        if new_x >= max_x || new_x <= 0 {
+            new_x = min(max_x, max(new_x, 0));
             self.current_direction *= -1;
         }
         self.x = new_x;
