@@ -45,9 +45,9 @@ impl TestableGameBuilder {
 
         let (width, height) = self.game_builder.dimensions;
         let mut renderer = StringRenderer::new(width as usize, height as usize);
-        renderer.register_sprite(0, (DEFAULT_SHIP_WIDTH as u8, DEFAULT_SHIP_HEIGHT as u8));
-        renderer.register_sprite(1, (DEFAULT_BULLET_WIDTH as u8, DEFAULT_BULLET_HEIGHT as u8));
-        renderer.register_sprite(2, (DEFAULT_ENEMY_WIDTH, DEFAULT_ENEMY_HEIGHT));
+        renderer.register_sprite(0, DEFAULT_SHIP_WIDTH as u8, DEFAULT_SHIP_HEIGHT as u8);
+        renderer.register_sprite(1, DEFAULT_BULLET_WIDTH as u8, DEFAULT_BULLET_HEIGHT as u8);
+        renderer.register_sprite(2, DEFAULT_ENEMY_WIDTH, DEFAULT_ENEMY_HEIGHT);
         TestableGame {
             input: input.clone(),
             renderer,
