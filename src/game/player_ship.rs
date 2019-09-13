@@ -5,7 +5,6 @@ use crate::game::renderer::GameRenderer;
 
 pub struct PlayerShip {
     width: u32,
-    bullet_dimensions: Vector2<u32>,
     screen_rect: Rectanglef,
     game_object: GameObject,
 }
@@ -20,7 +19,6 @@ impl PlayerShip {
         let go_rect = Rectanglef::with_tuple(Vector2::with(ship_x as f32, ship_y as f32), builder.ship_dimensions);
         Self {
             width,
-            bullet_dimensions: Vector2::from(builder.bullet_dimensions),
             game_object: GameObject::new(0, go_rect, builder.ship_speed()),
             screen_rect: builder.screen_rect()
         }
@@ -48,9 +46,8 @@ impl PlayerShip {
     }
 
     pub fn bullet_spawn_position(&self) -> (f32, f32) {
-        let (bullet_width, bullet_height) = self.bullet_dimensions.into();
         let pos = self.game_object.get_position();
-        (pos.x + self.width as f32 / 2.0 - bullet_width as f32 / 2.0, pos.y - bullet_height as f32)
+        (pos.x + self.width as f32 / 2.0, pos.y)
     }
 }
 

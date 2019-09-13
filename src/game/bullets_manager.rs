@@ -40,7 +40,12 @@ impl BulletsManager {
 
         if ticks_since_last >= self.autofire_ticks {
             self.last_bullet_tick = self.current_tick;
-            let rect = Rectanglef::with_tuple(Vector2::from(position), self.bullet_dimensions);
+
+            let mut adjusted_pos = position;
+            adjusted_pos.0 -= self.bullet_dimensions.0 as f32 / 2.0;
+            adjusted_pos.1 -= self.bullet_dimensions.1 as f32;
+            
+            let rect = Rectanglef::with_tuple(Vector2::from(adjusted_pos), self.bullet_dimensions);
             self.bullets.push(PlayerBullet::new(rect, self.bullet_speed))
         }
     }
