@@ -1,29 +1,26 @@
-use crate::game::geometry::{Rectangle, Rectanglef, Vector2, Vector2f};
+use crate::game::geometry::{Rectanglef, Vector2, Vector2f};
 use crate::game::positioned::OnScreen;
 use crate::game::renderer::GameRenderer;
 
 pub struct GameObject {
     sprite_id: u8,
-    position: Vector2f,
     speed: Vector2f,
     move_direction: Vector2f,
-    rectangle: Rectanglef
-
+    rectangle: Rectanglef,
 }
 
 impl GameObject {
     pub fn new(sprite_id: u8, rectangle: Rectanglef, speed: Vector2f) -> Self {
         Self {
             sprite_id,
-            position: rectangle.position,
             speed,
+            rectangle,
             move_direction: Vector2::zero(),
-            rectangle
         }
     }
 
     pub fn tick(&mut self) {
-        self.position += self.move_direction * self.speed;
+        self.rectangle.position += self.move_direction * self.speed;
     }
 
     pub fn tick_and<F>(&mut self, and: F) where F: Fn(&mut Self) {
@@ -46,17 +43,17 @@ impl GameObject {
     }
 
     pub fn get_position(&self) -> Vector2f {
-        self.position
+        self.rectangle.position
     }
 
     pub fn set_position(&mut self, x: f32, y: f32) {
-        self.position.x = x;
-        self.position.y = y;
+        self.rectangle.position.x = x;
+        self.rectangle.position.y = y;
     }
 }
 
 impl OnScreen for GameObject {
     fn position(&self) -> (i32, i32) {
-        (self.position.x as i32, self.position.y as i32)
+        (self.rectangle.position.x as i32, self.rectangle.position.y as i32)
     }
 }
