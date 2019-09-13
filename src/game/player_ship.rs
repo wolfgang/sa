@@ -56,7 +56,7 @@ impl PlayerShip {
     pub fn bullet_spawn_position(&self) -> (f32, f32) {
         let (bullet_width, bullet_height) = self.bullet_dimensions.into();
         let pos = self.game_object.get_position();
-        ((pos.x + self.width as f32 / 2.0 - bullet_width as f32 / 2.0) as f32, (pos.y - bullet_height as f32) as f32)
+        (pos.x + self.width as f32 / 2.0 - bullet_width as f32 / 2.0, pos.y - bullet_height as f32)
     }
 }
 

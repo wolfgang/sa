@@ -14,9 +14,9 @@ impl GameObject {
     pub fn new(sprite_id: u8, x: f32, y: f32, speed: (u32, u32)) -> Self {
         Self {
             sprite_id,
-            position: Vector2::new(x as f32, y as f32),
+            position: Vector2::new(x, y),
             speed: Vector2::new(speed.0 as f32, speed.1 as f32),
-            move_direction: Vector2::new(0, 0)
+            move_direction: Vector2::new(0, 0),
         }
     }
 
