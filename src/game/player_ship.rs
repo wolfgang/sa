@@ -1,6 +1,6 @@
 use crate::game::builder::GameBuilder;
 use crate::game::game_object::GameObject;
-use crate::game::geometry::{Rectanglef, Vector2};
+use crate::game::geometry::{Rectanglef, Vector2, Vector2f};
 use crate::game::renderer::GameRenderer;
 
 pub struct PlayerShip {
@@ -45,9 +45,9 @@ impl PlayerShip {
         self.game_object.snap_to_width(self.screen_rect.width);
     }
 
-    pub fn bullet_spawn_position(&self) -> (f32, f32) {
+    pub fn bullet_spawn_position(&self) -> Vector2f {
         let pos = self.game_object.get_position();
-        (pos.x + self.width as f32 / 2.0, pos.y)
+        Vector2::with(pos.x + self.width as f32 / 2.0, pos.y)
     }
 }
 
