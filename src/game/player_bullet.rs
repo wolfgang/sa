@@ -6,8 +6,8 @@ pub struct PlayerBullet {
 }
 
 impl PlayerBullet {
-    pub fn new(x: i32, y: i32, speed: u32) -> Self {
-        let mut game_object = GameObject::new(1, x as f32, y as f32, (0, speed));
+    pub fn new(x: f32, y: f32, speed: u32) -> Self {
+        let mut game_object = GameObject::new(1, x, y, (0, speed));
         game_object.set_move_direction(0, -1);
         Self { game_object }
     }
