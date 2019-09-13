@@ -23,11 +23,26 @@ impl Rectanglef {
     }
 
     pub fn intersects(&self, other: &Self) -> bool {
-        if self.position.x + self.width < other.position.x { return false }
-        if self.position.x > other.position.x + other.width { return false }
-        if self.position.y + self.height < other.position.y { return false }
-        if self.position.y > other.position.y + other.height { return false }
+        if self.right() < other.position.x { return false; }
+        if self.position.x > other.right() { return false; }
+        if self.bottom() < other.position.y { return false; }
+        if self.position.y > other.bottom() { return false; }
         true
+    }
+
+    fn right(&self) -> f32 {
+        self.position.x + self.width - 1.0
+    }
+
+    fn bottom(&self) -> f32 {
+        self.position.y + self.height - 1.0
+    }
+
+    pub fn is_inside_of(&self, other: &Self) -> bool {
+        self.position.x >= other.position.x
+            && self.right() <= other.right()
+            && self.position.y >= other.position.y
+            && self.bottom() <= other.bottom()
     }
 }
 
