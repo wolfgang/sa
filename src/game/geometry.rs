@@ -21,6 +21,14 @@ impl Rectanglef {
     pub fn zero() -> Self {
         Self::default()
     }
+
+    pub fn intersects(&self, other: &Self) -> bool {
+        if self.position.x + self.width < other.position.x { return false }
+        if self.position.x > other.position.x + other.width { return false }
+        if self.position.y + self.height < other.position.y { return false }
+        if self.position.y > other.position.y + other.height { return false }
+        true
+    }
 }
 
 #[derive(Copy, Clone, PartialEq, Debug, Default)]
