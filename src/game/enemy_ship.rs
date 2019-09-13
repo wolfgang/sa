@@ -4,29 +4,30 @@ use crate::game::geometry::{Rectanglef, Vector2};
 use crate::game::renderer::GameRenderer;
 
 pub struct EnemyShip {
-    max_x: f32,
+    screen_rect: Rectanglef,
     game_object: GameObject,
 }
 
 impl EnemyShip {
     pub fn from_game_builder(builder: &GameBuilder) -> Self {
-        let rectangle = Rectanglef::with_tuple(Vector2::zero(), builder.enemy_dimensions);
-        let mut game_object = GameObject::new(2, rectangle, builder.enemy_speed());
+        let go_rect = Rectanglef::with_tuple(Vector2::zero(), builder.enemy_dimensions);
+        let screen_rect = Rectanglef::with_tuple(Vector2::zero(), builder.dimensions);
+        let mut game_object = GameObject::new(2, go_rect, builder.enemy_speed());
         game_object.set_move_direction(1, 1);
         Self {
-            max_x: builder.dimensions.0 as f32,
             game_object,
+            screen_rect
         }
     }
 
     pub fn tick(&mut self) {
         self.game_object.tick();
 
-        if !self.game_object.is_inside_width(self.max_x) {
+        if !self.game_object.is_inside_width(self.screen_rect.width) {
             self.game_object.mult_move_direction(-1, 1)
         }
 
-        self.game_object.snap_to_width(self.max_x)
+        self.game_object.snap_to_width(self.screen_rect.width)
     }
 
     pub fn render<T>(&self, renderer: &mut T) where T: GameRenderer {
