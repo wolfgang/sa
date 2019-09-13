@@ -1,4 +1,5 @@
 use crate::game::Game;
+use crate::game::geometry::{Vector2, Vector2f};
 use crate::game::input::{InputNull, InputRef};
 
 #[derive(Clone)]
@@ -83,8 +84,8 @@ impl GameBuilder {
         self.bullet_speed / self.fps
     }
 
-    pub fn enemy_speed(&self) -> (f32, f32) {
-        (self.enemy_speed.0 as f32 / self.fps as f32, self.enemy_speed.1 as f32 / self.fps as f32)
+    pub fn enemy_speed(&self) -> Vector2f {
+        Vector2::new(self.enemy_speed.0 as f32, self.enemy_speed.1 as f32) * (1.0 / self.fps as f32)
     }
 
     pub fn autofire_ticks(&self) -> u32 {
