@@ -1,10 +1,10 @@
-use crate::game::geometry::Vector2;
+use crate::game::geometry::{Vector2, Vector2f};
 use crate::game::positioned::Positioned;
 use crate::game::renderer::GameRenderer;
 
 pub struct GameObject {
     sprite_id: u8,
-    position: Vector2<i32>,
+    position: Vector2f,
     speed: Vector2<u32>,
     move_direction: Vector2<i32>,
 
@@ -14,15 +14,15 @@ impl GameObject {
     pub fn new(sprite_id: u8, x: i32, y: i32, speed: (u32, u32)) -> Self {
         Self {
             sprite_id,
-            position: Vector2::new(x, y),
+            position: Vector2::new(x as f32, y as f32),
             speed: Vector2::from(speed),
             move_direction: Vector2::new(0, 0)
         }
     }
 
     pub fn tick(&mut self) {
-        self.position.x += self.move_direction.x * self.speed.x as i32;
-        self.position.y += self.move_direction.y * self.speed.y as i32;
+        self.position.x += self.move_direction.x as f32 * self.speed.x as f32;
+        self.position.y += self.move_direction.y as f32 * self.speed.y as f32;
     }
 
 
@@ -41,17 +41,17 @@ impl GameObject {
     }
 
     pub fn get_position(&self) -> (i32, i32) {
-        (self.position.x, self.position.y)
+        (self.position.x as i32, self.position.y as i32)
     }
 
     pub fn set_position(&mut self, x: i32, y: i32) {
-        self.position.x = x;
-        self.position.y = y;
+        self.position.x = x as f32;
+        self.position.y = y as f32;
     }
 }
 
 impl Positioned for GameObject {
     fn position(&self) -> (i32, i32) {
-        (self.position.x, self.position.y)
+        (self.position.x as i32, self.position.y as i32)
     }
 }
