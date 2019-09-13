@@ -24,7 +24,7 @@ impl PlayerShip {
         Self {
             width,
             bullet_dimensions: Vector2::from(builder.bullet_dimensions),
-            max_x: game_width - width,
+            max_x: game_width,
             game_object,
         }
     }
@@ -48,9 +48,7 @@ impl PlayerShip {
     pub fn tick(&mut self) {
         let max_x = self.max_x as f32;
         self.game_object.tick_and(|go| {
-            let pos = go.get_position();
-            let x = f32::max(0.0, f32::min(pos.x, max_x));
-            go.set_position(x, pos.y);
+            go.snap_to_width(max_x);
         });
     }
 

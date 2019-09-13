@@ -50,6 +50,11 @@ impl GameObject {
         self.rectangle.position.x = x;
         self.rectangle.position.y = y;
     }
+
+    pub fn snap_to_width(&mut self, width: f32) {
+        let x = self.rectangle.position.x;
+        self.rectangle.position.x = f32::max(0.0, f32::min(x, width - self.rectangle.width));
+    }
 }
 
 impl OnScreen for GameObject {

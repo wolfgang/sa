@@ -31,7 +31,7 @@ impl EnemyShip {
             self.game_object.mult_move_direction(-1, 1)
         }
 
-        self.game_object.set_position(f32::max(0.0, f32::min(pos.x, max_x)), pos.y);
+        self.game_object.snap_to_width(self.max_x as f32)
     }
 
     pub fn render<T>(&self, renderer: &mut T) where T: GameRenderer {
