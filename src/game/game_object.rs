@@ -1,5 +1,5 @@
 use crate::game::geometry::{Vector2, Vector2f};
-use crate::game::positioned::Positioned;
+use crate::game::positioned::OnScreen;
 use crate::game::renderer::GameRenderer;
 
 pub struct GameObject {
@@ -50,7 +50,7 @@ impl GameObject {
     }
 }
 
-impl Positioned for GameObject {
+impl OnScreen for GameObject {
     fn position(&self) -> (i32, i32) {
         (self.position.x as i32, self.position.y as i32)
     }

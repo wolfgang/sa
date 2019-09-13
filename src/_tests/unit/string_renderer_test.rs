@@ -1,5 +1,5 @@
 use crate::_tests::helpers::string_renderer::StringRenderer;
-use crate::game::positioned::Positioned;
+use crate::game::positioned::OnScreen;
 use crate::game::renderer::GameRenderer;
 
 #[test]
@@ -76,7 +76,7 @@ struct TestObj {
     y: i32,
 }
 
-impl Positioned for TestObj {
+impl OnScreen for TestObj {
     fn position(&self) -> (i32, i32) {
         (self.x, self.y)
     }
