@@ -5,7 +5,7 @@ use crate::game::renderer::GameRenderer;
 pub struct GameObject {
     sprite_id: u8,
     position: Vector2<i32>,
-    speed: (u32, u32),
+    speed: Vector2<u32>,
     move_direction: (i32, i32),
 
 }
@@ -15,14 +15,14 @@ impl GameObject {
         Self {
             sprite_id,
             position: Vector2::new(x, y),
-            speed,
+            speed: Vector2::from(speed),
             move_direction: (0, 0),
         }
     }
 
     pub fn tick(&mut self) {
-        self.position.x += self.move_direction.0 * self.speed.0 as i32;
-        self.position.y += self.move_direction.1 * self.speed.1 as i32;
+        self.position.x += self.move_direction.0 * self.speed.x as i32;
+        self.position.y += self.move_direction.1 * self.speed.y as i32;
     }
 
 
