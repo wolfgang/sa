@@ -49,7 +49,7 @@ impl PlayerShip {
             let pos = go.get_position();
 
             if pos.x < 0.0 { go.set_position(0.0, pos.y) };
-            if pos.x >= max_x { go.set_position(max_x, pos.y) }
+            if pos.x > max_x { go.set_position(max_x, pos.y) }
         });
     }
 

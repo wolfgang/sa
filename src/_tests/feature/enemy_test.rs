@@ -32,7 +32,7 @@ fn enemy_goes_from_left_to_right() {
         "...0000..."
     ]);
 
-    game.tick();
+    game.tick_twice();
     game.renders_frame(vec![
         "......22..",
         "......22..",
@@ -48,7 +48,7 @@ fn enemy_goes_from_left_to_right() {
         "...0000..."
     ]);
 
-    game.tick();
+    game.tick_twice();
     game.renders_frame(vec![
         "..22......",
         "..22......",
