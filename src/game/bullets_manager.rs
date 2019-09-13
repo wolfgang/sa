@@ -31,13 +31,13 @@ impl BulletsManager {
         self.last_bullet_tick = 0;
     }
 
-    pub fn spawn_bullet_at(&mut self, position: (i32, i32)) {
+    pub fn spawn_bullet_at(&mut self, position: (f32, f32)) {
 
         let ticks_since_last = self.current_tick - self.last_bullet_tick;
 
         if ticks_since_last >= self.autofire_ticks {
             self.last_bullet_tick = self.current_tick;
-            self.bullets.push(PlayerBullet::new(position.0 as f32, position.1 as f32, self.bullet_speed))
+            self.bullets.push(PlayerBullet::new(position.0, position.1, self.bullet_speed))
         }
     }
 

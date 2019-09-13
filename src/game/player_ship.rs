@@ -53,10 +53,10 @@ impl PlayerShip {
         });
     }
 
-    pub fn bullet_spawn_position(&self) -> (i32, i32) {
+    pub fn bullet_spawn_position(&self) -> (f32, f32) {
         let (bullet_width, bullet_height) = self.bullet_dimensions.into();
         let (x, y) = self.game_object.get_position();
-        (x + self.width as i32 / 2 - bullet_width as i32 / 2, y - bullet_height as i32)
+        ((x + self.width as i32 / 2 - bullet_width as i32 / 2) as f32, (y - bullet_height as i32) as f32)
     }
 }
 
