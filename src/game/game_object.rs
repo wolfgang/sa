@@ -20,6 +20,15 @@ impl GameObject {
         }
     }
 
+    pub fn new2(sprite_id: u8, x: f32, y: f32, speed: Vector2f) -> Self {
+        Self {
+            sprite_id,
+            position: Vector2::new(x, y),
+            speed,
+            move_direction: Vector2::new(0, 0),
+        }
+    }
+
     pub fn tick(&mut self) {
         self.position.x += self.move_direction.x as f32 * self.speed.x;
         self.position.y += self.move_direction.y as f32 * self.speed.y;

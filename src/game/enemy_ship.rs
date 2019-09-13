@@ -10,7 +10,7 @@ pub struct EnemyShip {
 
 impl EnemyShip {
     pub fn from_game_builder(builder: &GameBuilder) -> Self {
-        let mut game_object = GameObject::new(2, 0.0, 0.0, builder.enemy_speed());
+        let mut game_object = GameObject::new2(2, 0.0, 0.0, builder.enemy_speed().into());
         game_object.set_move_direction(1, 1);
         Self {
             width: builder.enemy_dimensions.0,
