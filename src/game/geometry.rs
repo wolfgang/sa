@@ -11,9 +11,9 @@ impl<T> Vector2<T> where T: Copy {
         Self { x, y }
     }
 
-    pub fn scale(&mut self, other: &Self) where T: MulAssign {
-        self.x *= other.x;
-        self.y *= other.y;
+    pub fn scale<U>(&mut self, other: &Vector2<U>) where T: MulAssign + From<U>, U: MulAssign + Copy {
+        self.x *= other.x.into();
+        self.y *= other.y.into();
     }
 }
 
