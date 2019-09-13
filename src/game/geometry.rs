@@ -1,7 +1,7 @@
 #[derive(Copy, Clone)]
 pub struct Vector2<T> where T: Copy {
-    x: T,
-    y: T,
+    pub(crate) x: T,
+    pub(crate) y: T,
 }
 
 impl<T> Vector2<T> where T: Copy {
