@@ -3,6 +3,9 @@ use std::ops::{AddAssign, Mul};
 pub type Vector2f = Vector2<f32>;
 pub type Rectanglef = Rectangle<f32>;
 
+pub fn rectangle_from(position: Vector2f, dimensions: (u32, u32)) -> Rectanglef {
+    Rectangle::with(position, dimensions.0 as f32, dimensions.1 as f32)
+}
 
 #[derive(Copy, Clone, Default)]
 pub struct Rectangle<T> where T: Copy {

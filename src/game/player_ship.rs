@@ -1,6 +1,6 @@
 use crate::game::builder::GameBuilder;
 use crate::game::game_object::GameObject;
-use crate::game::geometry::{Rectangle, Vector2};
+use crate::game::geometry::{rectangle_from, Vector2};
 use crate::game::renderer::GameRenderer;
 
 pub struct PlayerShip {
@@ -17,10 +17,7 @@ impl PlayerShip {
         let ship_x = game_width / 2 - width / 2;
         let ship_y = game_height - height;
 
-        let rect = Rectangle::with(
-            Vector2::with(ship_x as f32, ship_y as f32),
-            width as f32,
-            height as f32);
+        let rect = rectangle_from(Vector2::with(ship_x as f32, ship_y as f32), builder.ship_dimensions);
 
         let game_object = GameObject::new(0, rect, builder.ship_speed());
 

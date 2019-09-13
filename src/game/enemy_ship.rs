@@ -1,6 +1,6 @@
 use crate::game::builder::GameBuilder;
 use crate::game::game_object::GameObject;
-use crate::game::geometry::{Rectangle, Vector2};
+use crate::game::geometry::{rectangle_from, Vector2};
 use crate::game::renderer::GameRenderer;
 
 pub struct EnemyShip {
@@ -9,13 +9,9 @@ pub struct EnemyShip {
     game_object: GameObject,
 }
 
-
 impl EnemyShip {
     pub fn from_game_builder(builder: &GameBuilder) -> Self {
-        let rectangle = Rectangle::with(
-            Vector2::zero(),
-            builder.enemy_dimensions.0 as f32,
-            builder.enemy_dimensions.1 as f32);
+        let rectangle = rectangle_from(Vector2::zero(), builder.enemy_dimensions);
         let mut game_object = GameObject::new(2, rectangle, builder.enemy_speed());
         game_object.set_move_direction(1, 1);
         Self {
