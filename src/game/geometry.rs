@@ -1,5 +1,8 @@
 use std::ops::MulAssign;
 
+pub type Vector2f = Vector2<f32>;
+pub type Vector2F = Vector2<f64>;
+
 #[derive(Copy, Clone)]
 pub struct Vector2<T> where T: Copy {
     pub(crate) x: T,

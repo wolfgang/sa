@@ -1,8 +1,8 @@
-use crate::game::geometry::Vector2;
+use crate::game::geometry::{Vector2, Vector2F};
 
 #[test]
 fn scale_vector_with_other_vector_of_sane_or_convertible_type() {
-    let mut v1: Vector2<f64> = Vector2::new(2.0, 3.0);
+    let mut v1: Vector2F = Vector2::new(2.0, 3.0);
 
     v1.scale(&Vector2::new(4.0, 5.0));
     assert_eq!(v1.x, 8.0);
