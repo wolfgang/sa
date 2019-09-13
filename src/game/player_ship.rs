@@ -47,9 +47,8 @@ impl PlayerShip {
         let max_x = self.max_x as f32;
         self.game_object.tick_and(|go| {
             let pos = go.get_position();
-
-            if pos.x < 0.0 { go.set_position(0.0, pos.y) };
-            if pos.x > max_x { go.set_position(max_x, pos.y) }
+            let x = f32::max(0.0, f32::min(pos.x, max_x));
+            go.set_position(x, pos.y);
         });
     }
 
