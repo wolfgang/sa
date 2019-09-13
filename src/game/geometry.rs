@@ -11,7 +11,7 @@ pub struct Vector2<T> where T: Copy {
 
 
 impl<T> Vector2<T> where T: Copy {
-    pub fn new(x: T, y: T) -> Self {
+    pub fn with(x: T, y: T) -> Self {
         Self { x, y }
     }
 
@@ -25,7 +25,7 @@ impl<T> Mul<T> for Vector2<T> where T: Copy + Mul<Output=T> {
     type Output = Self;
 
     fn mul(self, rhs: T) -> Self::Output {
-        Vector2::new(self.x * rhs, self.y * rhs)
+        Vector2::with(self.x * rhs, self.y * rhs)
     }
 }
 
@@ -33,7 +33,7 @@ impl<T> Mul<Vector2<T>> for Vector2<T> where T: Copy + Mul<Output=T> {
     type Output = Self;
 
     fn mul(self, rhs: Vector2<T>) -> Self::Output {
-        Vector2::new(self.x * rhs.x, self.y * rhs.y)
+        Vector2::with(self.x * rhs.x, self.y * rhs.y)
     }
 }
 
@@ -48,7 +48,7 @@ impl<T> AddAssign<Vector2<T>> for Vector2<T> where T: Copy + AddAssign {
 
 impl<T> From<(T, T)> for Vector2<T> where T: Copy {
     fn from(t: (T, T)) -> Self {
-        Self::new(t.0, t.1)
+        Self::with(t.0, t.1)
     }
 }
 

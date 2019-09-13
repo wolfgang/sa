@@ -97,6 +97,6 @@ impl GameBuilder {
     }
 
     fn frame_speed(&self, dx: u32, dy: u32) -> Vector2f {
-        Vector2::new(dx as f32, dy as f32) * (1.0 / self.fps as f32)
+        Vector2::with(dx as f32, dy as f32) * (1.0 / self.fps as f32)
     }
 }
