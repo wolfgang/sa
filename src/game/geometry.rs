@@ -1,7 +1,6 @@
-use std::ops::{AddAssign, Mul, MulAssign};
+use std::ops::{AddAssign, Mul};
 
 pub type Vector2f = Vector2<f32>;
-pub type Vector2F = Vector2<f64>;
 
 #[derive(Copy, Clone, PartialEq, Debug)]
 pub struct Vector2<T> where T: Copy {
@@ -13,11 +12,6 @@ pub struct Vector2<T> where T: Copy {
 impl<T> Vector2<T> where T: Copy {
     pub fn with(x: T, y: T) -> Self {
         Self { x, y }
-    }
-
-    pub fn scale<U>(&mut self, other: &Vector2<U>) where T: MulAssign + From<U>, U: MulAssign + Copy {
-        self.x *= other.x.into();
-        self.y *= other.y.into();
     }
 }
 

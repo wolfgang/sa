@@ -1,15 +1,4 @@
-use crate::game::geometry::{Vector2, Vector2F};
-
-#[test]
-fn scale_vector_with_other_vector_of_sane_or_convertible_type() {
-    let mut v1: Vector2F = Vector2::with(2.0, 3.0);
-
-    v1.scale(&Vector2::with(4.0, 5.0));
-    assert_eq!(v1, Vector2::with(8.0, 15.0));
-
-    v1.scale(&Vector2::with(4, 5));
-    assert_eq!(v1, Vector2::with(32.0, 75.0));
-}
+use crate::game::geometry::Vector2;
 
 #[test]
 fn multiply_with_scalar() {
