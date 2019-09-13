@@ -1,5 +1,5 @@
 use crate::game::Game;
-use crate::game::geometry::{Vector2, Vector2f};
+use crate::game::geometry::{Rectanglef, Vector2, Vector2f};
 use crate::game::input::{InputNull, InputRef};
 
 #[derive(Clone)]
@@ -90,6 +90,10 @@ impl GameBuilder {
 
     pub fn autofire_ticks(&self) -> u32 {
         (0.5 * (self.fps as f32)) as u32
+    }
+
+    pub fn screen_rect(&self) -> Rectanglef {
+        Rectanglef::with_tuple(Vector2::zero(), self.dimensions)
     }
 
     pub fn build(&self) -> Game {
