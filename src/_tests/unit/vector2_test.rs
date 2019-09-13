@@ -16,3 +16,9 @@ fn multiply_with_scalar() {
     let scaled = Vector2::new(2.0, 3.0) * 20.0;
     assert_eq!(scaled, Vector2::new(40.0, 60.0));
 }
+
+#[test]
+fn from_u32s() {
+    let v = Vector2::from((10, 20));
+    assert_eq!(v, Vector2::new(10.0, 20.0));
+}
