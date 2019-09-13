@@ -44,12 +44,12 @@ impl PlayerShip {
     }
 
     pub fn tick(&mut self) {
-        let max_x = self.max_x as i32;
+        let max_x = self.max_x as f32;
         self.game_object.tick_and(|go| {
             let pos = go.get_position();
 
-            if pos.x < 0.0 { go.set_position(0, pos.y as i32) };
-            if pos.x >= max_x as f32 { go.set_position(max_x, pos.y as i32) }
+            if pos.x < 0.0 { go.set_position(0.0, pos.y) };
+            if pos.x >= max_x { go.set_position(max_x, pos.y) }
         });
     }
 

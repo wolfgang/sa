@@ -44,9 +44,9 @@ impl GameObject {
         self.position
     }
 
-    pub fn set_position(&mut self, x: i32, y: i32) {
-        self.position.x = x as f32;
-        self.position.y = y as f32;
+    pub fn set_position(&mut self, x: f32, y: f32) {
+        self.position.x = x;
+        self.position.y = y;
     }
 }
 
