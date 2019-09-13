@@ -41,11 +41,6 @@ impl GameObject {
         self.rectangle.position
     }
 
-    pub fn set_position(&mut self, x: f32, y: f32) {
-        self.rectangle.position.x = x;
-        self.rectangle.position.y = y;
-    }
-
     pub fn is_inside_of(&self, rect: &Rectanglef) -> bool {
         self.rectangle.is_inside_of(rect)
     }
