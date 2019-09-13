@@ -77,16 +77,15 @@ impl GameBuilder {
     }
 
     pub fn ship_speed(&self) -> Vector2f {
-        Vector2::new((self.ship_speed / self.fps) as f32, 0.0)
+        self.frame_speed(self.ship_speed, 0)
     }
 
-    pub fn bullet_speed(&self) -> u32 {
-        self.bullet_speed / self.fps
+    pub fn bullet_speed(&self) -> Vector2f {
+        self.frame_speed(0, self.bullet_speed)
     }
 
-    //noinspection RsTypeCheck
     pub fn enemy_speed(&self) -> Vector2f {
-        Vector2::from(self.enemy_speed) * (1.0 / self.fps as f32)
+        self.frame_speed(self.enemy_speed.0, self.enemy_speed.1)
     }
 
     pub fn autofire_ticks(&self) -> u32 {
@@ -95,5 +94,9 @@ impl GameBuilder {
 
     pub fn build(&self) -> Game {
         Game::from_builder(self)
+    }
+
+    fn frame_speed(&self, dx: u32, dy: u32) -> Vector2f {
+        Vector2::new(dx as f32, dy as f32) * (1.0 / self.fps as f32)
     }
 }

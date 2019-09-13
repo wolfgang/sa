@@ -35,12 +35,6 @@ impl<T> From<(T, T)> for Vector2<T> where T: Copy {
     }
 }
 
-impl From<(u32, u32)> for Vector2f {
-    fn from(t: (u32, u32)) -> Vector2f {
-        Self::from((t.0 as f32, t.1 as f32))
-    }
-}
-
 impl<T> Into<(T, T)> for Vector2<T> where T: Copy {
     fn into(self) -> (T, T) {
         (self.x, self.y)

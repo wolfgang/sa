@@ -1,4 +1,5 @@
 use crate::game::builder::GameBuilder;
+use crate::game::geometry::Vector2f;
 use crate::game::player_bullet::PlayerBullet;
 use crate::game::renderer::GameRenderer;
 
@@ -7,7 +8,7 @@ pub struct BulletsManager {
     last_bullet_tick: u32,
     current_tick: u32,
     autofire_ticks: u32,
-    bullet_speed: u32,
+    bullet_speed: Vector2f,
 }
 
 impl BulletsManager {
