@@ -2,6 +2,19 @@ use std::ops::{AddAssign, Mul};
 
 pub type Vector2f = Vector2<f32>;
 
+#[derive(Copy, Clone, Default)]
+pub struct Rectangle<T> where T: Copy {
+    pub position: Vector2<T>,
+    pub width: T,
+    pub height: T,
+}
+
+impl<T> Rectangle<T> where T: Copy {
+    pub fn with(position: Vector2<T>, width: T, height: T) -> Self {
+        Self { position, width, height }
+    }
+}
+
 #[derive(Copy, Clone, PartialEq, Debug, Default)]
 pub struct Vector2<T> where T: Copy {
     pub(crate) x: T,
