@@ -20,7 +20,7 @@ impl PlayerShip {
         Self {
             width,
             game_object: GameObject::new(0, go_rect, builder.ship_speed()),
-            screen_rect: builder.screen_rect()
+            screen_rect: builder.screen_rect(),
         }
     }
 
@@ -42,7 +42,9 @@ impl PlayerShip {
 
     pub fn tick(&mut self) {
         self.game_object.tick();
-        self.game_object.snap_to_width(self.screen_rect.width);
+        if !self.game_object.is_inside_of(&self.screen_rect) {
+            self.game_object.snap_to(&self.screen_rect);
+        }
     }
 
     pub fn bullet_spawn_position(&self) -> Vector2f {

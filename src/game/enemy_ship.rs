@@ -23,10 +23,10 @@ impl EnemyShip {
         self.game_object.tick();
 
         if !self.game_object.is_inside_of(&self.screen_rect) {
-            self.game_object.mult_move_direction(-1, 1)
+            self.game_object.snap_to(&self.screen_rect);
+            self.game_object.mult_move_direction(-1, 1);
         }
 
-        self.game_object.snap_to_width(self.screen_rect.width)
     }
 
     pub fn render<T>(&self, renderer: &mut T) where T: GameRenderer {

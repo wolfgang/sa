@@ -46,18 +46,19 @@ impl GameObject {
         self.rectangle.position.y = y;
     }
 
-    pub fn is_inside_width(&self, width: f32) -> bool {
-        let x = self.rectangle.position.x;
-        x >= 0.0 && x <= width - self.rectangle.width
-    }
-
     pub fn is_inside_of(&self, rect: &Rectanglef) -> bool {
         self.rectangle.is_inside_of(rect)
     }
 
-    pub fn snap_to_width(&mut self, width: f32) {
+    pub fn snap_to(&mut self, rec: &Rectanglef) {
         let x = self.rectangle.position.x;
-        self.rectangle.position.x = f32::max(0.0, f32::min(x, width - self.rectangle.width));
+        let y = self.rectangle.position.y;
+        self.rectangle.position.x = Self::clamp(x, 0.0, rec.width - self.rectangle.width);
+        self.rectangle.position.y = Self::clamp(y, 0.0, rec.height - self.rectangle.height);
+    }
+
+    fn clamp(val: f32, min: f32, max: f32) -> f32 {
+        f32::max(min, f32::min(val, max))
     }
 }
 
