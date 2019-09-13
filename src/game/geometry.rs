@@ -1,6 +1,8 @@
 use std::ops::{AddAssign, Mul};
 
 pub type Vector2f = Vector2<f32>;
+pub type Rectanglef = Rectangle<f32>;
+
 
 #[derive(Copy, Clone, Default)]
 pub struct Rectangle<T> where T: Copy {
@@ -12,6 +14,10 @@ pub struct Rectangle<T> where T: Copy {
 impl<T> Rectangle<T> where T: Copy {
     pub fn with(position: Vector2<T>, width: T, height: T) -> Self {
         Self { position, width, height }
+    }
+
+    pub fn zero() -> Self where T: Default {
+        Self::default()
     }
 }
 

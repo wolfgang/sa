@@ -1,13 +1,13 @@
 use crate::game::builder::GameBuilder;
 use crate::game::game_object::GameObject;
-use crate::game::geometry::Vector2;
+use crate::game::geometry::{Rectangle, Vector2};
 use crate::game::renderer::GameRenderer;
 
 pub struct PlayerShip {
     width: u32,
     bullet_dimensions: Vector2<u32>,
     max_x: u32,
-    game_object: GameObject
+    game_object: GameObject,
 }
 
 impl PlayerShip {
@@ -17,13 +17,18 @@ impl PlayerShip {
         let ship_x = game_width / 2 - width / 2;
         let ship_y = game_height - height;
 
-        let game_object = GameObject::new(0, ship_x as f32, ship_y as f32, builder.ship_speed());
+        let rect = Rectangle::with(
+            Vector2::with(ship_x as f32, ship_y as f32),
+            width as f32,
+            height as f32);
+
+        let game_object = GameObject::new(0, rect, builder.ship_speed());
 
         Self {
             width,
             bullet_dimensions: Vector2::from(builder.bullet_dimensions),
             max_x: game_width - width,
-            game_object
+            game_object,
         }
     }
 

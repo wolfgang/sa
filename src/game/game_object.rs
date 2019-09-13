@@ -1,4 +1,4 @@
-use crate::game::geometry::{Vector2, Vector2f};
+use crate::game::geometry::{Rectangle, Rectanglef, Vector2, Vector2f};
 use crate::game::positioned::OnScreen;
 use crate::game::renderer::GameRenderer;
 
@@ -7,16 +7,18 @@ pub struct GameObject {
     position: Vector2f,
     speed: Vector2f,
     move_direction: Vector2f,
+    rectangle: Rectanglef
 
 }
 
 impl GameObject {
-    pub fn new(sprite_id: u8, x: f32, y: f32, speed: Vector2f) -> Self {
+    pub fn new(sprite_id: u8, rectangle: Rectanglef, speed: Vector2f) -> Self {
         Self {
             sprite_id,
-            position: Vector2::with(x, y),
+            position: rectangle.position,
             speed,
             move_direction: Vector2::zero(),
+            rectangle
         }
     }
 
