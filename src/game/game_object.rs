@@ -23,11 +23,6 @@ impl GameObject {
         self.rectangle.position += self.move_direction * self.speed;
     }
 
-    pub fn tick_and<F>(&mut self, and: F) where F: Fn(&mut Self) {
-        self.tick();
-        and(self);
-    }
-
     pub fn render<T>(&self, renderer: &mut T) where T: GameRenderer {
         renderer.draw_sprite_obj(self.sprite_id, self)
     }
@@ -49,6 +44,11 @@ impl GameObject {
     pub fn set_position(&mut self, x: f32, y: f32) {
         self.rectangle.position.x = x;
         self.rectangle.position.y = y;
+    }
+
+    pub fn is_inside_width(&self, width: f32) -> bool {
+        let x = self.rectangle.position.x;
+        x >= 0.0 && x <= width - self.rectangle.width
     }
 
     pub fn snap_to_width(&mut self, width: f32) {

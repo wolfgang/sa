@@ -6,7 +6,7 @@ use crate::game::renderer::GameRenderer;
 pub struct PlayerShip {
     width: u32,
     bullet_dimensions: Vector2<u32>,
-    max_x: u32,
+    max_x: f32,
     game_object: GameObject,
 }
 
@@ -24,7 +24,7 @@ impl PlayerShip {
         Self {
             width,
             bullet_dimensions: Vector2::from(builder.bullet_dimensions),
-            max_x: game_width,
+            max_x: game_width as f32,
             game_object,
         }
     }
@@ -46,10 +46,8 @@ impl PlayerShip {
     }
 
     pub fn tick(&mut self) {
-        let max_x = self.max_x as f32;
-        self.game_object.tick_and(|go| {
-            go.snap_to_width(max_x);
-        });
+        self.game_object.tick();
+        self.game_object.snap_to_width(self.max_x);
     }
 
     pub fn bullet_spawn_position(&self) -> (f32, f32) {
