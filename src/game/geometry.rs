@@ -1,4 +1,4 @@
-use std::ops::{Mul, MulAssign};
+use std::ops::{AddAssign, Mul, MulAssign};
 
 pub type Vector2f = Vector2<f32>;
 pub type Vector2F = Vector2<f64>;
@@ -29,11 +29,29 @@ impl<T> Mul<T> for Vector2<T> where T: Copy + Mul<Output=T> {
     }
 }
 
+impl<T> Mul<Vector2<T>> for Vector2<T> where T: Copy + Mul<Output=T> {
+    type Output = Self;
+
+    fn mul(self, rhs: Vector2<T>) -> Self::Output {
+        Vector2::new(self.x * rhs.x, self.y * rhs.y)
+    }
+}
+
+impl<T> AddAssign<Vector2<T>> for Vector2<T> where T: Copy + AddAssign {
+    fn add_assign(&mut self, rhs: Vector2<T>) {
+        self.x += rhs.x;
+        self.y += rhs.y;
+    }
+}
+
+
+
 impl<T> From<(T, T)> for Vector2<T> where T: Copy {
     fn from(t: (T, T)) -> Self {
         Self::new(t.0, t.1)
     }
 }
+
 
 impl<T> Into<(T, T)> for Vector2<T> where T: Copy {
     fn into(self) -> (T, T) {
