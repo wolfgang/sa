@@ -46,17 +46,17 @@ impl PlayerShip {
     pub fn tick(&mut self) {
         let max_x = self.max_x as i32;
         self.game_object.tick_and(|go| {
-            let (x, y) = go.get_position();
+            let pos = go.get_position();
 
-            if x < 0 { go.set_position(0, y) };
-            if x >= max_x { go.set_position(max_x, y) }
+            if pos.x < 0.0 { go.set_position(0, pos.y as i32) };
+            if pos.x >= max_x as f32 { go.set_position(max_x, pos.y as i32) }
         });
     }
 
     pub fn bullet_spawn_position(&self) -> (f32, f32) {
         let (bullet_width, bullet_height) = self.bullet_dimensions.into();
-        let (x, y) = self.game_object.get_position();
-        ((x + self.width as i32 / 2 - bullet_width as i32 / 2) as f32, (y - bullet_height as i32) as f32)
+        let pos = self.game_object.get_position();
+        ((pos.x + self.width as f32 / 2.0 - bullet_width as f32 / 2.0) as f32, (pos.y - bullet_height as f32) as f32)
     }
 }
 

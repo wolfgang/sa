@@ -40,8 +40,8 @@ impl GameObject {
         self.move_direction.y = dy;
     }
 
-    pub fn get_position(&self) -> (i32, i32) {
-        (self.position.x as i32, self.position.y as i32)
+    pub fn get_position(&self) -> Vector2f {
+        self.position
     }
 
     pub fn set_position(&mut self, x: i32, y: i32) {

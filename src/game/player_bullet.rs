@@ -17,8 +17,8 @@ impl PlayerBullet {
     }
 
     pub fn is_alive(&self) -> bool {
-        let y = self.game_object.get_position().1;
-        y >= 0
+        let y = self.game_object.get_position().y;
+        y >= 0.0
     }
 
     pub fn render<T>(&self, renderer: &mut T) where T: GameRenderer {

@@ -22,16 +22,16 @@ impl EnemyShip {
     pub fn tick(&mut self) {
         self.game_object.tick();
 
-        let (x, y) = self.game_object.get_position();
+        let pos = self.game_object.get_position();
 
-        if x <= 0 {
-            self.game_object.set_position(0, y);
+        if pos.x <= 0.0 {
+            self.game_object.set_position(0, pos.y as i32);
             self.game_object.set_move_direction(1, 1);
         }
 
-        let max_x = (self.max_x - self.width) as i32;
-        if x >= max_x {
-            self.game_object.set_position(max_x, y);
+        let max_x = (self.max_x - self.width) as f32;
+        if pos.x >= max_x {
+            self.game_object.set_position(max_x as i32, pos.y as i32);
             self.game_object.set_move_direction(-1, 1);
         }
     }
