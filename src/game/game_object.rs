@@ -38,6 +38,11 @@ impl GameObject {
         self.move_direction.y = dy as f32;
     }
 
+    pub fn mult_move_direction(&mut self, dx: i32, dy: i32) {
+        self.move_direction.x *= dx as f32;
+        self.move_direction.y *= dy as f32;
+    }
+
     pub fn get_position(&self) -> Vector2f {
         self.position
     }

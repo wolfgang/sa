@@ -25,8 +25,10 @@ impl EnemyShip {
         let pos = self.game_object.get_position();
         let max_x = (self.max_x - self.width) as f32;
 
-        if pos.x < 0.0 { self.game_object.set_move_direction(1, 1) }
-        if pos.x > max_x { self.game_object.set_move_direction(-1, 1) }
+        if pos.x < 0.0 || pos.x > max_x {
+            self.game_object.mult_move_direction(-1, 1)
+        }
+
         self.game_object.set_position(f32::max(0.0, f32::min(pos.x, max_x)), pos.y);
     }
 
