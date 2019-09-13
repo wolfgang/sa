@@ -32,7 +32,7 @@ fn main() {
         .with_fps(fps)
         .with_ship_speed(360)
         .with_bullet_speed(540)
-        .with_enemy_speed(240, 60)
+        .with_enemy_speed(240, 20)
         .build();
 
     let mut renderer = RaylibRenderer::new(rl.clone());
