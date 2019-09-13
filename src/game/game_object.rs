@@ -11,7 +11,7 @@ pub struct GameObject {
 }
 
 impl GameObject {
-    pub fn new(sprite_id: u8, x: i32, y: i32, speed: (u32, u32)) -> Self {
+    pub fn new(sprite_id: u8, x: f32, y: f32, speed: (u32, u32)) -> Self {
         Self {
             sprite_id,
             position: Vector2::new(x as f32, y as f32),
