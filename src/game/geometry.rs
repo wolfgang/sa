@@ -1,3 +1,5 @@
+use std::ops::MulAssign;
+
 #[derive(Copy, Clone)]
 pub struct Vector2<T> where T: Copy {
     pub(crate) x: T,
@@ -7,6 +9,11 @@ pub struct Vector2<T> where T: Copy {
 impl<T> Vector2<T> where T: Copy {
     pub fn new(x: T, y: T) -> Self {
         Self { x, y }
+    }
+
+    pub fn scale(&mut self, other: &Self) where T: MulAssign {
+        self.x *= other.x;
+        self.y *= other.y;
     }
 }
 
