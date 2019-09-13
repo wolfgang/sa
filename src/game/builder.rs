@@ -76,8 +76,8 @@ impl GameBuilder {
         self
     }
 
-    pub fn ship_speed(&self) -> u32 {
-        self.ship_speed / self.fps
+    pub fn ship_speed(&self) -> Vector2f {
+        Vector2::new((self.ship_speed / self.fps) as f32, 0.0)
     }
 
     pub fn bullet_speed(&self) -> u32 {

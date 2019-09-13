@@ -17,7 +17,7 @@ impl PlayerShip {
         let ship_x = game_width / 2 - width / 2;
         let ship_y = game_height - height;
 
-        let game_object = GameObject::new(0, ship_x as f32, ship_y as f32, (builder.ship_speed(), 0));
+        let game_object = GameObject::new(0, ship_x as f32, ship_y as f32, builder.ship_speed());
 
         Self {
             width,
