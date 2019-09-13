@@ -2,7 +2,7 @@ use std::ops::{AddAssign, Mul};
 
 pub type Vector2f = Vector2<f32>;
 
-#[derive(Copy, Clone, PartialEq, Debug)]
+#[derive(Copy, Clone, PartialEq, Debug, Default)]
 pub struct Vector2<T> where T: Copy {
     pub(crate) x: T,
     pub(crate) y: T,
@@ -12,6 +12,10 @@ pub struct Vector2<T> where T: Copy {
 impl<T> Vector2<T> where T: Copy {
     pub fn with(x: T, y: T) -> Self {
         Self { x, y }
+    }
+
+    pub fn zero() -> Self where T: Default {
+        Self::default()
     }
 }
 
@@ -38,14 +42,11 @@ impl<T> AddAssign<Vector2<T>> for Vector2<T> where T: Copy + AddAssign {
     }
 }
 
-
-
 impl<T> From<(T, T)> for Vector2<T> where T: Copy {
     fn from(t: (T, T)) -> Self {
         Self::with(t.0, t.1)
     }
 }
-
 
 impl<T> Into<(T, T)> for Vector2<T> where T: Copy {
     fn into(self) -> (T, T) {

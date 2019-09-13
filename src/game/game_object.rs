@@ -16,7 +16,7 @@ impl GameObject {
             sprite_id,
             position: Vector2::with(x, y),
             speed,
-            move_direction: Vector2::with(0.0, 0.0),
+            move_direction: Vector2::zero(),
         }
     }
 
