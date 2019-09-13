@@ -1,5 +1,5 @@
 use crate::game::builder::GameBuilder;
-use crate::game::geometry::{rectangle_from, Vector2, Vector2f};
+use crate::game::geometry::{Rectanglef, Vector2, Vector2f};
 use crate::game::player_bullet::PlayerBullet;
 use crate::game::renderer::GameRenderer;
 
@@ -40,7 +40,7 @@ impl BulletsManager {
 
         if ticks_since_last >= self.autofire_ticks {
             self.last_bullet_tick = self.current_tick;
-            let rect = rectangle_from(Vector2::from(position), self.bullet_dimensions);
+            let rect = Rectanglef::with_tuple(Vector2::from(position), self.bullet_dimensions);
             self.bullets.push(PlayerBullet::new(rect, self.bullet_speed))
         }
     }

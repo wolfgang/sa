@@ -1,25 +1,24 @@
 use std::ops::{AddAssign, Mul};
 
 pub type Vector2f = Vector2<f32>;
-pub type Rectanglef = Rectangle<f32>;
-
-pub fn rectangle_from(position: Vector2f, dimensions: (u32, u32)) -> Rectanglef {
-    Rectangle::with(position, dimensions.0 as f32, dimensions.1 as f32)
-}
 
 #[derive(Copy, Clone, Default)]
-pub struct Rectangle<T> where T: Copy {
-    pub position: Vector2<T>,
-    pub width: T,
-    pub height: T,
+pub struct Rectanglef {
+    pub position: Vector2f,
+    pub width: f32,
+    pub height: f32,
 }
 
-impl<T> Rectangle<T> where T: Copy {
-    pub fn with(position: Vector2<T>, width: T, height: T) -> Self {
+impl Rectanglef {
+    pub fn with(position: Vector2f, width: f32, height: f32) -> Self {
         Self { position, width, height }
     }
 
-    pub fn zero() -> Self where T: Default {
+    pub fn with_tuple(position: Vector2f, dimensions: (u32, u32)) -> Self {
+        Self::with(position, dimensions.0 as f32, dimensions.1 as f32)
+    }
+
+    pub fn zero() -> Self {
         Self::default()
     }
 }
