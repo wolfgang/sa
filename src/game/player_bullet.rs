@@ -21,7 +21,7 @@ impl GameObject for PlayerBullet {
     }
 
     fn render(&self, renderer: &mut dyn GameRenderer) {
-        renderer.draw_sprite_obj(&self.moving_sprite)
+        self.moving_sprite.render(renderer);
     }
 
     fn is_alive(&self) -> bool {

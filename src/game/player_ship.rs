@@ -57,6 +57,6 @@ impl GameObject for PlayerShip {
     }
 
     fn render(&self, renderer: &mut dyn GameRenderer) {
-        renderer.draw_sprite_obj(&self.moving_sprite)
+        self.moving_sprite.render(renderer);
     }
 }
