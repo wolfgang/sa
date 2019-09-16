@@ -28,6 +28,7 @@ pub struct Game {
     player_controller: PlayerController,
     bullets_manager: BulletsManager,
     game_objects: Vec<GameObjectRef>,
+    current_tick: u32,
 }
 
 impl Game {
@@ -49,26 +50,27 @@ impl Game {
             player_controller: PlayerController::new(builder.input.clone(), player_ship.clone()),
             bullets_manager: BulletsManager::from_game_builder(builder, player_ship.clone()),
             game_objects,
+            current_tick: 1000,
         }
     }
 
 
     pub fn tick(&mut self) {
-        self.player_controller.tick();
+        self.current_tick += 1;
 
         if self.input.borrow().is_key_down(KEY_SPACE) {
-            let bullet = self.bullets_manager.spawn_bullet();
+            let bullet = self.bullets_manager.spawn_bullet(self.current_tick);
             if bullet.is_some() { self.game_objects.push(bullet.unwrap()) }
         } else {
             self.bullets_manager.reset();
         }
 
+        self.player_controller.tick();
         for go in self.game_objects.iter() {
             go.borrow_mut().tick();
         }
 
         self.game_objects.retain(|go| { go.borrow_mut().is_alive() });
-        self.bullets_manager.tick();
     }
 
     pub fn render<T>(&self, renderer: &mut T) where T: GameRenderer {
@@ -76,6 +78,5 @@ impl Game {
         for go in self.game_objects.iter() {
             go.borrow().render(renderer);
         }
-
     }
 }
