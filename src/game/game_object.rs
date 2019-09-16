@@ -1,5 +1,4 @@
 use crate::game::geometry::{Rectanglef, Vector2, Vector2f};
-use crate::game::renderer::GameRenderer;
 use crate::game::sprite::Sprite;
 
 pub struct GameObject {
@@ -21,10 +20,6 @@ impl GameObject {
 
     pub fn tick(&mut self) {
         self.rectangle.position += self.move_direction * self.speed;
-    }
-
-    pub fn render<T>(&self, renderer: &mut T) where T: GameRenderer {
-        renderer.draw_sprite_obj(self)
     }
 
     pub fn set_move_direction(&mut self, dx: i32, dy: i32) {

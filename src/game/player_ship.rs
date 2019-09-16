@@ -25,7 +25,7 @@ impl PlayerShip {
     }
 
     pub fn render<T>(&self, renderer: &mut T) where T: GameRenderer {
-        self.game_object.render(renderer)
+        renderer.draw_sprite_obj(&self.game_object)
     }
 
     pub fn move_left(&mut self) {
