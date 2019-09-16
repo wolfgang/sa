@@ -16,18 +16,18 @@ pub struct PlayerShip {
 }
 
 impl PlayerShip {
-    pub fn from_game_builder(builder: &GameBuilder) -> PlayerShip {
+    pub fn from_game_builder(builder: &GameBuilder) -> PlayerShipRef {
         let (width, height) = builder.ship_dimensions;
         let (game_width, game_height) = builder.dimensions;
         let ship_x = game_width / 2 - width / 2;
         let ship_y = game_height - height;
 
         let go_rect = Rectanglef::with_tuple(Vector2::with(ship_x as f32, ship_y as f32), builder.ship_dimensions);
-        Self {
+        Rc::new(RefCell::new(Self {
             width,
             game_object: MovingSprite::new(0, go_rect, builder.ship_speed()),
             screen_rect: builder.screen_rect(),
-        }
+        }))
     }
 
     pub fn render<T>(&self, renderer: &mut T) where T: GameRenderer {

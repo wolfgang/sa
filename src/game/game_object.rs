@@ -10,3 +10,16 @@ pub trait GameObject {
     fn render(&self, renderer: &mut dyn GameRenderer);
     fn is_alive(&self) -> bool { true }
 }
+
+pub struct NulLGameObject {}
+
+impl NulLGameObject {
+    pub fn new_rc() -> GameObjectRef {
+        Rc::new(RefCell::new(Self {}))
+    }
+}
+
+impl GameObject for NulLGameObject {
+    fn tick(&mut self) {}
+    fn render(&self, _renderer: &mut dyn GameRenderer) {}
+}
