@@ -1,6 +1,6 @@
 use crate::game::geometry::{Rectanglef, Vector2, Vector2f};
-use crate::game::positioned::OnScreen;
 use crate::game::renderer::GameRenderer;
+use crate::game::sprite::Sprite;
 
 pub struct GameObject {
     sprite_id: u8,
@@ -24,7 +24,7 @@ impl GameObject {
     }
 
     pub fn render<T>(&self, renderer: &mut T) where T: GameRenderer {
-        renderer.draw_sprite_obj_old(self.sprite_id, self)
+        renderer.draw_sprite_obj(self)
     }
 
     pub fn set_move_direction(&mut self, dx: i32, dy: i32) {
@@ -57,8 +57,12 @@ impl GameObject {
     }
 }
 
-impl OnScreen for GameObject {
+impl Sprite for GameObject {
     fn position(&self) -> (i32, i32) {
         (self.rectangle.position.x as i32, self.rectangle.position.y as i32)
+    }
+
+    fn id(&self) -> u8 {
+        self.sprite_id
     }
 }
