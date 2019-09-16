@@ -5,20 +5,23 @@ use crate::game::builder::GameBuilder;
 use crate::game::game_object::GameObjectRef;
 use crate::game::geometry::{Rectanglef, Vector2, Vector2f};
 use crate::game::player_bullet::PlayerBullet;
+use crate::game::player_ship::PlayerShipRef;
 
 pub struct BulletsManager {
     last_bullet_tick: u32,
     current_tick: u32,
+    player_ship: PlayerShipRef,
     autofire_ticks: u32,
     bullet_speed: Vector2f,
     bullet_dimensions: (u32, u32)
 }
 
 impl BulletsManager {
-    pub fn from_game_builder(builder: &GameBuilder) -> Self {
+    pub fn from_game_builder(builder: &GameBuilder, player_ship: PlayerShipRef) -> Self {
         BulletsManager {
             bullet_speed: builder.bullet_speed(),
             autofire_ticks: builder.autofire_ticks(),
+            player_ship,
             last_bullet_tick: 0,
             current_tick: 1000,
             bullet_dimensions: builder.bullet_dimensions
@@ -33,7 +36,8 @@ impl BulletsManager {
         self.last_bullet_tick = 0;
     }
 
-    pub fn spawn_bullet_at(&mut self, position: Vector2f) -> Option<GameObjectRef> {
+    pub fn spawn_bullet(&mut self) -> Option<GameObjectRef> {
+        let position = self.player_ship.borrow().bullet_spawn_position();
         let ticks_since_last = self.current_tick - self.last_bullet_tick;
         if ticks_since_last >= self.autofire_ticks {
             self.last_bullet_tick = self.current_tick;
@@ -47,4 +51,3 @@ impl BulletsManager {
         None
     }
 }
-

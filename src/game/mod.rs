@@ -51,7 +51,7 @@ impl Game {
             player_ship: player_ship.clone(),
             enemy_ship,
             enemies_enabled: builder.enemy_speed().x > 0.0,
-            bullets_manager: BulletsManager::from_game_builder(builder),
+            bullets_manager: BulletsManager::from_game_builder(builder, player_ship.clone()),
             game_objects,
         }
     }
@@ -64,7 +64,7 @@ impl Game {
         } else { self.player_ship.borrow_mut().stop() }
 
         if self.input.borrow().is_key_down(KEY_SPACE) {
-            let bullet = self.bullets_manager.spawn_bullet_at(self.player_ship.borrow().bullet_spawn_position());
+            let bullet = self.bullets_manager.spawn_bullet();
             if bullet.is_some() { self.game_objects.push(bullet.unwrap()) }
         } else {
             self.bullets_manager.reset();
