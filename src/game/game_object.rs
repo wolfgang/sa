@@ -11,15 +11,15 @@ pub trait GameObject {
     fn is_alive(&self) -> bool { true }
 }
 
-pub struct NulLGameObject {}
+pub struct NullGameObject {}
 
-impl NulLGameObject {
+impl NullGameObject {
     pub fn new_rc() -> GameObjectRef {
         Rc::new(RefCell::new(Self {}))
     }
 }
 
-impl GameObject for NulLGameObject {
+impl GameObject for NullGameObject {
     fn tick(&mut self) {}
     fn render(&self, _renderer: &mut dyn GameRenderer) {}
 }
