@@ -1,4 +1,5 @@
 use crate::game::builder::GameBuilder;
+use crate::game::game_object::GameObject;
 use crate::game::geometry::{Rectanglef, Vector2, Vector2f};
 use crate::game::moving_sprite::MovingSprite;
 use crate::game::renderer::GameRenderer;
@@ -53,3 +54,15 @@ impl PlayerShip {
     }
 }
 
+impl GameObject for PlayerShip {
+    fn tick(&mut self) {
+        self.game_object.tick();
+        if !self.game_object.is_inside_of(&self.screen_rect) {
+            self.game_object.snap_to(&self.screen_rect);
+        }
+    }
+
+    fn render<T>(&self, renderer: &mut T) where T: GameRenderer, Self: Sized {
+        renderer.draw_sprite_obj(&self.game_object)
+    }
+}

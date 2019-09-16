@@ -18,6 +18,7 @@ pub mod bullets_manager;
 pub mod enemy_ship;
 pub mod moving_sprite;
 pub mod sprite;
+pub mod game_object;
 
 pub struct Game {
     input: InputRef,
