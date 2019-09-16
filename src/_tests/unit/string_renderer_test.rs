@@ -90,7 +90,7 @@ fn draw_sprite_from_trait_object() {
 
     let obj = TestObj { x: 1, y: 1 };
 
-    sr.draw_sprite_obj(SPRITE1, &obj);
+    sr.draw_sprite_obj_old(SPRITE1, &obj);
 
     sr.assert_frame(vec![
         "....",

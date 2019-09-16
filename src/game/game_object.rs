@@ -24,7 +24,7 @@ impl GameObject {
     }
 
     pub fn render<T>(&self, renderer: &mut T) where T: GameRenderer {
-        renderer.draw_sprite_obj(self.sprite_id, self)
+        renderer.draw_sprite_obj_old(self.sprite_id, self)
     }
 
     pub fn set_move_direction(&mut self, dx: i32, dy: i32) {

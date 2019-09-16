@@ -1,7 +1,7 @@
 use crate::game::positioned::OnScreen;
 
 pub trait GameRenderer {
-    fn draw_sprite_obj<T>(&mut self, id: u8, obj: &T) where T: OnScreen {
+    fn draw_sprite_obj_old<T>(&mut self, id: u8, obj: &T) where T: OnScreen {
         let (x, y) = obj.position();
         self.draw_sprite(id, x, y)
     }
