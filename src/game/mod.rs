@@ -8,7 +8,7 @@ use renderer::GameRenderer;
 
 use crate::game::bullets_manager::BulletsManager;
 use crate::game::game_object::{GameObjectRef, NulLGameObject};
-use crate::game::player_ship::PlayerShipRef;
+use crate::game::player_controller::PlayerController;
 
 pub mod geometry;
 pub mod builder;
@@ -21,10 +21,11 @@ pub mod enemy_ship;
 pub mod moving_sprite;
 pub mod sprite;
 pub mod game_object;
+pub mod player_controller;
 
 pub struct Game {
     input: InputRef,
-    player_ship: PlayerShipRef,
+    player_controller: PlayerController,
     bullets_manager: BulletsManager,
     game_objects: Vec<GameObjectRef>,
 }
@@ -45,7 +46,7 @@ impl Game {
 
         Game {
             input: builder.input.clone(),
-            player_ship: player_ship.clone(),
+            player_controller: PlayerController::new(builder.input.clone(), player_ship.clone()),
             bullets_manager: BulletsManager::from_game_builder(builder, player_ship.clone()),
             game_objects,
         }
@@ -53,11 +54,7 @@ impl Game {
 
 
     pub fn tick(&mut self) {
-        if self.input.borrow().is_key_down(KEY_LEFT) {
-            self.player_ship.borrow_mut().move_left();
-        } else if self.input.borrow().is_key_down(KEY_RIGHT) {
-            self.player_ship.borrow_mut().move_right();
-        } else { self.player_ship.borrow_mut().stop() }
+        self.player_controller.tick();
 
         if self.input.borrow().is_key_down(KEY_SPACE) {
             let bullet = self.bullets_manager.spawn_bullet();
