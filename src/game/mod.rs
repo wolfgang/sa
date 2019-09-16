@@ -4,6 +4,7 @@ use player_ship::PlayerShip;
 use renderer::GameRenderer;
 
 use crate::game::game_object::{GameObjectRef, NullGameObject};
+use crate::game::game_objects_manager::GameObjectsManager;
 use crate::game::player_controller::PlayerController;
 
 pub mod geometry;
@@ -18,10 +19,11 @@ pub mod moving_sprite;
 pub mod sprite;
 pub mod game_object;
 pub mod player_controller;
+pub mod game_objects_manager;
 
 pub struct Game {
     player_controller: PlayerController,
-    game_objects: Vec<GameObjectRef>
+    game_objects_manager: GameObjectsManager
 }
 
 impl Game {
@@ -33,31 +35,25 @@ impl Game {
         let player_ship = PlayerShip::from_game_builder(builder);
         let enemies_enabled = builder.enemy_speed().x > 0.0;
         let enemy_ship = if enemies_enabled { EnemyShip::from_game_builder(builder) } else { NullGameObject::new_rc() };
-        let mut game_objects = Vec::with_capacity(10);
 
-        game_objects.push(player_ship.clone() as GameObjectRef);
-        game_objects.push(enemy_ship);
+        let mut game_objects_manager = GameObjectsManager::new();
+        game_objects_manager.add(player_ship.clone() as GameObjectRef);
+        game_objects_manager.add(enemy_ship);
 
         Game {
             player_controller: PlayerController::new(builder, player_ship.clone()),
-            game_objects
+            game_objects_manager
         }
     }
 
     pub fn tick(&mut self) {
-        self.player_controller.tick(&mut self.game_objects);
+        self.player_controller.tick(&mut self.game_objects_manager);
+        self.game_objects_manager.tick();
 
-        for go in self.game_objects.iter() {
-            go.borrow_mut().tick();
-        }
-
-        self.game_objects.retain(|go| { go.borrow().is_alive() });
     }
 
     pub fn render<T>(&self, renderer: &mut T) where T: GameRenderer {
         renderer.clear();
-        for go in self.game_objects.iter() {
-            go.borrow().render(renderer);
-        }
+        self.game_objects_manager.render(renderer);
     }
 }

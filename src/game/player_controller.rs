@@ -2,7 +2,7 @@ use raylib::consts::*;
 
 use crate::game::builder::GameBuilder;
 use crate::game::bullets_manager::BulletsManager;
-use crate::game::game_object::GameObjectRef;
+use crate::game::game_objects_manager::GameObjectsManager;
 use crate::game::input::InputRef;
 use crate::game::player_ship::PlayerShipRef;
 
@@ -23,7 +23,7 @@ impl PlayerController {
         }
     }
 
-    pub fn tick(&mut self, game_objects: &mut Vec<GameObjectRef>) {
+    pub fn tick(&mut self, game_objects_manager: &mut GameObjectsManager) {
         self.current_tick += 1;
         if self.input.borrow().is_key_down(KEY_LEFT) {
             self.player_ship.borrow_mut().move_left();
@@ -33,7 +33,7 @@ impl PlayerController {
 
         if self.input.borrow().is_key_down(KEY_SPACE) {
             let bullet = self.bullets_manager.spawn_bullet(self.current_tick);
-            if bullet.is_some() { game_objects.push(bullet.unwrap()) };
+            if bullet.is_some() { game_objects_manager.add(bullet.unwrap()) };
         } else {
             self.bullets_manager.reset();
         }
