@@ -1,10 +1,14 @@
+use std::cell::RefCell;
+use std::rc::Rc;
+
 use crate::game::builder::GameBuilder;
+use crate::game::game_object::GameObjectRef;
 use crate::game::geometry::{Rectanglef, Vector2, Vector2f};
 use crate::game::player_bullet::PlayerBullet;
 use crate::game::renderer::GameRenderer;
 
 pub struct BulletsManager {
-    bullets: Vec<PlayerBullet>,
+    bullets: Vec<GameObjectRef>,
     last_bullet_tick: u32,
     current_tick: u32,
     autofire_ticks: u32,
@@ -25,8 +29,7 @@ impl BulletsManager {
     }
 
     pub fn tick(&mut self) {
-        for bullet in &mut self.bullets { bullet.tick() }
-        self.bullets.retain(|bullet| { bullet.is_alive() });
+        self.bullets.retain(|bullet| { bullet.borrow_mut().is_alive() });
         self.current_tick += 1;
     }
 
@@ -34,7 +37,7 @@ impl BulletsManager {
         self.last_bullet_tick = 0;
     }
 
-    pub fn spawn_bullet_at(&mut self, position: Vector2f) {
+    pub fn spawn_bullet_at(&mut self, position: Vector2f) -> Option<GameObjectRef> {
 
         let ticks_since_last = self.current_tick - self.last_bullet_tick;
 
@@ -45,13 +48,16 @@ impl BulletsManager {
             let adjusted_pos = Vector2::with(position.x - bullet_width as f32 / 2.0, position.y - bullet_height as f32);
 
             let rect = Rectanglef::with_tuple(adjusted_pos, self.bullet_dimensions);
-            self.bullets.push(PlayerBullet::new(rect, self.bullet_speed))
+            let bullet = Rc::new(RefCell::new(PlayerBullet::new(rect, self.bullet_speed)));
+            self.bullets.push(bullet.clone());
+            return Some(bullet.clone());
         }
+        None
     }
 
     pub fn render_bullets<T>(&self, renderer: &mut T) where T: GameRenderer {
         for bullet in &self.bullets {
-            bullet.render(renderer);
+            bullet.borrow().render(renderer);
         }
     }
 }

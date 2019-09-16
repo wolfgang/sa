@@ -1,5 +1,7 @@
+use crate::game::game_object::GameObject;
 use crate::game::geometry::{Rectanglef, Vector2f};
 use crate::game::moving_sprite::MovingSprite;
+use crate::game::player_ship::PlayerShip;
 use crate::game::renderer::GameRenderer;
 
 pub struct PlayerBullet {
@@ -12,18 +14,19 @@ impl PlayerBullet {
         game_object.set_move_direction(0, -1);
         Self { game_object }
     }
+}
 
-    pub fn tick(&mut self) {
+impl GameObject for PlayerBullet {
+    fn tick(&mut self) {
         self.game_object.tick();
     }
 
-    pub fn is_alive(&self) -> bool {
-        let y = self.game_object.get_position().y;
-        y >= 0.0
+    fn render(&self, renderer: &mut dyn GameRenderer) {
+        renderer.draw_sprite_obj(&self.game_object)
     }
 
-    pub fn render<T>(&self, renderer: &mut T) where T: GameRenderer {
-        renderer.draw_sprite_obj(&self.game_object)
-
+    fn is_alive(&self) -> bool {
+        let y = self.game_object.get_position().y;
+        y >= 0.0
     }
 }

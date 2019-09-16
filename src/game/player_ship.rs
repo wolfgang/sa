@@ -67,7 +67,7 @@ impl GameObject for PlayerShip {
         }
     }
 
-    fn render<T>(&self, renderer: &mut T) where T: GameRenderer, Self: Sized {
+    fn render(&self, renderer: &mut dyn GameRenderer) {
         renderer.draw_sprite_obj(&self.game_object)
     }
 }

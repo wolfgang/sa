@@ -1,7 +1,7 @@
 use crate::game::sprite::Sprite;
 
 pub trait GameRenderer {
-    fn draw_sprite_obj<T>(&mut self, sprite: &T) where T: Sprite {
+    fn draw_sprite_obj(&mut self, sprite: &dyn Sprite) {
         let (x, y) = sprite.position();
         self.draw_sprite(sprite.id(), x, y)
     }

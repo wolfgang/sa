@@ -10,6 +10,7 @@ use player_ship::PlayerShip;
 use renderer::GameRenderer;
 
 use crate::game::bullets_manager::BulletsManager;
+use crate::game::game_object::GameObjectRef;
 use crate::game::player_ship::PlayerShipRef;
 
 pub mod geometry;
@@ -29,7 +30,8 @@ pub struct Game {
     player_ship: PlayerShipRef,
     enemy_ship: EnemyShip,
     bullets_manager: BulletsManager,
-    enemies_enabled: bool
+    enemies_enabled: bool,
+    game_objects: Vec<GameObjectRef>,
 }
 
 impl Game {
@@ -38,14 +40,19 @@ impl Game {
     }
 
     pub fn from_builder(builder: &GameBuilder) -> Self {
-        let player_ship = PlayerShip::from_game_builder(builder);
+        let player_ship = Rc::new(RefCell::new(PlayerShip::from_game_builder(builder)));
         let enemy_ship = EnemyShip::from_game_builder(builder);
+        let mut game_objects = Vec::with_capacity(10);
+
+        game_objects.push(player_ship.clone() as GameObjectRef);
+
         Game {
             input: builder.input.clone(),
-            player_ship: Rc::new(RefCell::new(player_ship)),
+            player_ship: player_ship.clone(),
             enemy_ship,
             enemies_enabled: builder.enemy_speed().x > 0.0,
-            bullets_manager: BulletsManager::from_game_builder(builder)
+            bullets_manager: BulletsManager::from_game_builder(builder),
+            game_objects,
         }
     }
 
@@ -57,19 +64,28 @@ impl Game {
         } else { self.player_ship.borrow_mut().stop() }
 
         if self.input.borrow().is_key_down(KEY_SPACE) {
-            self.bullets_manager.spawn_bullet_at(self.player_ship.borrow().bullet_spawn_position());
+            let bullet = self.bullets_manager.spawn_bullet_at(self.player_ship.borrow().bullet_spawn_position());
+            if bullet.is_some() { self.game_objects.push(bullet.unwrap()) }
         } else {
             self.bullets_manager.reset();
         }
-        self.player_ship.borrow_mut().tick();
+
+        for go in self.game_objects.iter() {
+            go.borrow_mut().tick();
+        }
+
+        self.game_objects.retain(|go| { go.borrow_mut().is_alive() });
+
         self.enemy_ship.tick();
         self.bullets_manager.tick();
     }
 
     pub fn render<T>(&self, renderer: &mut T) where T: GameRenderer {
         renderer.clear();
+        for go in self.game_objects.iter() {
+            go.borrow().render(renderer);
+        }
+
         if self.enemies_enabled { self.enemy_ship.render(renderer) }
-        self.player_ship.borrow().render(renderer);
-        self.bullets_manager.render_bullets(renderer);
     }
 }
