@@ -1,7 +1,6 @@
 use crate::game::game_object::GameObject;
 use crate::game::geometry::{Rectanglef, Vector2f};
 use crate::game::moving_sprite::MovingSprite;
-use crate::game::player_ship::PlayerShip;
 use crate::game::renderer::GameRenderer;
 
 pub struct PlayerBullet {
