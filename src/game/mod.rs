@@ -45,8 +45,7 @@ impl Game {
     }
 
     pub fn tick(&mut self) {
-        let bullet = self.player_controller.tick();
-        if bullet.is_some() { self.game_objects.push(bullet.unwrap()) }
+        self.player_controller.tick(&mut self.game_objects);
 
         for go in self.game_objects.iter() {
             go.borrow_mut().tick();

@@ -10,7 +10,7 @@ pub struct PlayerController {
     input: InputRef,
     player_ship: PlayerShipRef,
     bullets_manager: BulletsManager,
-    current_tick: u32
+    current_tick: u32,
 }
 
 impl PlayerController {
@@ -19,11 +19,11 @@ impl PlayerController {
             input: builder.input.clone(),
             bullets_manager: BulletsManager::from_game_builder(builder, player_ship.clone()),
             player_ship,
-            current_tick: 1000
+            current_tick: 1000,
         }
     }
 
-    pub fn tick(&mut self) -> Option<GameObjectRef> {
+    pub fn tick(&mut self, game_objects: &mut Vec<GameObjectRef>) {
         self.current_tick += 1;
         if self.input.borrow().is_key_down(KEY_LEFT) {
             self.player_ship.borrow_mut().move_left();
@@ -31,15 +31,12 @@ impl PlayerController {
             self.player_ship.borrow_mut().move_right();
         } else { self.player_ship.borrow_mut().stop() }
 
-        let mut bullet = None;
         if self.input.borrow().is_key_down(KEY_SPACE) {
-            bullet = self.bullets_manager.spawn_bullet(self.current_tick);
+            let bullet = self.bullets_manager.spawn_bullet(self.current_tick);
+            if bullet.is_some() { game_objects.push(bullet.unwrap()) };
         } else {
             self.bullets_manager.reset();
         }
-
-        bullet
-
     }
 }
 
