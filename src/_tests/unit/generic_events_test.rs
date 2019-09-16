@@ -1,32 +1,21 @@
 use std::cell::RefCell;
 use std::rc::Rc;
 
-const EVENT1: u32 = 1;
-const EVENT2: u32 = 2;
-
-trait Event {
-    fn id(&self) -> u32;
-}
+trait Event {}
 
 trait EventHandler<T> where T: Event {
     fn handle(&mut self, event: T);
 }
 
+#[derive(Default, Clone, Copy)]
 struct Event1 { int_val: i32 }
 
+#[derive(Default, Clone, Copy)]
 struct Event2 { float_val: f32 }
 
-impl Event for Event1 {
-    fn id(&self) -> u32 {
-        EVENT1
-    }
-}
+impl Event for Event1 {}
 
-impl Event for Event2 {
-    fn id(&self) -> u32 {
-        EVENT2
-    }
-}
+impl Event for Event2 {}
 
 
 #[derive(Default)]
@@ -50,7 +39,7 @@ impl EventHandler<Event2> for TestEventHandler {
 type EventHandlerRef<T> = Rc<RefCell<dyn EventHandler<T>>>;
 
 trait EventDispatcher<T> where T: Event {
-    fn on(&mut self, handler: EventHandlerRef<T>);
+    fn on(&mut self, evt: T, handler: EventHandlerRef<T>);
 }
 
 #[derive(Default)]
@@ -59,16 +48,26 @@ struct TestEventDispatcher {
     handlers_event2: Vec<EventHandlerRef<Event2>>,
 }
 
-impl EventDispatcher<Event1> for TestEventDispatcher {
-    fn on(&mut self, handler: EventHandlerRef<Event1>) {
+impl TestEventDispatcher {
+    fn on_event1(&mut self, handler: EventHandlerRef<Event1>) {
         self.handlers_event1.push(handler.clone());
     }
-}
-
-impl EventDispatcher<Event2> for TestEventDispatcher {
-    fn on(&mut self, handler: EventHandlerRef<Event2>) {
+    fn on_event2(&mut self, handler: EventHandlerRef<Event2>) {
         self.handlers_event2.push(handler.clone());
     }
+
+    fn dispatch_event1(&self, evt: Event1) {
+        for handler in self.handlers_event1.iter() {
+            handler.borrow_mut().handle(evt);
+        }
+    }
+
+    fn dispatch_event2(&self, evt: Event2) {
+        for handler in self.handlers_event2.iter() {
+            handler.borrow_mut().handle(evt);
+        }
+    }
+
 }
 
 
@@ -85,9 +84,14 @@ fn nothing() {
 fn dispatching_of_events() {
     let mut dispatcher = TestEventDispatcher::default();
     let handler = Rc::new(RefCell::new(TestEventHandler::default()));
-    dispatcher.on(handler.clone() as Rc<RefCell<dyn EventHandler<Event1>>>);
-    dispatcher.on(handler.clone() as Rc<RefCell<dyn EventHandler<Event2>>>);
+    dispatcher.on_event1(handler.clone());
+    dispatcher.on_event2(handler.clone());
 
     assert_eq!(1, dispatcher.handlers_event1.len());
     assert_eq!(1, dispatcher.handlers_event2.len());
+
+    dispatcher.dispatch_event1(Event1 { int_val: 17 });
+    dispatcher.dispatch_event2(Event2 { float_val: 19.31 });
+    assert_eq!(handler.borrow().int_val_received, 17);
+    assert_eq!(handler.borrow().float_val_received, 19.31);
 }
