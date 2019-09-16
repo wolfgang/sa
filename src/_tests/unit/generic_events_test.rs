@@ -1,16 +1,16 @@
 use std::cell::RefCell;
 use std::rc::Rc;
 
-trait Event {}
+trait Event: Clone + Copy {}
 
 trait EventHandler<T> where T: Event {
     fn handle(&mut self, event: T);
 }
 
-#[derive(Default, Clone, Copy)]
+#[derive(Clone, Copy)]
 struct Event1 { int_val: i32 }
 
-#[derive(Default, Clone, Copy)]
+#[derive(Clone, Copy)]
 struct Event2 { float_val: f32 }
 
 impl Event for Event1 {}
@@ -57,17 +57,18 @@ impl TestEventDispatcher {
     }
 
     fn dispatch_event1(&self, evt: Event1) {
-        for handler in self.handlers_event1.iter() {
-            handler.borrow_mut().handle(evt);
-        }
+        self.dispatch(evt, &self.handlers_event1);
     }
 
     fn dispatch_event2(&self, evt: Event2) {
-        for handler in self.handlers_event2.iter() {
+        self.dispatch(evt, &self.handlers_event2);
+    }
+
+    fn dispatch<T>(&self, evt: T, handlers: &Vec<EventHandlerRef<T>>) where T: Event {
+        for handler in handlers.iter() {
             handler.borrow_mut().handle(evt);
         }
     }
-
 }
 
 
