@@ -2,6 +2,7 @@ use std::char;
 use std::collections::HashMap;
 
 use crate::game::renderer::GameRenderer;
+use crate::game::sprite::Sprite;
 
 type Frame = Vec<Vec<char>>;
 type SpriteLogEntry = (u8, i32, i32);
@@ -47,6 +48,11 @@ impl StringRenderer {
             sprites: HashMap::with_capacity(10),
             sprite_log: Vec::with_capacity(10),
         }
+    }
+
+    pub fn draw_sprite_obj2<T>(&mut self, sprite: &T) where T: Sprite {
+        let (x, y) = sprite.position();
+        self.draw_sprite(sprite.id(), x, y);
     }
 
     pub fn register_sprite(&mut self, id: u8, width: u8, height: u8) {

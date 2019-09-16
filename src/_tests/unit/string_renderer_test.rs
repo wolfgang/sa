@@ -1,6 +1,7 @@
 use crate::_tests::helpers::string_renderer::StringRenderer;
 use crate::game::positioned::OnScreen;
 use crate::game::renderer::GameRenderer;
+use crate::game::sprite::Sprite;
 
 #[test]
 fn frame_is_empty_after_construction() {
@@ -117,4 +118,37 @@ fn sprite_log_returns_list_of_sprites_rendered() {
         "2, 3, 1",
         "2, 4, 2"
     ])
+}
+
+struct TestSprite {
+    sprite_id: u8,
+    x: i32,
+    y: i32,
+}
+
+impl Sprite for TestSprite {
+    fn position(&self) -> (i32, i32) {
+        (self.x, self.y)
+    }
+
+    fn id(&self) -> u8 {
+        self.sprite_id
+    }
+}
+
+#[test]
+fn draw_sprite_from_sprite_trait_object() {
+    let mut sr = StringRenderer::new(4, 4);
+    sr.register_sprite(SPRITE1, 2, 2);
+
+    let obj = TestSprite { sprite_id: SPRITE1, x: 1, y: 1 };
+
+    sr.draw_sprite_obj2(&obj);
+
+    sr.assert_frame(vec![
+        "....",
+        ".11.",
+        ".11.",
+        "...."
+    ]);
 }
