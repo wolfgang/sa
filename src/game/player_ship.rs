@@ -30,10 +30,6 @@ impl PlayerShip {
         }))
     }
 
-    pub fn render<T>(&self, renderer: &mut T) where T: GameRenderer {
-        renderer.draw_sprite_obj(&self.game_object)
-    }
-
     pub fn move_left(&mut self) {
         self.game_object.set_move_direction(-1, 0);
     }
@@ -44,13 +40,6 @@ impl PlayerShip {
 
     pub fn stop(&mut self) {
         self.game_object.set_move_direction(0, 0);
-    }
-
-    pub fn tick(&mut self) {
-        self.game_object.tick();
-        if !self.game_object.is_inside_of(&self.screen_rect) {
-            self.game_object.snap_to(&self.screen_rect);
-        }
     }
 
     pub fn bullet_spawn_position(&self) -> Vector2f {

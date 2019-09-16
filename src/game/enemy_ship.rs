@@ -22,16 +22,6 @@ impl EnemyShip {
             screen_rect: builder.screen_rect()
         }))
     }
-
-    pub fn tick(&mut self) {
-        self.game_object.tick();
-
-        if !self.game_object.is_inside_of(&self.screen_rect) {
-            self.game_object.snap_to(&self.screen_rect);
-            self.game_object.mult_move_direction(-1, 1);
-        }
-
-    }
 }
 
 impl GameObject for EnemyShip {
