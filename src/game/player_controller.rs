@@ -1,5 +1,6 @@
 use raylib::consts::*;
 
+use crate::game::builder::GameBuilder;
 use crate::game::input::InputRef;
 use crate::game::player_ship::PlayerShipRef;
 
@@ -9,9 +10,9 @@ pub struct PlayerController {
 }
 
 impl PlayerController {
-    pub fn new(input: InputRef, player_ship: PlayerShipRef) -> Self {
+    pub fn new(builder: &GameBuilder, player_ship: PlayerShipRef) -> Self {
         Self {
-            input,
+            input: builder.input.clone(),
             player_ship,
         }
     }

@@ -47,7 +47,7 @@ impl Game {
 
         Game {
             input: builder.input.clone(),
-            player_controller: PlayerController::new(builder.input.clone(), player_ship.clone()),
+            player_controller: PlayerController::new(builder, player_ship.clone()),
             bullets_manager: BulletsManager::from_game_builder(builder, player_ship.clone()),
             game_objects,
             current_tick: 1000,
