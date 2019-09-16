@@ -1,17 +1,17 @@
 use crate::game::builder::GameBuilder;
-use crate::game::game_object::GameObject;
 use crate::game::geometry::{Rectanglef, Vector2};
+use crate::game::moving_sprite::MovingSprite;
 use crate::game::renderer::GameRenderer;
 
 pub struct EnemyShip {
     screen_rect: Rectanglef,
-    game_object: GameObject,
+    game_object: MovingSprite,
 }
 
 impl EnemyShip {
     pub fn from_game_builder(builder: &GameBuilder) -> Self {
         let go_rect = Rectanglef::with_tuple(Vector2::zero(), builder.enemy_dimensions);
-        let mut game_object = GameObject::new(2, go_rect, builder.enemy_speed());
+        let mut game_object = MovingSprite::new(2, go_rect, builder.enemy_speed());
         game_object.set_move_direction(1, 1);
         Self {
             game_object,

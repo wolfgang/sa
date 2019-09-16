@@ -1,14 +1,14 @@
 use crate::game::geometry::{Rectanglef, Vector2, Vector2f};
 use crate::game::sprite::Sprite;
 
-pub struct GameObject {
+pub struct MovingSprite {
     sprite_id: u8,
     speed: Vector2f,
     move_direction: Vector2f,
     rectangle: Rectanglef,
 }
 
-impl GameObject {
+impl MovingSprite {
     pub fn new(sprite_id: u8, rectangle: Rectanglef, speed: Vector2f) -> Self {
         Self {
             sprite_id,
@@ -52,7 +52,7 @@ impl GameObject {
     }
 }
 
-impl Sprite for GameObject {
+impl Sprite for MovingSprite {
     fn position(&self) -> (i32, i32) {
         (self.rectangle.position.x as i32, self.rectangle.position.y as i32)
     }

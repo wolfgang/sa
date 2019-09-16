@@ -1,12 +1,12 @@
 use crate::game::builder::GameBuilder;
-use crate::game::game_object::GameObject;
 use crate::game::geometry::{Rectanglef, Vector2, Vector2f};
+use crate::game::moving_sprite::MovingSprite;
 use crate::game::renderer::GameRenderer;
 
 pub struct PlayerShip {
     width: u32,
     screen_rect: Rectanglef,
-    game_object: GameObject,
+    game_object: MovingSprite,
 }
 
 impl PlayerShip {
@@ -19,7 +19,7 @@ impl PlayerShip {
         let go_rect = Rectanglef::with_tuple(Vector2::with(ship_x as f32, ship_y as f32), builder.ship_dimensions);
         Self {
             width,
-            game_object: GameObject::new(0, go_rect, builder.ship_speed()),
+            game_object: MovingSprite::new(0, go_rect, builder.ship_speed()),
             screen_rect: builder.screen_rect(),
         }
     }
