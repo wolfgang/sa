@@ -2,7 +2,6 @@ use raylib::consts::KEY_SPACE;
 
 use crate::_tests::helpers::testable_game::TestableGame;
 
-#[ignore]
 #[test]
 fn after_bullet_collides_with_enemy_both_disappear() {
     let mut game = TestableGame::init()

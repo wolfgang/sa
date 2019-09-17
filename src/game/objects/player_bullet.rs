@@ -1,5 +1,5 @@
 use crate::core::geometry::{Rectanglef, Vector2f};
-use crate::game::game_objects_manager::GameObjectsManagerRef;
+use crate::game::objects::game_object::GameObjectRef;
 use crate::gfx::renderer::GameRenderer;
 
 use super::game_object::GameObject;
@@ -7,14 +7,14 @@ use super::moving_sprite::MovingSprite;
 
 pub struct PlayerBullet {
     moving_sprite: MovingSprite,
-    game_objects_manager: GameObjectsManagerRef
+    is_alive: bool
 }
 
 impl PlayerBullet {
-    pub fn new(rectangle: Rectanglef, speed: Vector2f, game_objects_manager: GameObjectsManagerRef) -> Self {
+    pub fn new(rectangle: Rectanglef, speed: Vector2f) -> Self {
         let mut moving_sprite = MovingSprite::new(1, rectangle, speed);
         moving_sprite.set_move_direction(0, -1);
-        Self { moving_sprite, game_objects_manager }
+        Self { moving_sprite, is_alive: true }
     }
 }
 
@@ -29,6 +29,15 @@ impl GameObject for PlayerBullet {
 
     fn is_alive(&self) -> bool {
         let y = self.moving_sprite.get_position().y;
-        y >= 0.0
+        self.is_alive && y >= 0.0
     }
+
+    fn check_collisions(&mut self, targets: &Vec<GameObjectRef>) {
+        for t in targets.iter() {
+            if t.borrow_mut().process_collision(&self.moving_sprite) {
+                self.is_alive = false;
+            }
+        }
+    }
+
 }

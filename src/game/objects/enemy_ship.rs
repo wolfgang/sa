@@ -11,6 +11,7 @@ use super::moving_sprite::MovingSprite;
 pub struct EnemyShip {
     screen_rect: Rectanglef,
     moving_sprite: MovingSprite,
+    is_alive: bool
 }
 
 impl EnemyShip {
@@ -20,7 +21,8 @@ impl EnemyShip {
         moving_sprite.set_move_direction(1, 1);
         Rc::new(RefCell::new(Self {
             moving_sprite,
-            screen_rect: builder.screen_rect()
+            screen_rect: builder.screen_rect(),
+            is_alive: true
         }))
     }
 }
@@ -37,5 +39,22 @@ impl GameObject for EnemyShip {
 
     fn render(&self, renderer: &mut dyn GameRenderer) {
         self.moving_sprite.render(renderer);
+    }
+
+    fn is_alive(&self) -> bool {
+        self.is_alive
+    }
+
+    fn is_target(&self) -> bool {
+        true
+    }
+
+
+    fn process_collision(&mut self, other: &MovingSprite) -> bool {
+        if other.intersects_with(&self.moving_sprite) {
+            self.is_alive = false;
+            return true;
+        }
+        false
     }
 }

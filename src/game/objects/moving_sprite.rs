@@ -45,6 +45,10 @@ impl MovingSprite {
         self.rectangle.is_inside_of(rect)
     }
 
+    pub fn intersects_with(&self, other: &Self) -> bool {
+        self.rectangle.intersects(&other.rectangle)
+    }
+
     pub fn snap_to(&mut self, rec: &Rectanglef) {
         let x = self.rectangle.position.x;
         let y = self.rectangle.position.y;

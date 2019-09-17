@@ -2,7 +2,6 @@ use std::cell::RefCell;
 use std::rc::Rc;
 
 use crate::core::geometry::{Rectanglef, Vector2, Vector2f};
-use crate::game::game_objects_manager::GameObjectsManagerRef;
 
 use super::builder::GameBuilder;
 use super::objects::game_object::GameObjectRef;
@@ -32,7 +31,7 @@ impl BulletsManager {
         self.last_bullet_tick = 0;
     }
 
-    pub fn spawn_bullet(&mut self, current_tick: u32, game_objects_manager: GameObjectsManagerRef) -> Option<GameObjectRef> {
+    pub fn spawn_bullet(&mut self, current_tick: u32) -> Option<GameObjectRef> {
         let ticks_since_last = current_tick - self.last_bullet_tick;
         if ticks_since_last >= self.autofire_ticks {
             self.last_bullet_tick = current_tick;
@@ -41,7 +40,7 @@ impl BulletsManager {
             let adjusted_pos = Vector2::with(position.x - bullet_width as f32 / 2.0, position.y - bullet_height as f32);
 
             let rect = Rectanglef::with_tuple(adjusted_pos, self.bullet_dimensions);
-            return Some(Rc::new(RefCell::new(PlayerBullet::new(rect, self.bullet_speed, game_objects_manager))));
+            return Some(Rc::new(RefCell::new(PlayerBullet::new(rect, self.bullet_speed))));
         }
         None
     }

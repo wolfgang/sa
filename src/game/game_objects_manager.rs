@@ -23,10 +23,11 @@ impl GameObjectsManager {
     }
 
     pub fn tick(&mut self) {
-        for go in self.game_objects.iter() {
-            go.borrow_mut().tick();
-        }
         self.game_objects.retain(|go| { go.borrow().is_alive() });
+    }
+
+    pub fn game_objects(&self) -> Vec<GameObjectRef> {
+        self.game_objects.clone()
     }
 
     pub fn render<T>(&self, renderer: &mut T) where T: GameRenderer {
