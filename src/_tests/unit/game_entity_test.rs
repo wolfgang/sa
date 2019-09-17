@@ -51,13 +51,17 @@ struct GameEntity {
 
 impl GameEntity {
     pub fn add_test_component1(&mut self, c: ComponentRef<TestComponent1>) {
-        self.test_component1 = Some(c.clone());
-        self.components.push(c.clone() as ComponentRef<dyn Component>)
+        if self.test_component1.is_none() {
+            self.test_component1 = Some(c.clone());
+            self.components.push(c.clone() as ComponentRef<dyn Component>)
+        }
     }
 
     pub fn add_test_component2(&mut self, c: ComponentRef<TestComponent2>) {
-        self.test_component2 = Some(c.clone());
-        self.components.push(c.clone() as ComponentRef<dyn Component>)
+        if self.test_component2.is_none() {
+            self.test_component2 = Some(c.clone());
+            self.components.push(c.clone() as ComponentRef<dyn Component>)
+        }
     }
 
     pub fn tick(&mut self) {
@@ -92,8 +96,9 @@ impl TickSpy {
 fn nothing() {
     let spy = TickSpy::new_rc();
     let mut entity = GameEntity::default();
-    entity.add_test_component1(TestComponent1::new_rc(spy.clone()).clone());
-    entity.add_test_component2(TestComponent2::new_rc(spy.clone()).clone());
+    entity.add_test_component1(TestComponent1::new_rc(spy.clone()));
+    entity.add_test_component2(TestComponent2::new_rc(spy.clone()));
+    entity.add_test_component2(TestComponent2::new_rc(spy.clone()));
 
     entity.tick();
 
