@@ -1,4 +1,4 @@
-use crate::game::geometry::{Rectanglef, Vector2, Vector2f};
+use crate::core::geometry::{Rectanglef, Vector2, Vector2f};
 use crate::gfx::renderer::GameRenderer;
 use crate::gfx::sprite::Sprite;
 

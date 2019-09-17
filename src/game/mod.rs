@@ -7,7 +7,6 @@ use player_controller::PlayerController;
 
 use crate::gfx::renderer::GameRenderer;
 
-pub mod geometry;
 pub mod builder;
 pub mod input;
 pub mod bullets_manager;

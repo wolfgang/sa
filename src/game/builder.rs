@@ -1,5 +1,5 @@
+use crate::core::geometry::{Rectanglef, Vector2, Vector2f};
 use crate::game::Game;
-use crate::game::geometry::{Rectanglef, Vector2, Vector2f};
 use crate::game::input::{InputNull, InputRef};
 
 #[derive(Clone)]

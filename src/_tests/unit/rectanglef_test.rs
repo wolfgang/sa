@@ -1,4 +1,4 @@
-use crate::game::geometry::{Rectanglef, Vector2};
+use crate::core::geometry::{Rectanglef, Vector2};
 
 #[test]
 fn intersect() {

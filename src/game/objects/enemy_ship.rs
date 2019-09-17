@@ -1,8 +1,8 @@
 use std::cell::RefCell;
 use std::rc::Rc;
 
+use crate::core::geometry::{Rectanglef, Vector2};
 use crate::game::builder::GameBuilder;
-use crate::game::geometry::{Rectanglef, Vector2};
 use crate::gfx::renderer::GameRenderer;
 
 use super::game_object::{GameObject, GameObjectRef};

@@ -1,8 +1,9 @@
 use std::cell::RefCell;
 use std::rc::Rc;
 
+use crate::core::geometry::{Rectanglef, Vector2, Vector2f};
+
 use super::builder::GameBuilder;
-use super::geometry::{Rectanglef, Vector2, Vector2f};
 use super::objects::game_object::GameObjectRef;
 use super::objects::player_bullet::PlayerBullet;
 use super::objects::player_ship::PlayerShipRef;

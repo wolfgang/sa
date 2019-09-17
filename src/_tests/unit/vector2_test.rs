@@ -1,4 +1,4 @@
-use crate::game::geometry::Vector2;
+use crate::core::geometry::Vector2;
 
 #[test]
 fn multiply_with_scalar() {
