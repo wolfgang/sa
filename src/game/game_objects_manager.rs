@@ -23,11 +23,21 @@ impl GameObjectsManager {
     }
 
     pub fn tick(&mut self) {
+        self.tick_game_objects();
+        self.resolve_collisions();
+        self.remove_dead_game_objects();
+    }
+
+    pub fn render<T>(&self, renderer: &mut T) where T: GameRenderer {
+        for go in self.game_objects.iter() {
+            go.borrow().render(renderer);
+        }
+    }
+
+    fn tick_game_objects(&mut self) {
         for go in self.game_objects.iter() {
             go.borrow_mut().tick();
         }
-        self.resolve_collisions();
-        self.game_objects.retain(|go| { go.borrow().is_alive() });
     }
 
     fn resolve_collisions(&mut self) {
@@ -43,9 +53,7 @@ impl GameObjectsManager {
         }
     }
 
-    pub fn render<T>(&self, renderer: &mut T) where T: GameRenderer {
-        for go in self.game_objects.iter() {
-            go.borrow().render(renderer);
-        }
+    fn remove_dead_game_objects(&mut self) {
+        self.game_objects.retain(|go| { go.borrow().is_alive() });
     }
 }
