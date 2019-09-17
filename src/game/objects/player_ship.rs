@@ -3,7 +3,6 @@ use std::rc::Rc;
 
 use crate::core::geometry::{Rectanglef, Vector2, Vector2f};
 use crate::game::builder::GameBuilder;
-use crate::gfx::renderer::GameRenderer;
 
 use super::game_object::GameObject;
 use super::moving_sprite::MovingSprite;
@@ -55,10 +54,6 @@ impl GameObject for PlayerShip {
         if !self.moving_sprite.is_inside_of(&self.screen_rect) {
             self.moving_sprite.snap_to(&self.screen_rect);
         }
-    }
-
-    fn render(&self, renderer: &mut dyn GameRenderer) {
-        self.moving_sprite.render(renderer);
     }
 
     fn collider(&self) -> &MovingSprite {

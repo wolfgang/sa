@@ -3,7 +3,6 @@ use std::rc::Rc;
 
 use crate::core::geometry::{Rectanglef, Vector2};
 use crate::game::builder::GameBuilder;
-use crate::gfx::renderer::GameRenderer;
 
 use super::game_object::{GameObject, GameObjectRef};
 use super::moving_sprite::MovingSprite;
@@ -35,10 +34,6 @@ impl GameObject for EnemyShip {
             self.moving_sprite.snap_to(&self.screen_rect);
             self.moving_sprite.mult_move_direction(-1, 1);
         }
-    }
-
-    fn render(&self, renderer: &mut dyn GameRenderer) {
-        self.moving_sprite.render(renderer);
     }
 
     fn collider(&self) -> &MovingSprite {

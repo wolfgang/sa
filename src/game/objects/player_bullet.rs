@@ -1,5 +1,4 @@
 use crate::core::geometry::{Rectanglef, Vector2f};
-use crate::gfx::renderer::GameRenderer;
 
 use super::game_object::GameObject;
 use super::moving_sprite::MovingSprite;
@@ -20,10 +19,6 @@ impl PlayerBullet {
 impl GameObject for PlayerBullet {
     fn tick(&mut self) {
         self.moving_sprite.tick();
-    }
-
-    fn render(&self, renderer: &mut dyn GameRenderer) {
-        self.moving_sprite.render(renderer);
     }
 
     fn collider(&self) -> &MovingSprite {

@@ -8,9 +8,11 @@ pub type GameObjectRef = Rc<RefCell<dyn GameObject>>;
 
 pub trait GameObject {
     fn tick(&mut self);
-    fn render(&self, renderer: &mut dyn GameRenderer);
     fn collider(&self) -> &MovingSprite;
 
+    fn render(&self, renderer: &mut dyn GameRenderer) {
+        self.collider().render(renderer);
+    }
     fn is_alive(&self) -> bool { true }
     fn on_collision(&mut self) {}
     fn is_colliding_with(&self, other: &GameObjectRef) -> bool {
