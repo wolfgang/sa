@@ -1,5 +1,8 @@
-use std::cell::RefCell;
+use std::cell::{Ref, RefCell};
 use std::rc::Rc;
+
+use crate::_tests::helpers::input_stub::InputStub;
+use crate::game::input::{Input, InputRef};
 
 type ComponentRef<T> = Rc<RefCell<T>>;
 
@@ -46,12 +49,33 @@ impl Component for TestComponent2 {
     }
 }
 
+struct InputHandler {
+    input: InputRef,
+    spy: TickSpyRef,
+}
+
+impl InputHandler {
+    fn new_rc(spy: TickSpyRef, input: InputRef) -> ComponentRef<Self> {
+        Rc::new(RefCell::new(Self { spy, input: input.clone() }))
+    }
+}
+
+impl Component for InputHandler {
+    fn tick(&mut self, _: &GameEntity) {
+        if self.input.borrow().is_key_down(21) {
+            self.spy.borrow_mut().log("GOT INPUT");
+        } else {
+            self.spy.borrow_mut().log("GOT NO INPUT")
+        }
+    }
+}
 
 
 #[derive(Default)]
 struct GameEntity {
     test_component1: Option<ComponentRef<TestComponent1>>,
     test_component2: Option<ComponentRef<TestComponent2>>,
+    input_handler: Option<ComponentRef<InputHandler>>,
     components: Vec<ComponentRef<dyn Component>>,
 }
 
@@ -69,6 +93,7 @@ macro_rules! impl_component {
 impl GameEntity {
     impl_component!(TestComponent1, test_component1);
     impl_component!(TestComponent2, test_component2);
+    impl_component!(InputHandler, input_handler);
 
     pub fn tick(&mut self) {
         for c in self.components.iter() {
@@ -109,4 +134,26 @@ fn nothing() {
     entity.tick();
 
     assert_eq!(spy.borrow().get_log(), vec!["TestComponent1::tick", "HELLO from TestComponent1", "TestComponent2::tick"]);
+}
+
+#[test]
+fn input_component() {
+    let spy = TickSpy::new_rc();
+    let mut entity = GameEntity::default();
+    let input = InputStub::new_rc();
+    entity.test_component2(TestComponent2::new_rc(spy.clone()));
+    entity.input_handler(InputHandler::new_rc(spy.clone(), input.clone()));
+
+    entity.tick();
+    assert_eq!(spy.borrow().get_log(), vec!["TestComponent2::tick", "GOT NO INPUT"]);
+
+    input.borrow_mut().key_is_down(21);
+    entity.tick();
+
+    assert_eq!(spy.borrow().get_log(), vec![
+        "TestComponent2::tick",
+        "GOT NO INPUT",
+        "TestComponent2::tick",
+        "GOT INPUT"
+    ]);
 }
