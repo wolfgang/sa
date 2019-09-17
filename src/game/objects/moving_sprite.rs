@@ -1,6 +1,6 @@
 use crate::game::geometry::{Rectanglef, Vector2, Vector2f};
-use crate::game::renderer::GameRenderer;
-use crate::game::sprite::Sprite;
+use crate::gfx::renderer::GameRenderer;
+use crate::gfx::sprite::Sprite;
 
 pub struct MovingSprite {
     sprite_id: u8,

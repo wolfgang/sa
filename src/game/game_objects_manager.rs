@@ -1,5 +1,5 @@
 use crate::game::objects::game_object::GameObjectRef;
-use crate::game::renderer::GameRenderer;
+use crate::gfx::renderer::GameRenderer;
 
 pub struct GameObjectsManager {
     pub game_objects: Vec<GameObjectRef>

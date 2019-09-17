@@ -4,14 +4,13 @@ use objects::enemy_ship::EnemyShip;
 use objects::game_object::{GameObjectRef, NullGameObject};
 use objects::player_ship::PlayerShip;
 use player_controller::PlayerController;
-use renderer::GameRenderer;
+
+use crate::gfx::renderer::GameRenderer;
 
 pub mod geometry;
 pub mod builder;
 pub mod input;
-pub mod renderer;
 pub mod bullets_manager;
-pub mod sprite;
 pub mod player_controller;
 pub mod game_objects_manager;
 pub mod objects;

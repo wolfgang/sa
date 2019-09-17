@@ -1,5 +1,5 @@
 use crate::game::geometry::{Rectanglef, Vector2f};
-use crate::game::renderer::GameRenderer;
+use crate::gfx::renderer::GameRenderer;
 
 use super::game_object::GameObject;
 use super::moving_sprite::MovingSprite;

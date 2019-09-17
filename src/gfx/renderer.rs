@@ -1,4 +1,4 @@
-use crate::game::sprite::Sprite;
+use crate::gfx::sprite::Sprite;
 
 pub trait GameRenderer {
     fn draw_sprite_obj(&mut self, sprite: &dyn Sprite) {

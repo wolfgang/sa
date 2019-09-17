@@ -1,7 +1,7 @@
 use std::cell::RefCell;
 use std::rc::Rc;
 
-use crate::game::renderer::GameRenderer;
+use crate::gfx::renderer::GameRenderer;
 
 pub type GameObjectRef = Rc<RefCell<dyn GameObject>>;
 

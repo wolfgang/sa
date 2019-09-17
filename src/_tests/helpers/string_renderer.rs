@@ -1,7 +1,7 @@
 use std::char;
 use std::collections::HashMap;
 
-use crate::game::renderer::GameRenderer;
+use crate::gfx::renderer::GameRenderer;
 
 type Frame = Vec<Vec<char>>;
 type SpriteLogEntry = (u8, i32, i32);
