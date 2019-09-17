@@ -60,4 +60,9 @@ impl GameObject for PlayerShip {
     fn render(&self, renderer: &mut dyn GameRenderer) {
         self.moving_sprite.render(renderer);
     }
+
+    fn collider(&self) -> &MovingSprite {
+        &self.moving_sprite
+    }
+
 }

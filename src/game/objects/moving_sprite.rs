@@ -2,6 +2,7 @@ use crate::core::geometry::{Rectanglef, Vector2, Vector2f};
 use crate::gfx::renderer::GameRenderer;
 use crate::gfx::sprite::Sprite;
 
+#[derive(Default)]
 pub struct MovingSprite {
     sprite_id: u8,
     speed: Vector2f,

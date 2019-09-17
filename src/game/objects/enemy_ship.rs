@@ -49,6 +49,15 @@ impl GameObject for EnemyShip {
         true
     }
 
+    fn collider(&self) -> &MovingSprite {
+        &self.moving_sprite
+    }
+
+    fn on_collision(&mut self) {
+        self.is_alive = false;
+    }
+
+
 
     fn process_collision(&mut self, other: &MovingSprite) -> bool {
         if other.intersects_with(&self.moving_sprite) {

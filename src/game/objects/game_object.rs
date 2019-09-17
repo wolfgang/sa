@@ -16,17 +16,30 @@ pub trait GameObject {
     }
 
     fn check_collisions(&mut self, _: &Vec<GameObjectRef>) {}
+    fn is_colliding_with(&self, other: &GameObjectRef) -> bool {
+        self.collider().intersects_with(other.borrow().collider())
+    }
+
+    fn on_collision(&mut self) {}
+
+    fn collider(&self) -> &MovingSprite;
 }
 
-pub struct NullGameObject {}
+pub struct NullGameObject {
+    moving_sprite: MovingSprite
+}
 
 impl NullGameObject {
     pub fn new_rc() -> GameObjectRef {
-        Rc::new(RefCell::new(Self {}))
+        Rc::new(RefCell::new(Self { moving_sprite: MovingSprite::default() }))
     }
 }
 
 impl GameObject for NullGameObject {
     fn tick(&mut self) {}
     fn render(&self, _renderer: &mut dyn GameRenderer) {}
+
+    fn collider(&self) -> &MovingSprite {
+        &self.moving_sprite
+    }
 }

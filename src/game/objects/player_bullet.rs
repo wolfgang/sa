@@ -40,4 +40,13 @@ impl GameObject for PlayerBullet {
         }
     }
 
+    fn collider(&self) -> &MovingSprite {
+        &self.moving_sprite
+    }
+
+    fn on_collision(&mut self) {
+        self.is_alive = false;
+    }
+
+
 }
