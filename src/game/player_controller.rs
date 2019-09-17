@@ -34,7 +34,7 @@ impl PlayerController {
         } else { self.player_ship.borrow_mut().stop() }
 
         if self.input.borrow().is_key_down(KEY_SPACE) {
-            let bullet = self.bullets_manager.spawn_bullet(self.current_tick);
+            let bullet = self.bullets_manager.spawn_bullet(self.current_tick, self.game_objects_manager.clone());
             if bullet.is_some() { self.game_objects_manager.borrow_mut().add(bullet.unwrap()) };
         } else {
             self.bullets_manager.reset();
