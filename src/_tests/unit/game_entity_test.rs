@@ -4,7 +4,7 @@ use std::rc::Rc;
 type ComponentRef<T> = Rc<RefCell<T>>;
 
 trait Component {
-    fn tick(&mut self);
+    fn tick(&mut self, entity: &GameEntity);
 }
 
 #[derive(Default)]
@@ -19,8 +19,9 @@ impl TestComponent1 {
 }
 
 impl Component for TestComponent1 {
-    fn tick(&mut self) {
-        self.spy.borrow_mut().log("TestComponent1::tick")
+    fn tick(&mut self, entity: &GameEntity) {
+        self.spy.borrow_mut().log("TestComponent1::tick");
+        entity.test_component2.as_ref().unwrap().borrow_mut().tell("HELLO from TestComponent1");
     }
 }
 
@@ -33,13 +34,18 @@ impl TestComponent2 {
     fn new_rc(spy: TickSpyRef) -> ComponentRef<Self> {
         Rc::new(RefCell::new(Self { spy }))
     }
+
+    fn tell(&mut self, msg: &str) {
+        self.spy.borrow_mut().log(msg);
+    }
 }
 
 impl Component for TestComponent2 {
-    fn tick(&mut self) {
+    fn tick(&mut self, _: &GameEntity) {
         self.spy.borrow_mut().log("TestComponent2::tick")
     }
 }
+
 
 
 #[derive(Default)]
@@ -66,7 +72,7 @@ impl GameEntity {
 
     pub fn tick(&mut self) {
         for c in self.components.iter() {
-            c.borrow_mut().tick()
+            c.borrow_mut().tick(&self)
         }
     }
 }
@@ -102,5 +108,5 @@ fn nothing() {
 
     entity.tick();
 
-    assert_eq!(spy.borrow().get_log(), vec!["TestComponent1::tick", "TestComponent2::tick"]);
+    assert_eq!(spy.borrow().get_log(), vec!["TestComponent1::tick", "HELLO from TestComponent1", "TestComponent2::tick"]);
 }
