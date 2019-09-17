@@ -1,8 +1,8 @@
-use std::cell::{Ref, RefCell};
+use std::cell::RefCell;
 use std::rc::Rc;
 
 use crate::_tests::helpers::input_stub::InputStub;
-use crate::game::input::{Input, InputRef};
+use crate::game::input::InputRef;
 
 type ComponentRef<T> = Rc<RefCell<T>>;
 

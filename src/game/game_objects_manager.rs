@@ -1,4 +1,4 @@
-use crate::game::game_object::GameObjectRef;
+use crate::game::objects::game_object::GameObjectRef;
 use crate::game::renderer::GameRenderer;
 
 pub struct GameObjectsManager {

@@ -1,11 +1,11 @@
 use std::cell::RefCell;
 use std::rc::Rc;
 
-use crate::game::builder::GameBuilder;
-use crate::game::game_object::GameObjectRef;
-use crate::game::geometry::{Rectanglef, Vector2, Vector2f};
-use crate::game::player_bullet::PlayerBullet;
-use crate::game::player_ship::PlayerShipRef;
+use super::builder::GameBuilder;
+use super::geometry::{Rectanglef, Vector2, Vector2f};
+use super::objects::game_object::GameObjectRef;
+use super::objects::player_bullet::PlayerBullet;
+use super::objects::player_ship::PlayerShipRef;
 
 pub struct BulletsManager {
     last_bullet_tick: u32,

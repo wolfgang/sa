@@ -2,9 +2,9 @@ use std::cell::RefCell;
 use std::rc::Rc;
 
 use crate::game::builder::GameBuilder;
-use crate::game::game_object::{GameObject, GameObjectRef};
 use crate::game::geometry::{Rectanglef, Vector2};
-use crate::game::moving_sprite::MovingSprite;
+use crate::game::objects::game_object::{GameObject, GameObjectRef};
+use crate::game::objects::moving_sprite::MovingSprite;
 use crate::game::renderer::GameRenderer;
 
 pub struct EnemyShip {

@@ -4,7 +4,7 @@ use crate::game::builder::GameBuilder;
 use crate::game::bullets_manager::BulletsManager;
 use crate::game::game_objects_manager::GameObjectsManager;
 use crate::game::input::InputRef;
-use crate::game::player_ship::PlayerShipRef;
+use crate::game::objects::player_ship::PlayerShipRef;
 
 pub struct PlayerController {
     input: InputRef,

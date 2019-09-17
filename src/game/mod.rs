@@ -1,25 +1,20 @@
 use builder::GameBuilder;
-use enemy_ship::EnemyShip;
-use player_ship::PlayerShip;
+use game_objects_manager::GameObjectsManager;
+use objects::enemy_ship::EnemyShip;
+use objects::game_object::{GameObjectRef, NullGameObject};
+use objects::player_ship::PlayerShip;
+use player_controller::PlayerController;
 use renderer::GameRenderer;
-
-use crate::game::game_object::{GameObjectRef, NullGameObject};
-use crate::game::game_objects_manager::GameObjectsManager;
-use crate::game::player_controller::PlayerController;
 
 pub mod geometry;
 pub mod builder;
 pub mod input;
 pub mod renderer;
-pub mod player_ship;
-pub mod player_bullet;
 pub mod bullets_manager;
-pub mod enemy_ship;
-pub mod moving_sprite;
 pub mod sprite;
-pub mod game_object;
 pub mod player_controller;
 pub mod game_objects_manager;
+pub mod objects;
 
 pub struct Game {
     player_controller: PlayerController,
