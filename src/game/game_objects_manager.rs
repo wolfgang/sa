@@ -23,22 +23,24 @@ impl GameObjectsManager {
     }
 
     pub fn tick(&mut self) {
-        let game_objects = self.game_objects.clone();
-        for go in game_objects.iter() {
+        for go in self.game_objects.iter() {
             go.borrow_mut().tick();
         }
+        self.resolve_collisions();
+        self.game_objects.retain(|go| { go.borrow().is_alive() });
+    }
 
-        for i in 0..game_objects.len() - 1 {
-            let go1 = &game_objects[i];
-            for j in i + 1..game_objects.len() {
-                let go2 = &game_objects[j];
+    fn resolve_collisions(&mut self) {
+        for i in 0..self.game_objects.len() - 1 {
+            let go1 = &self.game_objects[i];
+            for j in i + 1..self.game_objects.len() {
+                let go2 = &self.game_objects[j];
                 if go1.borrow().is_colliding_with(go2) {
                     go2.borrow_mut().on_collision();
                     go1.borrow_mut().on_collision();
                 }
             }
         }
-        self.game_objects.retain(|go| { go.borrow().is_alive() });
     }
 
     pub fn render<T>(&self, renderer: &mut T) where T: GameRenderer {

@@ -1,5 +1,4 @@
 use crate::core::geometry::{Rectanglef, Vector2f};
-use crate::game::objects::game_object::GameObjectRef;
 use crate::gfx::renderer::GameRenderer;
 
 use super::game_object::GameObject;
@@ -27,21 +26,14 @@ impl GameObject for PlayerBullet {
         self.moving_sprite.render(renderer);
     }
 
+    fn collider(&self) -> &MovingSprite {
+        &self.moving_sprite
+    }
+
+
     fn is_alive(&self) -> bool {
         let y = self.moving_sprite.get_position().y;
         self.is_alive && y >= 0.0
-    }
-
-    fn check_collisions(&mut self, targets: &Vec<GameObjectRef>) {
-        for t in targets.iter() {
-            if t.borrow_mut().process_collision(&self.moving_sprite) {
-                self.is_alive = false;
-            }
-        }
-    }
-
-    fn collider(&self) -> &MovingSprite {
-        &self.moving_sprite
     }
 
     fn on_collision(&mut self) {
