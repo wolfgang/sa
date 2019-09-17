@@ -49,20 +49,20 @@ struct GameEntity {
     components: Vec<ComponentRef<dyn Component>>,
 }
 
-impl GameEntity {
-    pub fn add_test_component1(&mut self, c: ComponentRef<TestComponent1>) {
-        if self.test_component1.is_none() {
-            self.test_component1 = Some(c.clone());
+macro_rules! impl_component {
+    ($c:ident, $m:ident) => {
+    pub fn $m(&mut self, c: ComponentRef<$c>) {
+        if self.$m.is_none() {
+            self.$m = Some(c.clone());
             self.components.push(c.clone() as ComponentRef<dyn Component>)
         }
     }
+}
+}
 
-    pub fn add_test_component2(&mut self, c: ComponentRef<TestComponent2>) {
-        if self.test_component2.is_none() {
-            self.test_component2 = Some(c.clone());
-            self.components.push(c.clone() as ComponentRef<dyn Component>)
-        }
-    }
+impl GameEntity {
+    impl_component!(TestComponent1, test_component1);
+    impl_component!(TestComponent2, test_component2);
 
     pub fn tick(&mut self) {
         for c in self.components.iter() {
@@ -96,9 +96,9 @@ impl TickSpy {
 fn nothing() {
     let spy = TickSpy::new_rc();
     let mut entity = GameEntity::default();
-    entity.add_test_component1(TestComponent1::new_rc(spy.clone()));
-    entity.add_test_component2(TestComponent2::new_rc(spy.clone()));
-    entity.add_test_component2(TestComponent2::new_rc(spy.clone()));
+    entity.test_component1(TestComponent1::new_rc(spy.clone()));
+    entity.test_component2(TestComponent2::new_rc(spy.clone()));
+    entity.test_component2(TestComponent2::new_rc(spy.clone()));
 
     entity.tick();
 
