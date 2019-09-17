@@ -28,14 +28,16 @@ impl GameObjectsManager {
             go.borrow_mut().tick();
         }
 
-        let targets = game_objects.iter()
-            .filter(|go| go.borrow().is_target())
-            .map(|go| go.clone()).collect();
-
-        for go in game_objects.iter() {
-            go.borrow_mut().check_collisions(&targets);
+        for i in 0..game_objects.len() - 1 {
+            let go1 = &game_objects[i];
+            for j in i + 1..game_objects.len() {
+                let go2 = &game_objects[j];
+                if go1.borrow().is_colliding_with(go2) {
+                    go2.borrow_mut().on_collision();
+                    go1.borrow_mut().on_collision();
+                }
+            }
         }
-
         self.game_objects.retain(|go| { go.borrow().is_alive() });
     }
 
