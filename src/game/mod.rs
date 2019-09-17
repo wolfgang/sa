@@ -5,6 +5,7 @@ use objects::game_object::{GameObjectRef, NullGameObject};
 use objects::player_ship::PlayerShip;
 use player_controller::PlayerController;
 
+use crate::game::game_objects_manager::GameObjectsManagerRef;
 use crate::gfx::renderer::GameRenderer;
 
 pub mod builder;
@@ -16,7 +17,7 @@ pub mod objects;
 
 pub struct Game {
     player_controller: PlayerController,
-    game_objects_manager: GameObjectsManager
+    game_objects_manager: GameObjectsManagerRef
 }
 
 impl Game {
@@ -29,24 +30,24 @@ impl Game {
         let enemies_enabled = builder.enemy_speed().x > 0.0;
         let enemy_ship = if enemies_enabled { EnemyShip::from_game_builder(builder) } else { NullGameObject::new_rc() };
 
-        let mut game_objects_manager = GameObjectsManager::new();
-        game_objects_manager.add(player_ship.clone() as GameObjectRef);
-        game_objects_manager.add(enemy_ship);
+        let game_objects_manager = GameObjectsManager::new_rc();
+        game_objects_manager.borrow_mut().add(player_ship.clone() as GameObjectRef);
+        game_objects_manager.borrow_mut().add(enemy_ship);
 
         Game {
-            player_controller: PlayerController::new(builder, player_ship.clone()),
-            game_objects_manager
+            player_controller: PlayerController::new(builder, player_ship.clone(), game_objects_manager.clone()),
+            game_objects_manager: game_objects_manager.clone()
         }
     }
 
     pub fn tick(&mut self) {
-        self.player_controller.tick(&mut self.game_objects_manager);
-        self.game_objects_manager.tick();
+        self.player_controller.tick();
+        self.game_objects_manager.borrow_mut().tick();
 
     }
 
     pub fn render<T>(&self, renderer: &mut T) where T: GameRenderer {
         renderer.clear();
-        self.game_objects_manager.render(renderer);
+        self.game_objects_manager.borrow().render(renderer);
     }
 }

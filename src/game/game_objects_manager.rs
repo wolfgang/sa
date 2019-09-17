@@ -1,15 +1,21 @@
+use std::cell::RefCell;
+use std::rc::Rc;
+
 use crate::game::objects::game_object::GameObjectRef;
 use crate::gfx::renderer::GameRenderer;
+
+pub type GameObjectsManagerRef = Rc<RefCell<GameObjectsManager>>;
 
 pub struct GameObjectsManager {
     pub game_objects: Vec<GameObjectRef>
 }
 
 impl GameObjectsManager {
-    pub fn new() -> Self {
-        Self {
-            game_objects: Vec::with_capacity(10)
-        }
+    pub fn new_rc() -> GameObjectsManagerRef {
+        Rc::new(RefCell::new(
+            Self {
+                game_objects: Vec::with_capacity(10)
+            }))
     }
 
     pub fn add(&mut self, game_object: GameObjectRef) {
@@ -29,4 +35,3 @@ impl GameObjectsManager {
         }
     }
 }
-
