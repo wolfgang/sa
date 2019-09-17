@@ -3,9 +3,10 @@ use std::rc::Rc;
 
 use crate::game::builder::GameBuilder;
 use crate::game::geometry::{Rectanglef, Vector2};
-use crate::game::objects::game_object::{GameObject, GameObjectRef};
-use crate::game::objects::moving_sprite::MovingSprite;
 use crate::game::renderer::GameRenderer;
+
+use super::game_object::{GameObject, GameObjectRef};
+use super::moving_sprite::MovingSprite;
 
 pub struct EnemyShip {
     screen_rect: Rectanglef,
