@@ -42,22 +42,7 @@ impl Game {
 
     pub fn tick(&mut self) {
         self.player_controller.tick();
-        let game_objects = self.game_objects_manager.borrow().game_objects();
-        for go in game_objects.iter() {
-            go.borrow_mut().tick();
-        }
-
-        let targets = game_objects.iter()
-            .filter(|go| go.borrow().is_target())
-            .map(|go| go.clone()).collect();
-
-        for go in game_objects.iter() {
-            go.borrow_mut().check_collisions(&targets);
-        }
-
-
         self.game_objects_manager.borrow_mut().tick();
-
     }
 
     pub fn render<T>(&self, renderer: &mut T) where T: GameRenderer {
