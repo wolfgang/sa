@@ -7,10 +7,27 @@ use crate::game::builder::GameBuilder;
 use super::game_object::{GameObject, GameObjectRef};
 use super::moving_sprite::MovingSprite;
 
+trait Behavior {
+    fn tick(&self, go: &mut EnemyShip);
+}
+
+struct EnemyShipBehavior {}
+
+impl Behavior for EnemyShipBehavior {
+    fn tick(&self, go: &mut EnemyShip) {
+        if !go.moving_sprite.is_inside_of(&go.screen_rect) {
+            go.moving_sprite.snap_to(&go.screen_rect);
+            go.moving_sprite.mult_move_direction(-1, 1);
+        }
+    }
+}
+
+
 pub struct EnemyShip {
     screen_rect: Rectanglef,
     moving_sprite: MovingSprite,
-    is_alive: bool
+    is_alive: bool,
+    behavior: Rc<RefCell<dyn Behavior>>
 }
 
 impl EnemyShip {
@@ -21,7 +38,8 @@ impl EnemyShip {
         Rc::new(RefCell::new(Self {
             moving_sprite,
             screen_rect: builder.screen_rect(),
-            is_alive: true
+            is_alive: true,
+            behavior: Rc::new(RefCell::new(EnemyShipBehavior {}))
         }))
     }
 }
@@ -29,11 +47,8 @@ impl EnemyShip {
 impl GameObject for EnemyShip {
     fn tick(&mut self) {
         self.moving_sprite.tick();
+        self.behavior.clone().borrow().tick(self);
 
-        if !self.moving_sprite.is_inside_of(&self.screen_rect) {
-            self.moving_sprite.snap_to(&self.screen_rect);
-            self.moving_sprite.mult_move_direction(-1, 1);
-        }
     }
 
     fn collider(&self) -> &MovingSprite {
