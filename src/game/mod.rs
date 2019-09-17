@@ -47,12 +47,9 @@ impl Game {
             go.borrow_mut().tick();
         }
 
-        let mut targets = Vec::with_capacity(10);
-
-        for go in game_objects.iter() {
-            if go.borrow().is_target() { targets.push(go.clone()) };
-        }
-
+        let targets = game_objects.iter()
+            .filter(|go| go.borrow().is_target())
+            .map(|go| go.clone()).collect();
 
         for go in game_objects.iter() {
             go.borrow_mut().check_collisions(&targets);
