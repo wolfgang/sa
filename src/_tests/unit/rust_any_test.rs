@@ -198,21 +198,31 @@ trait AsAny: Any {
 }
 
 
-trait Component: AsAny {}
+trait Component: AsAny {
+    fn get_value(&self) -> i32;
+}
 
 #[derive(PartialEq, Debug)]
 struct SomeComponent {
     x: i32
 }
 
-impl Component for SomeComponent {}
+impl Component for SomeComponent {
+    fn get_value(&self) -> i32 {
+        self.x
+    }
+}
 
 #[derive(PartialEq, Debug)]
 struct SomeOtherComponent {
     y: u32
 }
 
-impl Component for SomeOtherComponent {}
+impl Component for SomeOtherComponent {
+    fn get_value(&self) -> i32 {
+        self.y as i32
+    }
+}
 
 
 impl<T: Component + 'static> AsAny for T {
@@ -238,5 +248,7 @@ fn component_map() {
 
     let all = map.get_all_components();
     assert_eq!(all.len(), 3);
-    let c = all[0];
+    assert!(all[0].get_value() > 0);
+    assert!(all[1].get_value() > 0);
+    assert!(all[2].get_value() > 0);
 }
