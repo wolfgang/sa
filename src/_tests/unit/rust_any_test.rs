@@ -49,6 +49,12 @@ fn any_in_refcell() {
     assert_eq!(s.as_str(), "Hellox")
 }
 
+
+struct SomeStruct {
+    x: i32
+}
+
+
 #[test]
 fn store_any_types() {
     let mut map = AnyMap::new();
@@ -62,6 +68,12 @@ fn store_any_types() {
     let mut_str = map.get_mut_ref::<String>(1);
     mut_str.push('x');
     assert_eq!(map.get_ref::<String>(1).as_str(), "hellox");
+
+    map.add(3, SomeStruct { x: 1234 });
+
+    let s = map.get_ref::<SomeStruct>(3);
+    assert_eq!(s.x, 1234)
+
 
 
 }
