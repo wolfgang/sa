@@ -1,4 +1,4 @@
-use std::any::Any;
+use std::any::{Any, TypeId};
 use std::cell::RefCell;
 use std::collections::HashMap;
 use std::rc::Rc;
@@ -6,25 +6,27 @@ use std::rc::Rc;
 type AnyRef = Box<dyn Any>;
 
 struct AnyMap {
-    values: HashMap<u32, AnyRef>
+    values: HashMap<TypeId, AnyRef>
 }
 
 impl AnyMap {
     fn new() -> Self {
-        Self { values: HashMap::with_capacity(100) }
+        Self {
+            values: HashMap::default()
+        }
     }
 
-    fn add<T>(&mut self, key: u32, value: T) where T: Any {
-        self.values.insert(key, Box::from(value));
+    fn add<T>(&mut self, value: T) where T: Any {
+        self.values.insert(TypeId::of::<T>(), Box::from(value));
     }
 
-    fn get_ref<T>(&self, key: u32) -> &T where T: Any {
-        let v = self.values.get(&key).unwrap();
+    fn get_ref<T>(&self) -> &T where T: Any {
+        let v = self.values.get(&TypeId::of::<T>()).unwrap();
         (*v).downcast_ref::<T>().unwrap()
     }
 
-    fn get_mut_ref<T>(&mut self, key: u32) -> &mut T where T: Any {
-        let v = self.values.get_mut(&key).unwrap();
+    fn get_mut_ref<T>(&mut self) -> &mut T where T: Any {
+        let v = self.values.get_mut(&TypeId::of::<T>()).unwrap();
         (*v).downcast_mut::<T>().unwrap()
     }
 
@@ -59,19 +61,19 @@ struct SomeStruct {
 fn store_any_types() {
     let mut map = AnyMap::new();
 
-    map.add(1, String::from("hello"));
-    map.add(2, 1234 as u32);
+    map.add(String::from("hello"));
+    map.add(1234 as u32);
 
-    assert_eq!(map.get_ref::<String>(1).as_str(), "hello");
-    assert_eq!(map.get_ref::<u32>(2), &1234);
+    assert_eq!(map.get_ref::<String>().as_str(), "hello");
+    assert_eq!(map.get_ref::<u32>(), &1234);
 
-    let mut_str = map.get_mut_ref::<String>(1);
+    let mut_str = map.get_mut_ref::<String>();
     mut_str.push('x');
-    assert_eq!(map.get_ref::<String>(1).as_str(), "hellox");
+    assert_eq!(map.get_ref::<String>().as_str(), "hellox");
 
-    map.add(3, SomeStruct { x: 1234 });
+    map.add(SomeStruct { x: 1234 });
 
-    let s = map.get_ref::<SomeStruct>(3);
+    let s = map.get_ref::<SomeStruct>();
     assert_eq!(s.x, 1234)
 
 
