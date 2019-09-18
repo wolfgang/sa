@@ -22,6 +22,12 @@ impl AnyMap {
         let v = self.values.get(&key).unwrap();
         (*v).downcast_ref::<T>().unwrap()
     }
+
+    fn get_mut_ref<T>(&mut self, key: u32) -> &mut T where T: Any {
+        let v = self.values.get_mut(&key).unwrap();
+        (*v).downcast_mut::<T>().unwrap()
+    }
+
 }
 
 #[test]
@@ -51,5 +57,11 @@ fn store_any_types() {
     map.add(2, 1234 as u32);
 
     assert_eq!(map.get_ref::<String>(1).as_str(), "hello");
-    assert_eq!(map.get_ref::<u32>(2), &1234)
+    assert_eq!(map.get_ref::<u32>(2), &1234);
+
+    let mut_str = map.get_mut_ref::<String>(1);
+    mut_str.push('x');
+    assert_eq!(map.get_ref::<String>(1).as_str(), "hellox");
+
+
 }
