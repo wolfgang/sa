@@ -1,6 +1,5 @@
 use std::any::Any;
 use std::cell::RefCell;
-use std::ops::Deref;
 use std::rc::Rc;
 
 #[test]
@@ -15,8 +14,9 @@ fn any_in_rc() {
 fn any_in_refcell() {
     let v: Rc<RefCell<dyn Any>> = Rc::new(RefCell::new(String::from("Hello")));
 
-    let x = v.borrow();
-    let s = x.deref().downcast_ref::<String>().unwrap();
+    let mut x = v.borrow_mut();
+    let s = x.downcast_mut::<String>().unwrap();
+    s.push('x');
 
-    assert_eq!(s.as_str(), "Hello")
+    assert_eq!(s.as_str(), "Hellox")
 }
