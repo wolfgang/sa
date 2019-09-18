@@ -16,7 +16,7 @@ impl AnyMap {
         }
     }
 
-    fn add<T>(&mut self, key: u32, value: T) where T: Any {
+    fn insert<T>(&mut self, key: u32, value: T) where T: Any {
         let type_id = TypeId::of::<T>();
         let map_for_type = self.values.entry(type_id).or_insert(HashMap::with_capacity(10));
         map_for_type.insert(key, Box::from(value));
@@ -56,9 +56,19 @@ fn any_in_refcell() {
     assert_eq!(s.as_str(), "Hellox")
 }
 
+trait SomeTrait {
+    fn get_x(&self) -> i32;
+}
+
 #[derive(PartialEq, Debug)]
 struct SomeStruct {
     x: i32
+}
+
+impl SomeTrait for SomeStruct {
+    fn get_x(&self) -> i32 {
+        self.x
+    }
 }
 
 
@@ -66,11 +76,11 @@ struct SomeStruct {
 fn store_any_types_by_key() {
     let mut map = AnyMap::new();
 
-    map.add(1, String::from("hello"));
-    map.add(2, String::from("there"));
-    map.add(1, 1234 as u32);
-    map.add(17, 5678 as u32);
-    map.add(1, SomeStruct { x: 1234 });
+    map.insert(1, String::from("hello"));
+    map.insert(2, String::from("there"));
+    map.insert(1, 1234 as u32);
+    map.insert(17, 5678 as u32);
+    map.insert(1, SomeStruct { x: 1234 });
 
     assert_eq!(map.get_ref::<String>(1).as_str(), "hello");
     assert_eq!(map.get_ref::<String>(2).as_str(), "there");
@@ -88,4 +98,15 @@ fn store_any_types_by_key() {
     let s = map.get_mut_ref::<SomeStruct>(1);
     s.x = 5678;
     assert_eq!(map.get_ref::<SomeStruct>(1), &SomeStruct { x: 5678 })
+}
+
+#[test]
+fn get_struct_as_trait_object() {
+    let mut map = AnyMap::new();
+
+    map.insert(1, SomeStruct { x: 1234 });
+    assert_eq!(map.get_ref::<SomeStruct>(1), &SomeStruct { x: 1234 });
+
+    let trait_object = map.get_ref::<SomeStruct>(1) as &dyn SomeTrait;
+    assert_eq!(trait_object.get_x(), 1234)
 }
