@@ -26,7 +26,7 @@ impl AnyMap {
         let type_id = TypeId::of::<T>();
         let map_for_type = self.values.get(&type_id).unwrap();
         let v = map_for_type.get(&key).unwrap();
-        (*v).downcast_ref::<T>().unwrap()
+        Self::downcast_boxed(v)
     }
 
     fn get_mut_ref<T>(&mut self, key: u32) -> &mut T where T: Any {
@@ -34,6 +34,16 @@ impl AnyMap {
         let map_for_type = self.values.get_mut(&type_id).unwrap();
         let v = map_for_type.get_mut(&key).unwrap();
         (*v).downcast_mut::<T>().unwrap()
+    }
+
+    fn get_all<T>(&self) -> Vec<&T> where T: Any {
+        let type_id = TypeId::of::<T>();
+        let map_for_type = self.values.get(&type_id).unwrap();
+        map_for_type.values().map(|v| Self::downcast_boxed(v)).collect()
+    }
+
+    fn downcast_boxed<T>(boxed: &AnyRef) -> &T where T: Any {
+        (*boxed).downcast_ref::<T>().unwrap()
     }
 }
 
@@ -109,4 +119,17 @@ fn get_struct_as_trait_object() {
 
     let trait_object = map.get_ref::<SomeStruct>(1) as &dyn SomeTrait;
     assert_eq!(trait_object.get_x(), 1234)
+}
+
+#[test]
+fn get_all_values_for_type() {
+    let mut map = AnyMap::new();
+    map.insert(1, String::from("one"));
+    map.insert(2, String::from("two"));
+
+    let values = map.get_all::<String>();
+
+    assert_eq!(values.len(), 2);
+    assert!(values.contains(&&String::from("one")));
+    assert!(values.contains(&&String::from("two")));
 }
