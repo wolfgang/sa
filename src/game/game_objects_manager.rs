@@ -1,7 +1,10 @@
 use std::cell::RefCell;
 use std::rc::Rc;
 
-use crate::game::objects::game_object::GameObjectRef;
+use crate::game::builder::GameBuilder;
+use crate::game::objects::enemy_ship::EnemyShip;
+use crate::game::objects::game_object::{GameObjectRef, NullGameObject};
+use crate::game::objects::player_ship::PlayerShip;
 use crate::gfx::renderer::GameRenderer;
 
 pub type GameObjectsManagerRef = Rc<RefCell<GameObjectsManager>>;
@@ -16,6 +19,15 @@ impl GameObjectsManager {
             Self {
                 game_objects: Vec::with_capacity(10)
             }))
+    }
+
+    pub fn spawn_initial_objects(&mut self, game_builder: &GameBuilder) {
+        let player_ship = PlayerShip::from_game_builder(game_builder);
+        let enemies_enabled = game_builder.enemy_speed().x > 0.0;
+        let enemy_ship = if enemies_enabled { EnemyShip::from_game_builder(game_builder) } else { NullGameObject::new_rc() };
+
+        self.add(player_ship.clone() as GameObjectRef);
+        self.add(enemy_ship);
     }
 
     pub fn add(&mut self, game_object: GameObjectRef) {
