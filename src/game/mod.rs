@@ -1,8 +1,5 @@
 use builder::GameBuilder;
 use game_objects_manager::GameObjectsManager;
-use objects::enemy_ship::EnemyShip;
-use objects::game_object::{GameObjectRef, NullGameObject};
-use objects::player_ship::PlayerShip;
 use player_controller::PlayerController;
 
 use crate::game::game_objects_manager::GameObjectsManagerRef;
@@ -17,7 +14,7 @@ pub mod objects;
 
 pub struct Game {
     player_controller: PlayerController,
-    game_objects_manager: GameObjectsManagerRef
+    game_objects_manager: GameObjectsManagerRef,
 }
 
 impl Game {
@@ -26,17 +23,12 @@ impl Game {
     }
 
     pub fn from_builder(builder: &GameBuilder) -> Self {
-        let player_ship = PlayerShip::from_game_builder(builder);
-        let enemies_enabled = builder.enemy_speed().x > 0.0;
-        let enemy_ship = if enemies_enabled { EnemyShip::from_game_builder(builder) } else { NullGameObject::new_rc() };
-
-        let game_objects_manager = GameObjectsManager::new_rc();
-        game_objects_manager.borrow_mut().add(player_ship.clone() as GameObjectRef);
-        game_objects_manager.borrow_mut().add(enemy_ship);
+        let game_objects_manager = GameObjectsManager::new_rc(builder);
+        let player_ship = game_objects_manager.borrow().player_ship();
 
         Game {
-            player_controller: PlayerController::new(builder, player_ship.clone(), game_objects_manager.clone()),
-            game_objects_manager: game_objects_manager.clone()
+            player_controller: PlayerController::new(builder, player_ship, game_objects_manager.clone()),
+            game_objects_manager: game_objects_manager.clone(),
         }
     }
 
@@ -50,3 +42,4 @@ impl Game {
         self.game_objects_manager.borrow().render(renderer);
     }
 }
+
