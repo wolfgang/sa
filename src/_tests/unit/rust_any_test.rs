@@ -3,7 +3,7 @@ use std::cell::RefCell;
 use std::collections::HashMap;
 use std::rc::Rc;
 
-macro_rules! gen_any_map {
+macro_rules! gen_any_multimap {
     ($name:ident, $base_type:ident) => {
         struct $name {
             values: HashMap<TypeId, HashMap<u32, Box<dyn $base_type>>>,
@@ -123,11 +123,11 @@ impl<T: Component + 'static> AsAny for T {
     }
 }
 
-gen_any_map!(ComponentMap, Component);
+gen_any_multimap!(ComponentMultiMap, Component);
 
 #[test]
 fn component_map() {
-    let mut map = ComponentMap::new();
+    let mut map = ComponentMultiMap::new();
 
     map.insert(1, SomeComponent { x: 1234 });
     map.insert(1, SomeOtherComponent { y: 1234 });
