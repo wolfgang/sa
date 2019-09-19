@@ -48,62 +48,63 @@ impl AnyMap {
 }
 
 
-type ComponentRef = Box<dyn Component>;
-
-struct ComponentMap {
-    values: HashMap<TypeId, HashMap<u32, ComponentRef>>,
-}
-
-impl ComponentMap {
-    fn new() -> Self {
-        Self {
-            values: HashMap::default(),
+macro_rules! gen_any_map {
+    ($name:ident, $base_type:ident) => {
+        struct $name {
+            values: HashMap<TypeId, HashMap<u32, Box<dyn $base_type>>>,
         }
-    }
 
-    fn insert<T>(&mut self, key: u32, value: T) where T: Component + 'static {
-        let type_id = TypeId::of::<T>();
-        let map_for_type = self.values.entry(type_id).or_insert(HashMap::with_capacity(10));
-        map_for_type.insert(key, Box::from(value));
-    }
+        impl $name {
+            fn new() -> Self {
+                Self {
+                    values: HashMap::default(),
+                }
+            }
 
-    fn get_ref<T>(&self, key: u32) -> &T where T: Component + 'static {
-        let type_id = TypeId::of::<T>();
-        let map_for_type = self.values.get(&type_id).unwrap();
-        let v = map_for_type.get(&key).unwrap();
-        Self::downcast_boxed(v)
-    }
+            fn insert<T>(&mut self, key: u32, value: T) where T: $base_type + 'static {
+                let type_id = TypeId::of::<T>();
+                let map_for_type = self.values.entry(type_id).or_insert(HashMap::with_capacity(10));
+                map_for_type.insert(key, Box::from(value));
+            }
 
-    fn get_mut_ref<T>(&mut self, key: u32) -> &mut T where T: Component + 'static {
-        let type_id = TypeId::of::<T>();
-        let map_for_type = self.values.get_mut(&type_id).unwrap();
-        let v = map_for_type.get_mut(&key).unwrap();
-        (*v).as_any_mut().downcast_mut::<T>().unwrap()
-    }
+            fn get_ref<T>(&self, key: u32) -> &T where T: $base_type + 'static {
+                let type_id = TypeId::of::<T>();
+                let map_for_type = self.values.get(&type_id).unwrap();
+                let v = map_for_type.get(&key).unwrap();
+                Self::downcast_boxed(v)
+            }
 
-    fn get_all<T>(&self) -> Vec<&T> where T: Component + 'static {
-        let type_id = TypeId::of::<T>();
-        let map_for_type = self.values.get(&type_id).unwrap();
-        map_for_type.values().map(|v| Self::downcast_boxed(v)).collect()
-    }
+            fn get_mut_ref<T>(&mut self, key: u32) -> &mut T where T: $base_type + 'static {
+                let type_id = TypeId::of::<T>();
+                let map_for_type = self.values.get_mut(&type_id).unwrap();
+                let v = map_for_type.get_mut(&key).unwrap();
+                (*v).as_any_mut().downcast_mut::<T>().unwrap()
+            }
 
-    fn get_all_components(&self) -> Vec<&Box<dyn Component>> {
-        let mut result = Vec::new();
+            fn get_all<T>(&self) -> Vec<&T> where T: $base_type + 'static {
+                let type_id = TypeId::of::<T>();
+                let map_for_type = self.values.get(&type_id).unwrap();
+                map_for_type.values().map(|v| Self::downcast_boxed(v)).collect()
+            }
 
-        for v in self.values.values() {
-            for b in v.values() {
-                result.push(b);
+            fn get_all_as_base(&self) -> Vec<&Box<dyn $base_type>> {
+                let mut result = Vec::new();
+
+                for v in self.values.values() {
+                    for b in v.values() {
+                        result.push(b);
+                    }
+                }
+
+                result
+            }
+
+            fn downcast_boxed<T>(boxed: &Box<dyn $base_type>) -> &T where T: $base_type + 'static {
+                (*boxed).as_any().downcast_ref::<T>().unwrap()
             }
         }
-
-        result
-    }
-
-    fn downcast_boxed<T>(boxed: &ComponentRef) -> &T where T: Component + 'static {
-        (*boxed).as_any().downcast_ref::<T>().unwrap()
     }
 }
-
 
 #[test]
 fn any_in_rc() {
@@ -235,6 +236,8 @@ impl<T: Component + 'static> AsAny for T {
     }
 }
 
+gen_any_map!(ComponentMap, Component);
+
 #[test]
 fn component_map() {
     let mut map = ComponentMap::new();
@@ -246,7 +249,7 @@ fn component_map() {
     assert_eq!(map.get_ref::<SomeOtherComponent>(1), &SomeOtherComponent { y: 1234 });
     assert_eq!(map.get_ref::<SomeComponent>(2), &SomeComponent { x: 5678 });
 
-    let all = map.get_all_components();
+    let all = map.get_all_as_base();
     assert_eq!(all.len(), 3);
     assert!(all[0].get_value() > 0);
     assert!(all[1].get_value() > 0);
