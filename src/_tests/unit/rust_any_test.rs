@@ -61,6 +61,48 @@ macro_rules! gen_any_multimap {
     }
 }
 
+
+macro_rules! gen_any_map {
+    ($name:ident, $base_type:ident) => {
+        struct $name {
+            values: HashMap<TypeId, Box<dyn $base_type>>
+        }
+
+        impl $name {
+            fn new() -> Self {
+                Self {
+                    values: HashMap::default(),
+                }
+            }
+
+            fn insert<T>(&mut self, value: T) where T: $base_type + AsAny + 'static {
+                let type_id = TypeId::of::<T>();
+                self.values.insert(type_id, Box::from(value));
+            }
+
+            fn get_ref<T>(&self, ) -> &T where T: $base_type + AsAny + 'static {
+                let type_id = TypeId::of::<T>();
+                let v = self.values.get(&type_id).unwrap();
+                Self::downcast_boxed(v)
+            }
+
+            fn get_mut_ref<T>(&mut self) -> &mut T where T: $base_type + AsAny + 'static {
+                let type_id = TypeId::of::<T>();
+                let v = self.values.get_mut(&type_id).unwrap();
+                (*v).as_any_mut().downcast_mut::<T>().unwrap()
+            }
+
+            fn get_all_as_base(&self) -> Vec<&Box<dyn $base_type>> {
+                self.values.values().collect()
+            }
+
+            fn downcast_boxed<T>(boxed: &Box<dyn $base_type>) -> &T where T: $base_type + AsAny + 'static {
+                (*boxed).as_any().downcast_ref::<T>().unwrap()
+            }
+        }
+    }
+}
+
 #[test]
 fn any_in_rc() {
     let v: Rc<dyn Any> = Rc::new(String::from("Hello"));
@@ -126,7 +168,7 @@ impl<T: Component + 'static> AsAny for T {
 gen_any_multimap!(ComponentMultiMap, Component);
 
 #[test]
-fn component_map() {
+fn component_multimap() {
     let mut map = ComponentMultiMap::new();
 
     map.insert(1, SomeComponent { x: 1234 });
@@ -151,4 +193,27 @@ fn component_map() {
     let mutable_ref = map.get_mut_ref::<SomeOtherComponent>(1);
     mutable_ref.y = 5678;
     assert_eq!(map.get_ref::<SomeOtherComponent>(1), &SomeOtherComponent { y: 5678 });
+}
+
+gen_any_map!(ComponentMap, Component);
+
+
+#[test]
+fn component_map() {
+    let mut map = ComponentMap::new();
+
+    map.insert(SomeComponent { x: 1234 });
+    map.insert(SomeOtherComponent { y: 1234 });
+    assert_eq!(map.get_ref::<SomeComponent>(), &SomeComponent { x: 1234 });
+    assert_eq!(map.get_ref::<SomeOtherComponent>(), &SomeOtherComponent { y: 1234 });
+
+
+    let all = map.get_all_as_base();
+    assert_eq!(all.len(), 2);
+    assert!(all[0].get_value() > 0);
+    assert!(all[1].get_value() > 0);
+
+    let mutable_ref = map.get_mut_ref::<SomeOtherComponent>();
+    mutable_ref.y = 5678;
+    assert_eq!(map.get_ref::<SomeOtherComponent>(), &SomeOtherComponent { y: 5678 });
 }
