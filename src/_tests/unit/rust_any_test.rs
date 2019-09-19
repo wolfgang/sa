@@ -61,27 +61,27 @@ macro_rules! gen_any_map {
                 }
             }
 
-            fn insert<T>(&mut self, key: u32, value: T) where T: $base_type + 'static {
+            fn insert<T>(&mut self, key: u32, value: T) where T: $base_type + AsAny + 'static {
                 let type_id = TypeId::of::<T>();
                 let map_for_type = self.values.entry(type_id).or_insert(HashMap::with_capacity(10));
                 map_for_type.insert(key, Box::from(value));
             }
 
-            fn get_ref<T>(&self, key: u32) -> &T where T: $base_type + 'static {
+            fn get_ref<T>(&self, key: u32) -> &T where T: $base_type + AsAny + 'static {
                 let type_id = TypeId::of::<T>();
                 let map_for_type = self.values.get(&type_id).unwrap();
                 let v = map_for_type.get(&key).unwrap();
                 Self::downcast_boxed(v)
             }
 
-            fn get_mut_ref<T>(&mut self, key: u32) -> &mut T where T: $base_type + 'static {
+            fn get_mut_ref<T>(&mut self, key: u32) -> &mut T where T: $base_type + AsAny + 'static {
                 let type_id = TypeId::of::<T>();
                 let map_for_type = self.values.get_mut(&type_id).unwrap();
                 let v = map_for_type.get_mut(&key).unwrap();
                 (*v).as_any_mut().downcast_mut::<T>().unwrap()
             }
 
-            fn get_all<T>(&self) -> Vec<&T> where T: $base_type + 'static {
+            fn get_all_of_type<T>(&self) -> Vec<&T> where T: $base_type + AsAny + 'static {
                 let type_id = TypeId::of::<T>();
                 let map_for_type = self.values.get(&type_id).unwrap();
                 map_for_type.values().map(|v| Self::downcast_boxed(v)).collect()
@@ -99,7 +99,7 @@ macro_rules! gen_any_map {
                 result
             }
 
-            fn downcast_boxed<T>(boxed: &Box<dyn $base_type>) -> &T where T: $base_type + 'static {
+            fn downcast_boxed<T>(boxed: &Box<dyn $base_type>) -> &T where T: $base_type + AsAny + 'static {
                 (*boxed).as_any().downcast_ref::<T>().unwrap()
             }
         }
@@ -254,4 +254,14 @@ fn component_map() {
     assert!(all[0].get_value() > 0);
     assert!(all[1].get_value() > 0);
     assert!(all[2].get_value() > 0);
+
+    let all_somes = map.get_all_of_type::<SomeComponent>();
+    assert_eq!(all_somes.len(), 2);
+
+    assert!(all_somes.contains(&&SomeComponent { x: 1234 }));
+    assert!(all_somes.contains(&&SomeComponent { x: 5678 }));
+
+    let mutable_ref = map.get_mut_ref::<SomeOtherComponent>(1);
+    mutable_ref.y = 5678;
+    assert_eq!(map.get_ref::<SomeOtherComponent>(1), &SomeOtherComponent { y: 5678 });
 }
