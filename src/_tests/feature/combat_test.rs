@@ -29,10 +29,10 @@ fn after_bullet_collides_with_enemy_both_disappear_and_new_enemy_is_spawned() {
 
     game.tick();
 
-//    game.renders_frame(vec![
-//        "22........",
-//        "22........",
-//        "..........",
-//        "...0000..."
-//    ]);
+    game.renders_frame(vec![
+        "22........",
+        "22........",
+        "..........",
+        "...0000..."
+    ]);
 }

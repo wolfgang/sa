@@ -11,7 +11,9 @@ pub type GameObjectsManagerRef = Rc<RefCell<GameObjectsManager>>;
 
 pub struct GameObjectsManager {
     pub game_objects: Vec<GameObjectRef>,
-    player_ship: PlayerShipRef
+    player_ship: PlayerShipRef,
+    enemy_ship: GameObjectRef,
+    game_builder: GameBuilder
 }
 
 impl GameObjectsManager {
@@ -21,8 +23,10 @@ impl GameObjectsManager {
         let enemy_ship = if enemies_enabled { EnemyShip::from_game_builder(game_builder) } else { NullGameObject::new_rc() };
         Rc::new(RefCell::new(
             Self {
-                game_objects: vec![player_ship.clone() as GameObjectRef, enemy_ship],
-                player_ship: player_ship.clone()
+                game_objects: vec![player_ship.clone() as GameObjectRef, enemy_ship.clone()],
+                player_ship: player_ship.clone().clone(),
+                enemy_ship,
+                game_builder: game_builder.clone()
             }))
     }
 
@@ -37,6 +41,11 @@ impl GameObjectsManager {
     pub fn tick(&mut self) {
         self.tick_game_objects();
         self.resolve_collisions();
+        if !self.enemy_ship.borrow().is_alive() {
+            let enemies_enabled = self.game_builder.enemy_speed().x > 0.0;
+            self.enemy_ship = if enemies_enabled { EnemyShip::from_game_builder(&self.game_builder) } else { NullGameObject::new_rc() };
+            self.add(self.enemy_ship.clone())
+        }
         self.remove_dead_game_objects();
     }
 
