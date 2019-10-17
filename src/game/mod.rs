@@ -27,13 +27,6 @@ struct Mover {
 #[storage(NullStorage)]
 struct IsPlayer;
 
-#[derive(Default)]
-#[allow(dead_code)]
-struct WorldDimensions {
-    width: u32,
-    height: u32,
-}
-
 #[derive(Clone, Default)]
 pub struct GameConfig {
     pub dimensions: (u32, u32),
@@ -104,7 +97,7 @@ impl GameBuilder {
             .with(IsPlayer)
             .build();
 
-        world.insert(WorldDimensions { width, height });
+        world.insert(self.config.clone());
 
         Game { world, input: self.input.clone() }
     }
@@ -154,12 +147,12 @@ impl Game {
     }
 
     fn constrain_player_to_screen(&mut self) {
-        let world_dimensions = self.world.read_resource::<WorldDimensions>();
+        let config = self.world.read_resource::<GameConfig>();
         let mut gos = self.world.write_storage::<Geometry>();
         let players = self.world.read_storage::<IsPlayer>();
 
         for (geometry, _) in (&mut gos, &players).join() {
-            let max_x = (world_dimensions.width - geometry.width) as i32;
+            let max_x = (config.dimensions.0 - geometry.width) as i32;
             geometry.x = max(0, min(geometry.x, max_x));
         }
     }
