@@ -22,6 +22,11 @@ struct Mover {
     current_speed: i32,
 }
 
+#[derive(Component)]
+struct Sprite {
+    id: u8
+}
+
 #[derive(Component, Default)]
 #[storage(NullStorage)]
 struct IsPlayer;
@@ -85,6 +90,7 @@ impl GameBuilder {
         world.register::<Geometry>();
         world.register::<Mover>();
         world.register::<IsPlayer>();
+        world.register::<Sprite>();
 
         let (ship_width, ship_height) = self.config.ship_dimensions;
         let (width, height) = self.config.dimensions;
@@ -93,6 +99,7 @@ impl GameBuilder {
         world.create_entity()
             .with(Geometry { x: x as i32, y: y as i32, width: ship_width, height: ship_height })
             .with(Mover { current_speed: 0 })
+            .with(Sprite { id: 0 })
             .with(IsPlayer)
             .build();
 
@@ -161,8 +168,9 @@ impl Game {
     pub fn render<T>(&self, renderer: &mut T) where T: GameRenderer {
         renderer.clear();
         let gos = self.world.read_storage::<Geometry>();
-        for geometry in (&gos).join() {
-            renderer.draw_sprite(0, geometry.x, geometry.y, geometry.width, geometry.height);
+        let sprites = self.world.read_storage::<Sprite>();
+        for (geometry, sprite) in (&gos, &sprites).join() {
+            renderer.draw_sprite(sprite.id, geometry.x, geometry.y, geometry.width, geometry.height);
         }
     }
 }
