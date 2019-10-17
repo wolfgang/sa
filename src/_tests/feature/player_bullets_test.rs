@@ -2,7 +2,6 @@ use raylib::consts::{KEY_RIGHT, KEY_SPACE};
 
 use crate::_tests::helpers::testable_game::TestableGame;
 
-#[ignore]
 #[test]
 fn pressing_space_spawns_bullet_from_ship_center() {
     let mut game = TestableGame::init()
@@ -23,9 +22,24 @@ fn pressing_space_spawns_bullet_from_ship_center() {
         "..........",
         "..........",
         "..........",
+        "..........",
+        "..........",
+        ".....11...",
+        "....0000..",
+    ]);
+
+    game.key_is_up(KEY_SPACE);
+
+    game.tick();
+    game.renders_frame(vec![
+        "..........",
+        "..........",
+        "..........",
+        "..........",
         ".....11...",
         "..........",
         "..........",
         "....0000..",
     ]);
+
 }

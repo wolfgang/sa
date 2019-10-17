@@ -24,12 +24,15 @@ fn main() {
     };
 
     renderer.register_sprite(0, player_ship_rec);
+    renderer.register_sprite(1, player_ship_rec);
 
     let mut game = Game::init()
         .with_dimensions(SCREEN_WIDTH, SCREEN_HEIGHT)
         .with_ship_dimensions(player_ship_rec.width as u32, player_ship_rec.height as u32)
         .with_input(RaylibInput::new_rc(rl.clone()))
         .with_ship_speed(4)
+        .with_bullet_speed(8)
+        .with_bullet_dimensions(32, 32)
         .build();
 
     let fps = 60;

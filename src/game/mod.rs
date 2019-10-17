@@ -1,6 +1,6 @@
 use std::cmp::{max, min};
 
-use raylib::consts::{KEY_LEFT, KEY_RIGHT};
+use raylib::consts::{KEY_LEFT, KEY_RIGHT, KEY_SPACE};
 use specs::prelude::*;
 use specs_derive::Component;
 
@@ -42,14 +42,14 @@ pub struct GameConfig {
 #[derive(Clone)]
 pub struct GameBuilder {
     input: InputRef,
-    pub(crate) config: GameConfig
+    pub(crate) config: GameConfig,
 }
 
 impl GameBuilder {
     pub fn new() -> Self {
         Self {
             input: InputNull::new_rc(),
-            config: GameConfig::default()
+            config: GameConfig::default(),
         }
     }
     pub fn with_dimensions(&mut self, width: u32, height: u32) -> &mut Self {
@@ -121,16 +121,34 @@ impl Game {
         self.handle_player_input();
         self.move_game_objects();
         self.constrain_player_to_screen();
+        self.world.maintain();
     }
 
 
     fn handle_player_input(&mut self) {
         let mut velocities = self.world.write_storage::<Velocity>();
+        let gos = self.world.read_storage::<Geometry>();
         let players = self.world.read_storage::<IsPlayer>();
         let config = self.world.read_resource::<GameConfig>();
+        let updater = self.world.read_resource::<LazyUpdate>();
+        let entities = self.world.entities();
 
 
-        for (velocity, _) in (&mut velocities, &players).join() {
+        for (velocity, player_geom, _) in (&mut velocities, &gos, &players).join() {
+            if self.input.borrow().is_key_down(KEY_SPACE) {
+                let bullet = entities.create();
+                let x = player_geom.x as u32 + config.ship_dimensions.0 / 2 - config.bullet_dimensions.0 / 2;
+                let y = player_geom.y as u32 - config.bullet_dimensions.1;
+                updater.insert(bullet, Geometry {
+                    x: x as i32,
+                    y: y as i32,
+                    width: config.bullet_dimensions.0,
+                    height: config.bullet_dimensions.1,
+                });
+                updater.insert(bullet, Velocity(0, -1 * config.bullet_speed as i32));
+                updater.insert(bullet, Sprite { id: 1 });
+            }
+
             if self.input.borrow().is_key_down(KEY_LEFT) {
                 velocity.0 = config.ship_speed as i32 * -1;
             } else if self.input.borrow().is_key_down(KEY_RIGHT) {
