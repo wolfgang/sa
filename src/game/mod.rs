@@ -18,9 +18,7 @@ struct Geometry {
 }
 
 #[derive(Component)]
-struct Mover {
-    current_speed: i32,
-}
+struct Velocity(i32, i32);
 
 #[derive(Component)]
 struct Sprite {
@@ -88,7 +86,7 @@ impl GameBuilder {
     pub fn build(&self) -> Game {
         let mut world = World::new();
         world.register::<Geometry>();
-        world.register::<Mover>();
+        world.register::<Velocity>();
         world.register::<IsPlayer>();
         world.register::<Sprite>();
 
@@ -98,7 +96,7 @@ impl GameBuilder {
         let y = height - ship_height;
         world.create_entity()
             .with(Geometry { x: x as i32, y: y as i32, width: ship_width, height: ship_height })
-            .with(Mover { current_speed: 0 })
+            .with(Velocity(0, 0))
             .with(Sprite { id: 0 })
             .with(IsPlayer)
             .build();
@@ -127,28 +125,29 @@ impl Game {
 
 
     fn handle_player_input(&mut self) {
-        let mut movers = self.world.write_storage::<Mover>();
+        let mut velocities = self.world.write_storage::<Velocity>();
         let players = self.world.read_storage::<IsPlayer>();
         let config = self.world.read_resource::<GameConfig>();
 
 
-        for (mover, _) in (&mut movers, &players).join() {
+        for (velocity, _) in (&mut velocities, &players).join() {
             if self.input.borrow().is_key_down(KEY_LEFT) {
-                mover.current_speed = config.ship_speed as i32 * -1;
+                velocity.0 = config.ship_speed as i32 * -1;
             } else if self.input.borrow().is_key_down(KEY_RIGHT) {
-                mover.current_speed = config.ship_speed as i32;
+                velocity.0 = config.ship_speed as i32;
             } else {
-                mover.current_speed = 0;
+                velocity.0 = 0;
             }
         }
     }
 
     fn move_game_objects(&mut self) {
         let mut gos = self.world.write_storage::<Geometry>();
-        let mut movers = self.world.write_storage::<Mover>();
+        let velocities = self.world.read_storage::<Velocity>();
 
-        for (geometry, mover) in (&mut gos, &mut movers).join() {
-            geometry.x += mover.current_speed;
+        for (geometry, velocity) in (&mut gos, &velocities).join() {
+            geometry.x += velocity.0;
+            geometry.y += velocity.1;
         }
     }
 
