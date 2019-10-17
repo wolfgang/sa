@@ -1,4 +1,4 @@
-use raylib::{Color, Rectangle};
+use raylib::Rectangle;
 
 use sa::game::game::Game;
 use sa::raylib_renderer::RaylibRenderer;
@@ -27,11 +27,21 @@ fn main() {
         .with_ship_dimensions(player_ship_rec.width as u32, player_ship_rec.height as u32)
         .build();
 
+    let fps = 60;
+
+    let frame_time = 1.0 / fps as f64;
+    let mut current_delta = 0.0;
+    let mut last_time = rl.get_time();
 
     while !rl.window_should_close() {
-        rl.begin_drawing();
-        rl.clear_background(Color::BLACK);
-        game.render(&mut renderer);
-        rl.end_drawing();
+        let time = rl.get_time();
+        current_delta += time - last_time;
+        last_time = time;
+        while current_delta >= frame_time {
+            current_delta -= frame_time;
+            rl.begin_drawing();
+            game.render(&mut renderer);
+            rl.end_drawing();
+        }
     }
 }
