@@ -1,4 +1,16 @@
+use specs::prelude::*;
+use specs_derive::Component;
+
 use crate::gfx::game_renderer::GameRenderer;
+
+#[derive(Component)]
+struct Geometry {
+    x: u32,
+    y: u32,
+    width: u32,
+    height: u32,
+}
+
 
 pub struct GameBuilder {}
 
@@ -12,11 +24,14 @@ impl GameBuilder {
     }
 
     pub fn build(&self) -> Game {
-        Game {}
+        let mut world = World::new();
+        world.register::<Geometry>();
+        world.create_entity().with(Geometry { x: 3, y: 4, width: 3, height: 1 }).build();
+        Game { world }
     }
 }
 
-pub struct Game {}
+pub struct Game { pub world: World }
 
 impl Game {
     pub fn init() -> GameBuilder {
@@ -24,6 +39,11 @@ impl Game {
     }
 
     pub fn render<T>(&self, renderer: &mut T) where T: GameRenderer {
-        renderer.draw_sprite(0, 3, 4, 3, 1);
+        let gos = self.world.read_storage::<Geometry>();
+
+        for geometry in gos.join() {
+            renderer.draw_sprite(0, geometry.x, geometry.y, geometry.width, geometry.height);
+        }
+
     }
 }

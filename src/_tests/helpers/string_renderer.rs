@@ -1,5 +1,4 @@
 use std::char;
-use std::collections::HashMap;
 
 use crate::gfx::game_renderer::GameRenderer;
 

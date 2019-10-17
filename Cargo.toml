@@ -6,3 +6,5 @@ edition = "2018"
 
 [dependencies]
 raylib = "0.9.1"
+specs = "0.15.1"
+specs-derive = "0.4.0"
