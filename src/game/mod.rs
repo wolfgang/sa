@@ -1,6 +1,6 @@
 use std::cmp::{max, min};
 
-use raylib::consts::{KEY_LEFT, KEY_RIGHT, KEY_SPACE};
+use raylib::consts::{KEY_LEFT, KEY_RIGHT};
 use specs::prelude::*;
 use specs_derive::Component;
 
@@ -19,7 +19,6 @@ struct Geometry {
 
 #[derive(Component)]
 struct Mover {
-    speed: u32,
     current_speed: i32,
 }
 
@@ -93,7 +92,7 @@ impl GameBuilder {
         let y = height - ship_height;
         world.create_entity()
             .with(Geometry { x: x as i32, y: y as i32, width: ship_width, height: ship_height })
-            .with(Mover { speed: self.config.ship_speed, current_speed: 0 })
+            .with(Mover { current_speed: 0 })
             .with(IsPlayer)
             .build();
 
@@ -122,15 +121,15 @@ impl Game {
 
     fn handle_player_input(&mut self) {
         let mut movers = self.world.write_storage::<Mover>();
-        let gos = self.world.read_storage::<Geometry>();
         let players = self.world.read_storage::<IsPlayer>();
+        let config = self.world.read_resource::<GameConfig>();
 
 
-        for (mover, geometry, _) in (&mut movers, &gos, &players).join() {
+        for (mover, _) in (&mut movers, &players).join() {
             if self.input.borrow().is_key_down(KEY_LEFT) {
-                mover.current_speed = mover.speed as i32 * -1;
+                mover.current_speed = config.ship_speed as i32 * -1;
             } else if self.input.borrow().is_key_down(KEY_RIGHT) {
-                mover.current_speed = mover.speed as i32;
+                mover.current_speed = config.ship_speed as i32;
             } else {
                 mover.current_speed = 0;
             }
@@ -150,6 +149,7 @@ impl Game {
         let config = self.world.read_resource::<GameConfig>();
         let mut gos = self.world.write_storage::<Geometry>();
         let players = self.world.read_storage::<IsPlayer>();
+
 
         for (geometry, _) in (&mut gos, &players).join() {
             let max_x = (config.dimensions.0 - geometry.width) as i32;
