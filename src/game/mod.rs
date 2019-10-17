@@ -105,8 +105,14 @@ impl Game {
     }
 
     pub fn tick(&mut self) {
+        self.handle_player_input();
+        self.move_game_objects();
+        self.constrain_player_to_screen();
+    }
+
+
+    fn handle_player_input(&mut self) {
         let players = self.world.read_storage::<IsPlayer>();
-        let mut gos = self.world.write_storage::<Geometry>();
         let mut movers = self.world.write_storage::<Mover>();
 
         for (mover, _) in (&mut movers, &players).join() {
@@ -118,13 +124,25 @@ impl Game {
                 mover.current_speed = 0;
             }
         }
+    }
 
+    fn move_game_objects(&mut self) {
+        let mut gos = self.world.write_storage::<Geometry>();
+        let mut movers = self.world.write_storage::<Mover>();
+
+        for (geometry, mover) in (&mut gos, &mut movers).join() {
+            geometry.x += mover.current_speed;
+        }
+    }
+
+    fn constrain_player_to_screen(&mut self) {
         let world_dimensions = self.world.read_resource::<WorldDimensions>();
+        let mut gos = self.world.write_storage::<Geometry>();
+        let players = self.world.read_storage::<IsPlayer>();
 
-        for (geometry, mover, _) in (&mut gos, &mut movers, &players).join() {
-            let new_x = geometry.x + mover.current_speed;
+        for (geometry, _) in (&mut gos, &players).join() {
             let max_x = (world_dimensions.width - geometry.width) as i32;
-            geometry.x = max(0, min(new_x, max_x));
+            geometry.x = max(0, min(geometry.x, max_x));
         }
     }
 
