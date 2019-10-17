@@ -10,8 +10,6 @@ fn render_player_ship_at_bottom_of_screen_centered() {
 
     let mut renderer = StringRenderer::new(9, 5);
 
-    renderer.register_sprite(0, 1, 3);
-
     game.render(&mut renderer);
 
     renderer.assert_frame(vec![

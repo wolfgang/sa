@@ -6,17 +6,15 @@ use crate::gfx::game_renderer::GameRenderer;
 type Frame = Vec<Vec<char>>;
 
 pub struct StringRenderer {
-    frame: Frame,
-    sprites: HashMap<u8, (u8, u8)>,
+    frame: Frame
 }
 
 impl GameRenderer for StringRenderer {
-    fn draw_sprite(&mut self, id: u8, x: u32, y: u32) {
-        let (width, height) = self.sprites.get(&id).unwrap();
+    fn draw_sprite(&mut self, id: u8, x: u32, y: u32, width: u32, height: u32) {
         let id_char = char::from_digit(id as u32, 10).unwrap();
 
-        for row in 0..*height {
-            for column in 0..*width {
+        for row in 0..height {
+            for column in 0..width {
                 let pixel_x = (column as u32 + x) as usize;
                 let pixel_y = (row as u32 + y) as usize;
                 self.frame[pixel_y][pixel_x] = id_char;
@@ -28,13 +26,8 @@ impl GameRenderer for StringRenderer {
 impl StringRenderer {
     pub fn new(width: usize, height: usize) -> Self {
         StringRenderer {
-            frame: Self::new_frame(width, height),
-            sprites: HashMap::with_capacity(10),
+            frame: Self::new_frame(width, height)
         }
-    }
-
-    pub fn register_sprite(&mut self, id: u8, width: u8, height: u8) {
-        self.sprites.insert(id, (width, height));
     }
 
     fn new_frame(width: usize, height: usize) -> Frame {

@@ -23,5 +23,7 @@ impl Game {
         GameBuilder {}
     }
 
-    pub fn render(&self, renderer: &mut dyn GameRenderer) {}
+    pub fn render<T>(&self, renderer: &mut T) where T: GameRenderer {
+        renderer.draw_sprite(0, 3, 4, 3, 1);
+    }
 }

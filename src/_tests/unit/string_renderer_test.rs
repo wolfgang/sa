@@ -18,10 +18,8 @@ const SPRITE2: u8 = 2;
 #[test]
 fn draw_sprite_fills_rect_with_sprite_id() {
     let mut sr = StringRenderer::new(6, 6);
-    sr.register_sprite(SPRITE1, 2, 3);
-    sr.register_sprite(SPRITE2, 3, 1);
-    sr.draw_sprite(SPRITE1, 1, 2);
-    sr.draw_sprite(SPRITE2, 1, 0);
+    sr.draw_sprite(SPRITE1, 1, 2, 2, 3);
+    sr.draw_sprite(SPRITE2, 1, 0, 3, 1);
 
     sr.assert_frame(vec![
         ".222..",
