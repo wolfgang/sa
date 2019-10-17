@@ -36,6 +36,13 @@ pub struct GameConfig {
     pub ship_speed: u32,
     pub bullet_dimensions: (u32, u32),
     pub bullet_speed: u32,
+    pub autofire_delay: u32,
+}
+
+#[derive(Default)]
+struct GameState {
+    current_tick: u32,
+    last_bullet_tick: u32,
 }
 
 
@@ -78,6 +85,11 @@ impl GameBuilder {
         self
     }
 
+    pub fn with_autofire_delay(&mut self, delay: u32) -> &mut Self {
+        self.config.autofire_delay = delay;
+        self
+    }
+
     pub fn with_input(&mut self, input: InputRef) -> &mut Self {
         self.input = input;
         self
@@ -102,6 +114,7 @@ impl GameBuilder {
             .build();
 
         world.insert(self.config.clone());
+        world.insert(GameState { current_tick: 1000, last_bullet_tick: 0 });
 
         Game { world, input: self.input.clone() }
     }
@@ -121,6 +134,10 @@ impl Game {
         self.handle_player_input();
         self.move_game_objects();
         self.constrain_player_to_screen();
+        {
+            let mut game_state = self.world.write_resource::<GameState>();
+            game_state.current_tick += 1;
+        }
         self.world.maintain();
     }
 
@@ -132,21 +149,25 @@ impl Game {
         let config = self.world.read_resource::<GameConfig>();
         let updater = self.world.read_resource::<LazyUpdate>();
         let entities = self.world.entities();
+        let mut game_state = self.world.write_resource::<GameState>();
 
 
         for (velocity, player_geom, _) in (&mut velocities, &gos, &players).join() {
             if self.input.borrow().is_key_down(KEY_SPACE) {
-                let bullet = entities.create();
-                let x = player_geom.x as u32 + config.ship_dimensions.0 / 2 - config.bullet_dimensions.0 / 2;
-                let y = player_geom.y as u32 - config.bullet_dimensions.1;
-                updater.insert(bullet, Geometry {
-                    x: x as i32,
-                    y: y as i32,
-                    width: config.bullet_dimensions.0,
-                    height: config.bullet_dimensions.1,
-                });
-                updater.insert(bullet, Velocity(0, -1 * config.bullet_speed as i32));
-                updater.insert(bullet, Sprite { id: 1 });
+                if game_state.current_tick - game_state.last_bullet_tick >= config.autofire_delay {
+                    game_state.last_bullet_tick = game_state.current_tick;
+                    let bullet = entities.create();
+                    let x = player_geom.x as u32 + config.ship_dimensions.0 / 2 - config.bullet_dimensions.0 / 2;
+                    let y = player_geom.y as u32 - config.bullet_dimensions.1;
+                    updater.insert(bullet, Geometry {
+                        x: x as i32,
+                        y: y as i32,
+                        width: config.bullet_dimensions.0,
+                        height: config.bullet_dimensions.1,
+                    });
+                    updater.insert(bullet, Velocity(0, -1 * config.bullet_speed as i32));
+                    updater.insert(bullet, Sprite { id: 1 });
+                }
             }
 
             if self.input.borrow().is_key_down(KEY_LEFT) {

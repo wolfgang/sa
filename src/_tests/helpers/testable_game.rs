@@ -40,6 +40,11 @@ impl TestableGameBuilder {
         self
     }
 
+    pub fn with_autofire_delay(&mut self, delay: u32) -> &mut Self {
+        self.game_builder = self.game_builder.with_autofire_delay(delay).clone();
+        self
+    }
+
     pub fn build(&mut self) -> TestableGame {
         let input = InputStub::new_rc();
         let game = self.game_builder

@@ -33,6 +33,7 @@ fn main() {
         .with_ship_speed(4)
         .with_bullet_speed(8)
         .with_bullet_dimensions(32, 32)
+        .with_autofire_delay(30)
         .build();
 
     let fps = 60;
