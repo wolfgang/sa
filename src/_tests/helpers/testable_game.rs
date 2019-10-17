@@ -31,10 +31,12 @@ impl TestableGameBuilder {
     }
 
     pub fn with_bullet_speed(&mut self, speed: u32) -> &mut Self {
+        self.game_builder = self.game_builder.with_bullet_speed(speed).clone();
         self
     }
 
     pub fn with_bullet_dimensions(&mut self, width: u32, height: u32) -> &mut Self {
+        self.game_builder = self.game_builder.with_bullet_dimensions(width, height).clone();
         self
     }
 

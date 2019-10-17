@@ -1,6 +1,6 @@
 use std::cmp::{max, min};
 
-use raylib::consts::{KEY_LEFT, KEY_RIGHT};
+use raylib::consts::{KEY_LEFT, KEY_RIGHT, KEY_SPACE};
 use specs::prelude::*;
 use specs_derive::Component;
 
@@ -40,6 +40,8 @@ pub struct GameBuilder {
     pub dimensions: (u32, u32),
     ship_dimensions: (u32, u32),
     ship_speed: u32,
+    bullet_dimensions: (u32, u32),
+    bullet_speed: u32,
     input: InputRef,
 }
 
@@ -49,6 +51,8 @@ impl GameBuilder {
             dimensions: (0, 0),
             ship_dimensions: (0, 0),
             ship_speed: 0,
+            bullet_dimensions: (0, 0),
+            bullet_speed: 0,
             input: InputNull::new_rc(),
         }
     }
@@ -64,6 +68,17 @@ impl GameBuilder {
 
     pub fn with_ship_speed(&mut self, speed: u32) -> &mut Self {
         self.ship_speed = speed;
+        self
+    }
+
+    pub fn with_bullet_dimensions(&mut self, width: u32, height: u32) -> &mut Self {
+        self.bullet_dimensions = (width, height);
+        self
+    }
+
+
+    pub fn with_bullet_speed(&mut self, speed: u32) -> &mut Self {
+        self.bullet_speed = speed;
         self
     }
 
@@ -90,13 +105,14 @@ impl GameBuilder {
 
         world.insert(WorldDimensions { width, height });
 
-        Game { world, input: self.input.clone() }
+        Game { world, input: self.input.clone(), config: self.clone() }
     }
 }
 
 pub struct Game {
     world: World,
     input: InputRef,
+    config: GameBuilder
 }
 
 impl Game {
@@ -112,10 +128,13 @@ impl Game {
 
 
     fn handle_player_input(&mut self) {
-        let players = self.world.read_storage::<IsPlayer>();
         let mut movers = self.world.write_storage::<Mover>();
+        let gos = self.world.read_storage::<Geometry>();
+        let players = self.world.read_storage::<IsPlayer>();
 
-        for (mover, _) in (&mut movers, &players).join() {
+
+        for (mover, geometry, _) in (&mut movers, &gos, &players).join() {
+
             if self.input.borrow().is_key_down(KEY_LEFT) {
                 mover.current_speed = mover.speed as i32 * -1;
             } else if self.input.borrow().is_key_down(KEY_RIGHT) {

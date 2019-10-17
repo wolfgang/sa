@@ -2,7 +2,6 @@ use raylib::consts::{KEY_RIGHT, KEY_SPACE};
 
 use crate::_tests::helpers::testable_game::TestableGame;
 
-#[ignore]
 #[test]
 fn pressing_space_spawns_bullet_from_ship_center() {
     let mut game = TestableGame::init()
