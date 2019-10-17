@@ -20,8 +20,9 @@ struct Mover {
 }
 
 
+#[derive(Clone)]
 pub struct GameBuilder {
-    dimensions: (u32, u32),
+    pub(crate) dimensions: (u32, u32),
     ship_dimensions: (u32, u32),
     ship_speed: u32,
     input: InputRef,
