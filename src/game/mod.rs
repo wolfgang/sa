@@ -168,6 +168,8 @@ impl Game {
                     updater.insert(bullet, Velocity(0, -1 * config.bullet_speed as i32));
                     updater.insert(bullet, Sprite { id: 1 });
                 }
+            } else {
+                game_state.last_bullet_tick = 0;
             }
 
             if self.input.borrow().is_key_down(KEY_LEFT) {

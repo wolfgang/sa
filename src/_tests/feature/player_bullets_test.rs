@@ -88,5 +88,37 @@ fn holding_space_down_spawns_bullets_every_n_ticks() {
         "....11....",
         "...0000...",
     ]);
+}
 
+#[test]
+fn releasing_space_resets_autofire_delay() {
+    let mut game = TestableGame::init()
+        .with_dimensions(10, 6)
+        .with_bullet_speed(1)
+        .with_autofire_delay(10)
+        .with_bullet_dimensions(2, 1)
+        .build();
+
+    game.key_is_down(KEY_SPACE);
+    game.tick();
+    game.renders_frame(vec![
+        "..........",
+        "..........",
+        "..........",
+        "..........",
+        "....11....",
+        "...0000...",
+    ]);
+    game.key_is_up(KEY_SPACE);
+    game.tick();
+    game.key_is_down(KEY_SPACE);
+    game.tick();
+    game.renders_frame(vec![
+        "..........",
+        "..........",
+        "....11....",
+        "..........",
+        "....11....",
+        "...0000...",
+    ]);
 }
