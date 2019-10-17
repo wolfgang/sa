@@ -13,12 +13,17 @@ struct Geometry {
     height: u32,
 }
 
+#[derive(Component)]
+struct Mover {
+    speed: u32
+}
+
 
 pub struct GameBuilder {
     dimensions: (u32, u32),
     ship_dimensions: (u32, u32),
     ship_speed: u32,
-    input: InputRef
+    input: InputRef,
 }
 
 impl GameBuilder {
@@ -53,12 +58,16 @@ impl GameBuilder {
     pub fn build(&self) -> Game {
         let mut world = World::new();
         world.register::<Geometry>();
+        world.register::<Mover>();
 
         let (ship_width, ship_height) = self.ship_dimensions;
         let (width, height) = self.dimensions;
         let x = width / 2 - ship_width / 2;
         let y = height - ship_height;
-        world.create_entity().with(Geometry { x, y, width: ship_width, height: ship_height }).build();
+        world.create_entity()
+            .with(Geometry { x, y, width: ship_width, height: ship_height })
+            .with(Mover { speed: self.ship_speed })
+            .build();
         Game { world, input: self.input.clone() }
     }
 }
@@ -78,10 +87,11 @@ impl Game {
     pub fn render<T>(&self, renderer: &mut T) where T: GameRenderer {
         renderer.clear();
         let mut gos = self.world.write_storage::<Geometry>();
+        let movers = self.world.read_storage::<Mover>();
 
-        for geometry in (&mut gos).join() {
+        for (geometry, mover) in (&mut gos, &movers).join() {
             if self.input.borrow().is_key_down(KEY_LEFT) {
-                geometry.x -= 1;
+                geometry.x -= mover.speed;
             }
             renderer.draw_sprite(0, geometry.x, geometry.y, geometry.width, geometry.height);
         }
