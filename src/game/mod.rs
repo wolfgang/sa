@@ -34,51 +34,52 @@ struct WorldDimensions {
     height: u32,
 }
 
+#[derive(Clone, Default)]
+pub struct GameConfig {
+    pub dimensions: (u32, u32),
+    pub ship_dimensions: (u32, u32),
+    pub ship_speed: u32,
+    pub bullet_dimensions: (u32, u32),
+    pub bullet_speed: u32,
+}
+
 
 #[derive(Clone)]
 pub struct GameBuilder {
-    pub dimensions: (u32, u32),
-    ship_dimensions: (u32, u32),
-    ship_speed: u32,
-    bullet_dimensions: (u32, u32),
-    bullet_speed: u32,
     input: InputRef,
+    pub(crate) config: GameConfig
 }
 
 impl GameBuilder {
     pub fn new() -> Self {
         Self {
-            dimensions: (0, 0),
-            ship_dimensions: (0, 0),
-            ship_speed: 0,
-            bullet_dimensions: (0, 0),
-            bullet_speed: 0,
             input: InputNull::new_rc(),
+            config: GameConfig::default()
         }
     }
     pub fn with_dimensions(&mut self, width: u32, height: u32) -> &mut Self {
-        self.dimensions = (width, height);
+        self.config.dimensions = (width, height);
         self
     }
 
     pub fn with_ship_dimensions(&mut self, width: u32, height: u32) -> &mut Self {
-        self.ship_dimensions = (width, height);
+        self.config.ship_dimensions = (width, height);
         self
     }
 
     pub fn with_ship_speed(&mut self, speed: u32) -> &mut Self {
-        self.ship_speed = speed;
+        self.config.ship_speed = speed;
         self
     }
 
     pub fn with_bullet_dimensions(&mut self, width: u32, height: u32) -> &mut Self {
-        self.bullet_dimensions = (width, height);
+        self.config.bullet_dimensions = (width, height);
         self
     }
 
 
     pub fn with_bullet_speed(&mut self, speed: u32) -> &mut Self {
-        self.bullet_speed = speed;
+        self.config.bullet_speed = speed;
         self
     }
 
@@ -93,26 +94,25 @@ impl GameBuilder {
         world.register::<Mover>();
         world.register::<IsPlayer>();
 
-        let (ship_width, ship_height) = self.ship_dimensions;
-        let (width, height) = self.dimensions;
+        let (ship_width, ship_height) = self.config.ship_dimensions;
+        let (width, height) = self.config.dimensions;
         let x = width / 2 - ship_width / 2;
         let y = height - ship_height;
         world.create_entity()
             .with(Geometry { x: x as i32, y: y as i32, width: ship_width, height: ship_height })
-            .with(Mover { speed: self.ship_speed, current_speed: 0 })
+            .with(Mover { speed: self.config.ship_speed, current_speed: 0 })
             .with(IsPlayer)
             .build();
 
         world.insert(WorldDimensions { width, height });
 
-        Game { world, input: self.input.clone(), config: self.clone() }
+        Game { world, input: self.input.clone() }
     }
 }
 
 pub struct Game {
     world: World,
     input: InputRef,
-    config: GameBuilder
 }
 
 impl Game {
@@ -134,7 +134,6 @@ impl Game {
 
 
         for (mover, geometry, _) in (&mut movers, &gos, &players).join() {
-
             if self.input.borrow().is_key_down(KEY_LEFT) {
                 mover.current_speed = mover.speed as i32 * -1;
             } else if self.input.borrow().is_key_down(KEY_RIGHT) {

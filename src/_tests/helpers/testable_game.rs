@@ -46,7 +46,7 @@ impl TestableGameBuilder {
             .with_input(input.clone())
             .build();
 
-        let (width, height) = self.game_builder.dimensions;
+        let (width, height) = self.game_builder.config.dimensions;
         let renderer = StringRenderer::new(width as usize, height as usize);
         TestableGame {
             input: input.clone(),
