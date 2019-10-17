@@ -23,6 +23,10 @@ struct Mover {
     current_speed: i32,
 }
 
+#[derive(Component, Default)]
+#[storage(NullStorage)]
+struct IsPlayer;
+
 #[derive(Default)]
 #[allow(dead_code)]
 struct WorldDimensions {
@@ -72,6 +76,7 @@ impl GameBuilder {
         let mut world = World::new();
         world.register::<Geometry>();
         world.register::<Mover>();
+        world.register::<IsPlayer>();
 
         let (ship_width, ship_height) = self.ship_dimensions;
         let (width, height) = self.dimensions;
@@ -80,6 +85,7 @@ impl GameBuilder {
         world.create_entity()
             .with(Geometry { x: x as i32, y: y as i32, width: ship_width, height: ship_height })
             .with(Mover { speed: self.ship_speed, current_speed: 0 })
+            .with(IsPlayer)
             .build();
 
         world.insert(WorldDimensions { width, height });
@@ -99,10 +105,11 @@ impl Game {
     }
 
     pub fn tick(&mut self) {
+        let players = self.world.read_storage::<IsPlayer>();
         let mut gos = self.world.write_storage::<Geometry>();
         let mut movers = self.world.write_storage::<Mover>();
 
-        for mover in (&mut movers).join() {
+        for (mover, _) in (&mut movers, &players).join() {
             if self.input.borrow().is_key_down(KEY_LEFT) {
                 mover.current_speed = mover.speed as i32 * -1;
             } else if self.input.borrow().is_key_down(KEY_RIGHT) {
@@ -114,7 +121,7 @@ impl Game {
 
         let world_dimensions = self.world.read_resource::<WorldDimensions>();
 
-        for (geometry, mover) in (&mut gos, &mut movers).join() {
+        for (geometry, mover, _) in (&mut gos, &mut movers, &players).join() {
             let new_x = geometry.x + mover.current_speed;
             let max_x = (world_dimensions.width - geometry.width) as i32;
             geometry.x = max(0, min(new_x, max_x));
