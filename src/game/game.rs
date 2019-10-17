@@ -7,15 +7,16 @@ use crate::gfx::game_renderer::GameRenderer;
 
 #[derive(Component)]
 struct Geometry {
-    x: u32,
-    y: u32,
+    x: i32,
+    y: i32,
     width: u32,
     height: u32,
 }
 
 #[derive(Component)]
 struct Mover {
-    speed: u32
+    speed: u32,
+    current_speed: i32,
 }
 
 
@@ -65,8 +66,8 @@ impl GameBuilder {
         let x = width / 2 - ship_width / 2;
         let y = height - ship_height;
         world.create_entity()
-            .with(Geometry { x, y, width: ship_width, height: ship_height })
-            .with(Mover { speed: self.ship_speed })
+            .with(Geometry { x: x as i32, y: y as i32, width: ship_width, height: ship_height })
+            .with(Mover { speed: self.ship_speed, current_speed: 0 })
             .build();
         Game { world, input: self.input.clone() }
     }
@@ -82,22 +83,29 @@ impl Game {
         GameBuilder::new()
     }
 
-    pub fn tick(&mut self) {}
+    pub fn tick(&mut self) {
+        let mut gos = self.world.write_storage::<Geometry>();
+        let mut movers = self.world.write_storage::<Mover>();
+
+        for mover in (&mut movers).join() {
+            if self.input.borrow().is_key_down(KEY_LEFT) {
+                mover.current_speed = mover.speed as i32 * -1;
+            } else if self.input.borrow().is_key_down(KEY_RIGHT) {
+                mover.current_speed = mover.speed as i32;
+            } else {
+                mover.current_speed = 0;
+            }
+        }
+
+        for (geometry, mover) in (&mut gos, &mut movers).join() {
+            geometry.x += mover.current_speed;
+        }
+    }
 
     pub fn render<T>(&self, renderer: &mut T) where T: GameRenderer {
         renderer.clear();
-        let mut gos = self.world.write_storage::<Geometry>();
-        let movers = self.world.read_storage::<Mover>();
-
-        for (geometry, mover) in (&mut gos, &movers).join() {
-            if self.input.borrow().is_key_down(KEY_LEFT) {
-                geometry.x -= mover.speed;
-            }
-
-            if self.input.borrow().is_key_down(KEY_RIGHT) {
-                geometry.x += mover.speed;
-            }
-
+        let gos = self.world.read_storage::<Geometry>();
+        for geometry in (&gos).join() {
             renderer.draw_sprite(0, geometry.x, geometry.y, geometry.width, geometry.height);
         }
     }

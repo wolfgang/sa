@@ -22,7 +22,7 @@ impl<'a> RaylibRenderer<'a> {
 }
 
 impl GameRenderer for RaylibRenderer<'_> {
-    fn draw_sprite(&mut self, id: u8, x: u32, y: u32, width: u32, height: u32) {
+    fn draw_sprite(&mut self, id: u8, x: i32, y: i32, width: u32, height: u32) {
         let source_rec = self.sprites.get(&id).unwrap();
         let dest_rec = Rectangle { x: x as f32, y: y as f32, width: width as f32, height: height as f32 };
         self.rl.draw_texture_pro(&self.sprite_sheet, *source_rec, dest_rec, Vector2::zero(), 0.0, Color::WHITE);
