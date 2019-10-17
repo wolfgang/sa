@@ -4,20 +4,20 @@ use crate::game::game::Game;
 #[test]
 fn render_player_ship_at_bottom_of_screen_centered() {
     let game = Game::init()
-        .with_dimensions(9, 5)
-        .with_ship_dimensions(3, 1)
+        .with_dimensions(10, 5)
+        .with_ship_dimensions(4, 1)
         .build();
 
-    let mut renderer = StringRenderer::new(9, 5);
+    let mut renderer = StringRenderer::new(10, 5);
 
     game.render(&mut renderer);
 
     renderer.assert_frame(vec![
-        ".........",
-        ".........",
-        ".........",
-        ".........",
-        "...000...",
+        "..........",
+        "..........",
+        "..........",
+        "..........",
+        "...0000..."
     ])
 
 }
