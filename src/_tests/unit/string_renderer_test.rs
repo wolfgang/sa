@@ -30,3 +30,13 @@ fn draw_sprite_fills_rect_with_sprite_id() {
         "......"
     ])
 }
+
+#[test]
+fn clear() {
+    let mut sr = StringRenderer::new(3, 2);
+    sr.draw_sprite(SPRITE1, 0, 0, 2, 2);
+    sr.clear();
+    sr.assert_frame(vec![
+        "...",
+        "..."]);
+}

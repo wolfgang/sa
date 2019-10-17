@@ -1,6 +1,8 @@
+use raylib::consts::KEY_LEFT;
 use specs::prelude::*;
 use specs_derive::Component;
 
+use crate::game::input::{InputNull, InputRef};
 use crate::gfx::game_renderer::GameRenderer;
 
 #[derive(Component)]
@@ -12,13 +14,22 @@ struct Geometry {
 }
 
 
-#[derive(Default)]
 pub struct GameBuilder {
     dimensions: (u32, u32),
     ship_dimensions: (u32, u32),
+    ship_speed: u32,
+    input: InputRef
 }
 
 impl GameBuilder {
+    pub fn new() -> Self {
+        Self {
+            dimensions: (0, 0),
+            ship_dimensions: (0, 0),
+            ship_speed: 0,
+            input: InputNull::new_rc(),
+        }
+    }
     pub fn with_dimensions(&mut self, width: u32, height: u32) -> &mut Self {
         self.dimensions = (width, height);
         self
@@ -26,6 +37,16 @@ impl GameBuilder {
 
     pub fn with_ship_dimensions(&mut self, width: u32, height: u32) -> &mut Self {
         self.ship_dimensions = (width, height);
+        self
+    }
+
+    pub fn with_ship_speed(&mut self, speed: u32) -> &mut Self {
+        self.ship_speed = speed;
+        self
+    }
+
+    pub fn with_input(&mut self, input: InputRef) -> &mut Self {
+        self.input = input;
         self
     }
 
@@ -38,21 +59,30 @@ impl GameBuilder {
         let x = width / 2 - ship_width / 2;
         let y = height - ship_height;
         world.create_entity().with(Geometry { x, y, width: ship_width, height: ship_height }).build();
-        Game { world }
+        Game { world, input: self.input.clone() }
     }
 }
 
-pub struct Game { pub world: World }
+pub struct Game {
+    world: World,
+    input: InputRef,
+}
 
 impl Game {
     pub fn init() -> GameBuilder {
-        GameBuilder::default()
+        GameBuilder::new()
     }
 
-    pub fn render<T>(&self, renderer: &mut T) where T: GameRenderer {
-        let gos = self.world.read_storage::<Geometry>();
+    pub fn tick(&mut self) {}
 
-        for geometry in gos.join() {
+    pub fn render<T>(&self, renderer: &mut T) where T: GameRenderer {
+        renderer.clear();
+        let mut gos = self.world.write_storage::<Geometry>();
+
+        for geometry in (&mut gos).join() {
+            if self.input.borrow().is_key_down(KEY_LEFT) {
+                geometry.x -= 1;
+            }
             renderer.draw_sprite(0, geometry.x, geometry.y, geometry.width, geometry.height);
         }
     }
