@@ -19,5 +19,4 @@ fn render_player_ship_at_bottom_of_screen_centered() {
         "..........",
         "...0000..."
     ])
-
 }
