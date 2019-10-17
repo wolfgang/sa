@@ -1,4 +1,4 @@
-use raylib::consts::KEY_LEFT;
+use raylib::consts::{KEY_LEFT, KEY_RIGHT};
 use specs::prelude::*;
 use specs_derive::Component;
 
@@ -93,6 +93,11 @@ impl Game {
             if self.input.borrow().is_key_down(KEY_LEFT) {
                 geometry.x -= mover.speed;
             }
+
+            if self.input.borrow().is_key_down(KEY_RIGHT) {
+                geometry.x += mover.speed;
+            }
+
             renderer.draw_sprite(0, geometry.x, geometry.y, geometry.width, geometry.height);
         }
     }
