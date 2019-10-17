@@ -7,7 +7,7 @@ type Frame = Vec<Vec<char>>;
 pub struct StringRenderer {
     frame: Frame,
     width: usize,
-    height: usize
+    height: usize,
 }
 
 impl GameRenderer for StringRenderer {
@@ -16,9 +16,12 @@ impl GameRenderer for StringRenderer {
 
         for row in 0..height {
             for column in 0..width {
-                let pixel_x = (column as i32 + x) as usize;
-                let pixel_y = (row as i32 + y) as usize;
-                self.frame[pixel_y][pixel_x] = id_char;
+                let pixel_x = column as i32 + x;
+                let pixel_y = row as i32 + y;
+                if pixel_x >= 0 && pixel_x < self.width as i32 &&
+                    pixel_y >= 0 && pixel_y < self.height as i32 {
+                    self.frame[pixel_y as usize][pixel_x as usize] = id_char;
+                }
             }
         }
     }
@@ -33,7 +36,7 @@ impl StringRenderer {
         StringRenderer {
             width,
             height,
-            frame: Self::new_frame(width, height)
+            frame: Self::new_frame(width, height),
         }
     }
 

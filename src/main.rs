@@ -29,7 +29,7 @@ fn main() {
         .with_dimensions(SCREEN_WIDTH, SCREEN_HEIGHT)
         .with_ship_dimensions(player_ship_rec.width as u32, player_ship_rec.height as u32)
         .with_input(RaylibInput::new_rc(rl.clone()))
-        .with_ship_speed(2)
+        .with_ship_speed(4)
         .build();
 
     let fps = 60;

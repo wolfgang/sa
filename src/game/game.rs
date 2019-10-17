@@ -1,3 +1,5 @@
+use std::cmp::{max, min};
+
 use raylib::consts::{KEY_LEFT, KEY_RIGHT};
 use specs::prelude::*;
 use specs_derive::Component;
@@ -19,10 +21,17 @@ struct Mover {
     current_speed: i32,
 }
 
+#[derive(Default)]
+#[allow(dead_code)]
+struct WorldDimensions {
+    width: u32,
+    height: u32,
+}
+
 
 #[derive(Clone)]
 pub struct GameBuilder {
-    pub(crate) dimensions: (u32, u32),
+    pub dimensions: (u32, u32),
     ship_dimensions: (u32, u32),
     ship_speed: u32,
     input: InputRef,
@@ -70,6 +79,9 @@ impl GameBuilder {
             .with(Geometry { x: x as i32, y: y as i32, width: ship_width, height: ship_height })
             .with(Mover { speed: self.ship_speed, current_speed: 0 })
             .build();
+
+        world.insert(WorldDimensions { width, height });
+
         Game { world, input: self.input.clone() }
     }
 }
@@ -98,10 +110,15 @@ impl Game {
             }
         }
 
+        let world_dimensions = self.world.read_resource::<WorldDimensions>();
+
         for (geometry, mover) in (&mut gos, &mut movers).join() {
-            geometry.x += mover.current_speed;
+            let new_x = geometry.x + mover.current_speed;
+            let max_x = (world_dimensions.width - geometry.width) as i32;
+            geometry.x = max(0, min(new_x, max_x));
         }
     }
+
 
     pub fn render<T>(&self, renderer: &mut T) where T: GameRenderer {
         renderer.clear();

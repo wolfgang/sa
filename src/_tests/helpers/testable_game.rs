@@ -2,18 +2,8 @@ use crate::_tests::helpers::input_stub::{InputStub, InputStubRef};
 use crate::_tests::helpers::string_renderer::StringRenderer;
 use crate::game::game::{Game, GameBuilder};
 
-const DEFAULT_FPS: u32 = 60;
-
 const DEFAULT_SHIP_WIDTH: u32 = 4;
 const DEFAULT_SHIP_HEIGHT: u32 = 1;
-const DEFAULT_SHIP_SPEED: u32 = 120;
-
-const DEFAULT_BULLET_WIDTH: u32 = 2;
-const DEFAULT_BULLET_HEIGHT: u32 = 1;
-const DEFAULT_BULLET_SPEED: u32 = 60;
-
-const DEFAULT_ENEMY_WIDTH: u8 = 2;
-const DEFAULT_ENEMY_HEIGHT: u8 = 2;
 
 pub struct TestableGameBuilder {
     game_builder: GameBuilder
@@ -45,7 +35,7 @@ impl TestableGameBuilder {
             .build();
 
         let (width, height) = self.game_builder.dimensions;
-        let mut renderer = StringRenderer::new(width as usize, height as usize);
+        let renderer = StringRenderer::new(width as usize, height as usize);
         TestableGame {
             input: input.clone(),
             renderer,
@@ -73,19 +63,8 @@ impl TestableGame {
         self.input.borrow_mut().key_is_up(key)
     }
 
-    pub fn tick_twice(&mut self) {
-        self.tick_times(2);
-    }
-
     pub fn tick_times(&mut self, times: u32) {
         for _ in 0..times { self.tick() }
-    }
-
-    pub fn loop_times(&mut self, times: u32) {
-        for _ in 0..times {
-            self.tick();
-            self.render();
-        }
     }
 
     pub fn tick(&mut self) {
