@@ -4,6 +4,7 @@ use crate::game::{Game, GameBuilder};
 
 const DEFAULT_SHIP_WIDTH: u32 = 4;
 const DEFAULT_SHIP_HEIGHT: u32 = 1;
+const DEFAULT_SHIP_SPEED: u32 = 1;
 
 pub struct TestableGameBuilder {
     game_builder: GameBuilder
@@ -14,6 +15,7 @@ impl TestableGameBuilder {
         Self {
             game_builder: GameBuilder::new()
                 .with_ship_dimensions(DEFAULT_SHIP_WIDTH, DEFAULT_SHIP_HEIGHT)
+                .with_ship_speed(DEFAULT_SHIP_SPEED)
                 .clone()
         }
     }
@@ -25,6 +27,14 @@ impl TestableGameBuilder {
 
     pub fn with_ship_speed(&mut self, speed: u32) -> &mut Self {
         self.game_builder = self.game_builder.with_ship_speed(speed).clone();
+        self
+    }
+
+    pub fn with_bullet_speed(&mut self, speed: u32) -> &mut Self {
+        self
+    }
+
+    pub fn with_bullet_dimensions(&mut self, width: u32, height: u32) -> &mut Self {
         self
     }
 
