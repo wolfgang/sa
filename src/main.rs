@@ -2,7 +2,7 @@ use std::rc::Rc;
 
 use raylib::Rectangle;
 
-use sa::game::game::Game;
+use sa::game::Game;
 use sa::raylib_input::RaylibInput;
 use sa::raylib_renderer::RaylibRenderer;
 
