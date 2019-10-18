@@ -1,6 +1,7 @@
 use crate::_tests::helpers::input_stub::{InputStub, InputStubRef};
 use crate::_tests::helpers::string_renderer::StringRenderer;
-use crate::game::{Game, GameBuilder};
+use crate::game::builder::GameBuilder;
+use crate::game::Game;
 
 const DEFAULT_SHIP_WIDTH: u32 = 4;
 const DEFAULT_SHIP_HEIGHT: u32 = 1;
