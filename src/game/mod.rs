@@ -13,6 +13,24 @@ pub mod builder;
 pub mod input;
 pub mod components;
 
+
+struct MoveGameObjects {}
+
+impl<'a> System<'a> for MoveGameObjects {
+    type SystemData = (
+        WriteStorage<'a, Geometry>,
+        ReadStorage<'a, Velocity>
+    );
+
+    fn run(&mut self, (mut geometries, velocities): Self::SystemData) {
+        for (geometry, velocity) in (&mut geometries, &velocities).join() {
+            geometry.x += velocity.0;
+            geometry.y += velocity.1;
+        }
+    }
+}
+
+
 #[derive(Default)]
 struct GameState {
     current_tick: u32,
@@ -35,7 +53,9 @@ impl Game {
 
     pub fn tick(&mut self) {
         self.handle_player_input();
-        self.move_game_objects();
+
+        let mut sys = MoveGameObjects {};
+        sys.run_now(&self.world);
         self.constrain_player_to_screen();
         {
             let mut game_state = self.world.write_resource::<GameState>();
@@ -82,16 +102,6 @@ impl Game {
             } else {
                 velocity.0 = 0;
             }
-        }
-    }
-
-    fn move_game_objects(&mut self) {
-        let mut gos = self.world.write_storage::<Geometry>();
-        let velocities = self.world.read_storage::<Velocity>();
-
-        for (geometry, velocity) in (&mut gos, &velocities).join() {
-            geometry.x += velocity.0;
-            geometry.y += velocity.1;
         }
     }
 
