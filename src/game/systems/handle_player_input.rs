@@ -1,18 +1,10 @@
-use raylib::consts::*;
 use specs::prelude::*;
 
 use crate::game::builder::GameConfig;
 use crate::game::components::*;
 use crate::game::GameState;
-use crate::game::input::InputRef;
 
-pub struct HandlePlayerInput { input: InputRef }
-
-impl HandlePlayerInput {
-    pub fn new(input: InputRef) -> Self {
-        Self { input }
-    }
-}
+pub struct HandlePlayerInput {}
 
 impl<'a> System<'a> for HandlePlayerInput {
     type SystemData = (
@@ -36,7 +28,7 @@ impl<'a> System<'a> for HandlePlayerInput {
         mut game_state): Self::SystemData)
     {
         for (velocity, player_geom, _) in (&mut velocities, &gos, &players).join() {
-            if self.input.borrow().is_key_down(KEY_SPACE) {
+            if game_state.shooting {
                 if game_state.current_tick - game_state.last_bullet_tick >= config.autofire_delay {
                     game_state.last_bullet_tick = game_state.current_tick;
                     let bullet = entities.create();
@@ -55,9 +47,9 @@ impl<'a> System<'a> for HandlePlayerInput {
                 game_state.last_bullet_tick = 0;
             }
 
-            if self.input.borrow().is_key_down(KEY_LEFT) {
+            if game_state.moving_left {
                 velocity.0 = config.ship_speed as i32 * -1;
-            } else if self.input.borrow().is_key_down(KEY_RIGHT) {
+            } else if game_state.moving_right {
                 velocity.0 = config.ship_speed as i32;
             } else {
                 velocity.0 = 0;

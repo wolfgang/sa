@@ -84,7 +84,7 @@ impl GameBuilder {
             .build();
 
         world.insert(self.config.clone());
-        world.insert(GameState { current_tick: 1000, last_bullet_tick: 0 });
+        world.insert(GameState { current_tick: 1000, ..Default::default() });
 
         Game::new(world, self.input.clone())
     }
