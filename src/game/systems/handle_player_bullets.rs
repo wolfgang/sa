@@ -4,11 +4,10 @@ use crate::game::builder::GameConfig;
 use crate::game::components::*;
 use crate::game::GameState;
 
-pub struct HandlePlayerInput {}
+pub struct HandlePlayerBullets {}
 
-impl<'a> System<'a> for HandlePlayerInput {
+impl<'a> System<'a> for HandlePlayerBullets {
     type SystemData = (
-        WriteStorage<'a, Velocity>,
         ReadStorage<'a, Geometry>,
         ReadStorage<'a, IsPlayer>,
         Read<'a, GameConfig>,
@@ -19,7 +18,6 @@ impl<'a> System<'a> for HandlePlayerInput {
 
 
     fn run(&mut self, (
-        mut velocities,
         gos,
         players,
         config,
@@ -27,7 +25,7 @@ impl<'a> System<'a> for HandlePlayerInput {
         entities,
         mut game_state): Self::SystemData)
     {
-        for (velocity, player_geom, _) in (&mut velocities, &gos, &players).join() {
+        for (player_geom, _) in (&gos, &players).join() {
             if game_state.shooting {
                 if game_state.current_tick - game_state.last_bullet_tick >= config.autofire_delay {
                     game_state.last_bullet_tick = game_state.current_tick;
@@ -45,14 +43,6 @@ impl<'a> System<'a> for HandlePlayerInput {
                 }
             } else {
                 game_state.last_bullet_tick = 0;
-            }
-
-            if game_state.moving_left {
-                velocity.0 = config.ship_speed as i32 * -1;
-            } else if game_state.moving_right {
-                velocity.0 = config.ship_speed as i32;
-            } else {
-                velocity.0 = 0;
             }
         }
     }
