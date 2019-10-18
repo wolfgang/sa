@@ -93,7 +93,7 @@ impl GameBuilder {
         world.insert(self.config.clone());
         world.insert(GameState { current_tick: 1000, last_bullet_tick: 0 });
 
-        Game { world, input: self.input.clone() }
+        Game::new(world, self.input.clone())
     }
 }
 
@@ -111,6 +111,10 @@ pub struct Game {
 impl Game {
     pub fn init() -> GameBuilder {
         GameBuilder::new()
+    }
+
+    pub fn new(world: World, input: InputRef) -> Self {
+        Self { world, input }
     }
 
     pub fn tick(&mut self) {
