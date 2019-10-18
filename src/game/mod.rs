@@ -20,7 +20,9 @@ pub struct GameState {
 
 pub struct Game {
     world: World,
-    input: InputRef,
+    handle_player_input: HandlePlayerInput,
+    move_game_objects: MoveGameObjects,
+    constrain_player_to_screen: ConstrainPlayerToScreen
 }
 
 impl Game {
@@ -29,16 +31,18 @@ impl Game {
     }
 
     pub fn new(world: World, input: InputRef) -> Self {
-        Self { world, input }
+        Self {
+            world,
+            handle_player_input: HandlePlayerInput::new(input),
+            move_game_objects: MoveGameObjects {},
+            constrain_player_to_screen: ConstrainPlayerToScreen {},
+        }
     }
 
     pub fn tick(&mut self) {
-        let mut handle_player_input = HandlePlayerInput::new(self.input.clone());
-        let mut move_game_objects = MoveGameObjects {};
-        let mut constrain_player_to_screen = ConstrainPlayerToScreen {};
-        handle_player_input.run_now(&self.world);
-        move_game_objects.run_now(&self.world);
-        constrain_player_to_screen.run_now(&self.world);
+        self.handle_player_input.run_now(&self.world);
+        self.move_game_objects.run_now(&self.world);
+        self.constrain_player_to_screen.run_now(&self.world);
 
         self.advance_tick();
         self.world.maintain();
