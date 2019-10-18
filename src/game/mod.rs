@@ -25,9 +25,7 @@ pub struct GameState {
 pub struct Game {
     world: World,
     input: InputRef,
-    handle_player_input: HandlePlayerInput,
-    move_game_objects: MoveGameObjects,
-    constrain_player_to_screen: ConstrainPlayerToScreen
+    dispatcher: Dispatcher<'static, 'static>
 }
 
 impl Game {
@@ -36,21 +34,21 @@ impl Game {
     }
 
     pub fn new(world: World, input: InputRef) -> Self {
+        let dispatcher = DispatcherBuilder::new()
+            .with(HandlePlayerInput {}, "handle_player_input", &[])
+            .with(MoveGameObjects {}, "move_game_objects", &[])
+            .with(ConstrainPlayerToScreen {}, "constrain_player_to_screen", &[])
+            .build();
         Self {
             world,
             input,
-            handle_player_input: HandlePlayerInput {},
-            move_game_objects: MoveGameObjects {},
-            constrain_player_to_screen: ConstrainPlayerToScreen {},
+            dispatcher
         }
     }
 
     pub fn tick(&mut self) {
         self.update_game_state();
-        self.handle_player_input.run_now(&self.world);
-        self.move_game_objects.run_now(&self.world);
-        self.constrain_player_to_screen.run_now(&self.world);
-
+        self.dispatcher.dispatch(&self.world);
         self.world.maintain();
     }
 
