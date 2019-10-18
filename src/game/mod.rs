@@ -2,32 +2,15 @@ use std::cmp::{max, min};
 
 use raylib::consts::{KEY_LEFT, KEY_RIGHT, KEY_SPACE};
 use specs::prelude::*;
-use specs_derive::Component;
 
-use crate::game::input::{InputNull, InputRef};
+use components::*;
+use input::{InputNull, InputRef};
+
 use crate::gfx::game_renderer::GameRenderer;
 
 pub mod input;
+pub mod components;
 
-#[derive(Component)]
-struct Geometry {
-    x: i32,
-    y: i32,
-    width: u32,
-    height: u32,
-}
-
-#[derive(Component)]
-struct Velocity(i32, i32);
-
-#[derive(Component)]
-struct Sprite {
-    id: u8
-}
-
-#[derive(Component, Default)]
-#[storage(NullStorage)]
-struct IsPlayer;
 
 #[derive(Clone, Default)]
 pub struct GameConfig {
@@ -39,18 +22,12 @@ pub struct GameConfig {
     pub autofire_delay: u32,
 }
 
-#[derive(Default)]
-struct GameState {
-    current_tick: u32,
-    last_bullet_tick: u32,
-}
-
-
 #[derive(Clone)]
 pub struct GameBuilder {
     input: InputRef,
     pub(crate) config: GameConfig,
 }
+
 
 impl GameBuilder {
     pub fn new() -> Self {
@@ -118,6 +95,12 @@ impl GameBuilder {
 
         Game { world, input: self.input.clone() }
     }
+}
+
+#[derive(Default)]
+struct GameState {
+    current_tick: u32,
+    last_bullet_tick: u32,
 }
 
 pub struct Game {
