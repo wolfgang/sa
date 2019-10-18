@@ -6,6 +6,7 @@ use builder::{GameBuilder, GameConfig};
 use components::*;
 use input::InputRef;
 use systems::handle_player_input::HandlePlayerInput;
+use systems::move_game_objects::MoveGameObjects;
 
 use crate::gfx::game_renderer::GameRenderer;
 
@@ -15,23 +16,7 @@ pub mod components;
 pub mod systems;
 
 
-struct MoveGameObjects {}
 struct ConstrainPlayerToScreen {}
-
-
-impl<'a> System<'a> for MoveGameObjects {
-    type SystemData = (
-        WriteStorage<'a, Geometry>,
-        ReadStorage<'a, Velocity>
-    );
-
-    fn run(&mut self, (mut geometries, velocities): Self::SystemData) {
-        for (geometry, velocity) in (&mut geometries, &velocities).join() {
-            geometry.x += velocity.0;
-            geometry.y += velocity.1;
-        }
-    }
-}
 
 impl<'a> System<'a> for ConstrainPlayerToScreen {
     type SystemData = (
