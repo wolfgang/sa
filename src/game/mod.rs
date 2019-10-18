@@ -4,7 +4,6 @@ use specs::prelude::*;
 use builder::GameBuilder;
 use components::*;
 use input::InputRef;
-use systems::*;
 
 use crate::gfx::game_renderer::GameRenderer;
 
@@ -33,12 +32,7 @@ impl Game {
         GameBuilder::new()
     }
 
-    pub fn new(world: World, input: InputRef) -> Self {
-        let dispatcher = DispatcherBuilder::new()
-            .with(HandlePlayerInput {}, "handle_player_input", &[])
-            .with(MoveGameObjects {}, "move_game_objects", &[])
-            .with(ConstrainPlayerToScreen {}, "constrain_player_to_screen", &[])
-            .build();
+    pub fn new(world: World, dispatcher: Dispatcher<'static, 'static>, input: InputRef) -> Self {
         Self {
             world,
             input,

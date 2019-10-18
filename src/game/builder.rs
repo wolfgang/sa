@@ -1,4 +1,6 @@
-use specs::{Builder, World, WorldExt};
+use specs::{Builder, DispatcherBuilder, World, WorldExt};
+
+use crate::game::systems::{ConstrainPlayerToScreen, HandlePlayerInput, MoveGameObjects};
 
 use super::components::*;
 use super::Game;
@@ -86,6 +88,13 @@ impl GameBuilder {
         world.insert(self.config.clone());
         world.insert(GameState { current_tick: 1000, ..Default::default() });
 
-        Game::new(world, self.input.clone())
+        let dispatcher = DispatcherBuilder::new()
+            .with(HandlePlayerInput {}, "handle_player_input", &[])
+            .with(MoveGameObjects {}, "move_game_objects", &[])
+            .with(ConstrainPlayerToScreen {}, "constrain_player_to_screen", &[])
+            .build();
+
+
+        Game::new(world, dispatcher, self.input.clone())
     }
 }
