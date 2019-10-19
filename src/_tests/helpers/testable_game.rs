@@ -52,6 +52,11 @@ impl TestableGameBuilder {
         self
     }
 
+    pub fn with_enemy_speed(&mut self, x: u32, y: u32) -> &mut Self {
+        self.game_builder = self.game_builder.with_enemy_speed(x, y).clone();
+        self
+    }
+
     pub fn build(&mut self) -> TestableGame {
         let input = InputStub::new_rc();
         let game = self.game_builder

@@ -36,6 +36,7 @@ fn main() {
         .with_input(RaylibInput::new_rc(rl.clone()))
         .with_ship_speed(4)
         .with_bullet_speed(8)
+        .with_enemy_speed(2, 1)
         .with_bullet_dimensions((bullet_rec.width / 1.5) as u32, (bullet_rec.height / 1.5) as u32)
         .with_autofire_delay(30)
         .with_enemy_count(1)

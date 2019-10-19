@@ -16,7 +16,8 @@ pub struct GameConfig {
     pub bullet_speed: u32,
     pub autofire_delay: u32,
     pub enemy_count: u32,
-    pub enemy_dimensions: (u32, u32)
+    pub enemy_dimensions: (u32, u32),
+    pub enemy_speed: (u32, u32),
 }
 
 #[derive(Clone)]
@@ -73,6 +74,11 @@ impl GameBuilder {
         self
     }
 
+    pub fn with_enemy_speed(&mut self, x: u32, y: u32) -> &mut Self {
+        self.config.enemy_speed = (x, y);
+        self
+    }
+
     pub fn with_input(&mut self, input: InputRef) -> &mut Self {
         self.input = input;
         self
@@ -85,6 +91,7 @@ impl GameBuilder {
         world.register::<IsPlayer>();
         world.register::<Sprite>();
         world.register::<IsBullet>();
+        world.register::<IsEnemy>();
 
         let (ship_width, ship_height) = self.config.ship_dimensions;
         let (width, height) = self.config.dimensions;
@@ -100,13 +107,14 @@ impl GameBuilder {
 
         if self.config.enemy_count == 1 {
             world.create_entity()
+                .with(IsEnemy)
                 .with(Geometry {
                     x: 0,
                     y: 0,
                     width: self.config.enemy_dimensions.0,
                     height: self.config.enemy_dimensions.1,
                 })
-                .with(Velocity(0, 0))
+                .with(Velocity(self.config.enemy_speed.0 as i32, self.config.enemy_speed.1 as i32))
                 .with(Sprite { id: 2 })
                 .build();
         }
@@ -130,6 +138,9 @@ impl GameBuilder {
                 ExpirePlayerBullets {},
                 "expire_player_bullets",
                 &["move_game_objects"])
+
+            .with(HandleEnemyMovement {}, "handle_enemy_movement", &["move_game_objects"])
+
             .build();
 
 

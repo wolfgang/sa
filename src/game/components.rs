@@ -24,3 +24,7 @@ pub struct IsPlayer;
 #[derive(Component, Default)]
 #[storage(NullStorage)]
 pub struct IsBullet;
+
+#[derive(Component, Default)]
+#[storage(NullStorage)]
+pub struct IsEnemy;
