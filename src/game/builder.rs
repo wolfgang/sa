@@ -73,6 +73,7 @@ impl GameBuilder {
         world.register::<Velocity>();
         world.register::<IsPlayer>();
         world.register::<Sprite>();
+        world.register::<IsBullet>();
 
         let (ship_width, ship_height) = self.config.ship_dimensions;
         let (width, height) = self.config.dimensions;
@@ -98,6 +99,10 @@ impl GameBuilder {
             .with(
                 ConstrainPlayerToScreen {},
                 "constrain_player_to_screen",
+                &["move_game_objects"])
+            .with(
+                ExpirePlayerBullets {},
+                "expire_player_bullets",
                 &["move_game_objects"])
             .build();
 

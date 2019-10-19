@@ -30,6 +30,7 @@ impl<'a> System<'a> for HandlePlayerBullets {
                 if game_state.current_tick - game_state.last_bullet_tick >= config.autofire_delay {
                     game_state.last_bullet_tick = game_state.current_tick;
                     let bullet = entities.create();
+                    updater.insert(bullet, IsBullet);
                     updater.insert(bullet, Self::get_bullet_geometry(&config, player_geom));
                     updater.insert(bullet, Velocity(0, -1 * config.bullet_speed as i32));
                     updater.insert(bullet, Sprite { id: 1 });
