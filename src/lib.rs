@@ -6,3 +6,4 @@ pub mod gfx;
 pub mod game;
 pub mod raylib_renderer;
 pub mod raylib_input;
+pub mod sprite_registry;
