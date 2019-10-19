@@ -55,3 +55,22 @@ fn ignore_pixels_out_of_bounds() {
     ]);
 }
 
+#[test]
+fn sprite_log_returns_list_of_sprites_rendered() {
+    let mut sr = StringRenderer::new(4, 4);
+
+    sr.draw_sprite(SPRITE1, 0, 1, 1, 2);
+    sr.draw_sprite(SPRITE2, 3, 1, 3, 4);
+    sr.draw_sprite(SPRITE2, 4, 2, 3, 4);
+
+    sr.assert_sprite_log_for(1, vec![
+        "1, 0, 1"
+    ]);
+
+    sr.assert_sprite_log_for(2, vec![
+        "2, 3, 1",
+        "2, 4, 2"
+    ])
+}
+
+

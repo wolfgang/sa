@@ -119,3 +119,22 @@ fn releasing_space_resets_autofire_delay() {
         "...0000...",
     ]);
 }
+
+#[test]
+fn bullet_is_removed_after_leaving_screen() {
+    let mut game = TestableGame::init()
+        .with_dimensions(10, 4)
+        .with_bullet_speed(1)
+        .with_autofire_delay(600)
+        .build();
+
+
+    game.key_is_down(KEY_SPACE);
+    game.loop_times(10);
+
+    game.assert_sprite_log_for(1, vec![
+        "1, 4, 2",
+        "1, 4, 1",
+        "1, 4, 0",
+    ])
+}

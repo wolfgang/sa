@@ -83,6 +83,13 @@ impl TestableGame {
         for _ in 0..times { self.tick() }
     }
 
+    pub fn loop_times(&mut self, times: u32) {
+        for _ in 0..times {
+            self.tick();
+            self.render();
+        }
+    }
+
     pub fn tick(&mut self) {
         self.game.tick();
     }
@@ -98,5 +105,9 @@ impl TestableGame {
 
     pub fn assert_frame(&self, expected_frame: Vec<&str>) {
         self.renderer.assert_frame(expected_frame)
+    }
+
+    pub fn assert_sprite_log_for(&self, id: u8, expected_log: Vec<&str>) {
+        self.renderer.assert_sprite_log_for(id, expected_log)
     }
 }
