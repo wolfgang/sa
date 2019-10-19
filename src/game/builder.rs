@@ -140,6 +140,7 @@ impl GameBuilder {
                 &["move_game_objects"])
 
             .with(HandleEnemyMovement {}, "handle_enemy_movement", &["move_game_objects"])
+            .with(CollidePlayerBullets {}, "collide_player_bullets", &["move_game_objects"])
 
             .build();
 
