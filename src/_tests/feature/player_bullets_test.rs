@@ -120,7 +120,6 @@ fn releasing_space_resets_autofire_delay() {
     ]);
 }
 
-#[ignore]
 #[test]
 fn bullet_is_removed_after_leaving_screen() {
     let mut game = TestableGame::init()
