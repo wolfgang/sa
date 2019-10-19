@@ -1,8 +1,6 @@
 use std::fs;
 use std::rc::Rc;
 
-use raylib::Rectangle;
-
 use sa::game::Game;
 use sa::raylib_input::RaylibInput;
 use sa::raylib_renderer::RaylibRenderer;
@@ -23,13 +21,14 @@ fn main() {
 
     let player_ship_rec = sprite_registry.get_source_rec("playerShip3_red.png");
     let bullet_rec = sprite_registry.get_source_rec("laserBlue08.png");
-//    let enemy_rec = sprite_registry.get_source_rec("enemyBlack2.png");
+    let enemy_rec = sprite_registry.get_source_rec("enemyBlack2.png");
 
 
 
     let mut renderer = RaylibRenderer::new(&rl);
     renderer.register_sprite(0, player_ship_rec);
     renderer.register_sprite(1, bullet_rec);
+    renderer.register_sprite(2, enemy_rec);
 
     let mut game = Game::init()
         .with_dimensions(SCREEN_WIDTH, SCREEN_HEIGHT)
@@ -39,6 +38,8 @@ fn main() {
         .with_bullet_speed(8)
         .with_bullet_dimensions((bullet_rec.width / 1.5) as u32, (bullet_rec.height / 1.5) as u32)
         .with_autofire_delay(30)
+        .with_enemy_count(1)
+        .with_enemy_dimensions((enemy_rec.width / 1.5) as u32, (enemy_rec.height / 1.5) as u32)
         .build();
 
     let fps = 60;

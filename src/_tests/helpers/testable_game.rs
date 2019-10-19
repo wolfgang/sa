@@ -8,6 +8,8 @@ const DEFAULT_SHIP_HEIGHT: u32 = 1;
 const DEFAULT_SHIP_SPEED: u32 = 1;
 const DEFAULT_BULLET_WIDTH: u32 = 2;
 const DEFAULT_BULLET_HEIGHT: u32 = 1;
+const DEFAULT_ENEMY_WIDTH: u32 = 3;
+const DEFAULT_ENEMY_HEIGHT: u32 = 1;
 
 pub struct TestableGameBuilder {
     game_builder: GameBuilder
@@ -20,6 +22,7 @@ impl TestableGameBuilder {
                 .with_ship_dimensions(DEFAULT_SHIP_WIDTH, DEFAULT_SHIP_HEIGHT)
                 .with_ship_speed(DEFAULT_SHIP_SPEED)
                 .with_bullet_dimensions(DEFAULT_BULLET_WIDTH, DEFAULT_BULLET_HEIGHT)
+                .with_enemy_dimensions(DEFAULT_ENEMY_WIDTH, DEFAULT_ENEMY_HEIGHT)
                 .clone()
         }
     }
@@ -41,6 +44,11 @@ impl TestableGameBuilder {
 
     pub fn with_autofire_delay(&mut self, delay: u32) -> &mut Self {
         self.game_builder = self.game_builder.with_autofire_delay(delay).clone();
+        self
+    }
+
+    pub fn with_enemy_count(&mut self, count: u32) -> &mut Self {
+        self.game_builder = self.game_builder.with_enemy_count(count).clone();
         self
     }
 

@@ -15,6 +15,8 @@ pub struct GameConfig {
     pub bullet_dimensions: (u32, u32),
     pub bullet_speed: u32,
     pub autofire_delay: u32,
+    pub enemy_count: u32,
+    pub enemy_dimensions: (u32, u32)
 }
 
 #[derive(Clone)]
@@ -62,6 +64,15 @@ impl GameBuilder {
         self
     }
 
+    pub fn with_enemy_count(&mut self, count: u32) -> &mut Self {
+        self.config.enemy_count = count;
+        self
+    }
+    pub fn with_enemy_dimensions(&mut self, width: u32, height: u32) -> &mut Self {
+        self.config.enemy_dimensions = (width, height);
+        self
+    }
+
     pub fn with_input(&mut self, input: InputRef) -> &mut Self {
         self.input = input;
         self
@@ -85,6 +96,21 @@ impl GameBuilder {
             .with(Sprite { id: 0 })
             .with(IsPlayer)
             .build();
+
+
+        if self.config.enemy_count == 1 {
+            world.create_entity()
+                .with(Geometry {
+                    x: 0,
+                    y: 0,
+                    width: self.config.enemy_dimensions.0,
+                    height: self.config.enemy_dimensions.1,
+                })
+                .with(Velocity(0, 0))
+                .with(Sprite { id: 2 })
+                .build();
+        }
+
 
         world.insert(self.config.clone());
         world.insert(GameState { current_tick: 1000, ..Default::default() });
