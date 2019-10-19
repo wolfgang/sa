@@ -18,10 +18,12 @@ impl<'a> System<'a> for HandleEnemyMovement {
     fn run(&mut self, (enemies, mut geometries, mut velocities, config): Self::SystemData) {
         for (_, geometry, velocity) in (&enemies, &mut geometries, &mut velocities).join() {
             let max_x = (config.dimensions.0 - geometry.width) as i32;
+            let max_y = config.dimensions.1 as i32;
             if geometry.x >= max_x || geometry.x <= 0 {
                 velocity.0 *= -1;
                 geometry.x = max(0, min(max_x, geometry.x));
             }
+            if geometry.y >= max_y { geometry.y = 0; }
         }
     }
 }
