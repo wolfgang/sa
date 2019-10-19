@@ -20,3 +20,7 @@ pub struct Sprite {
 #[derive(Component, Default)]
 #[storage(NullStorage)]
 pub struct IsPlayer;
+
+#[derive(Component, Default)]
+#[storage(NullStorage)]
+pub struct IsBullet;
