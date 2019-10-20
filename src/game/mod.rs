@@ -18,7 +18,8 @@ pub struct GameState {
     last_bullet_tick: u32,
     moving_left: bool,
     moving_right: bool,
-    shooting: bool
+    shooting: bool,
+    active_enemies: u32
 }
 
 pub struct Game {

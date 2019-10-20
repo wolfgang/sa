@@ -10,6 +10,7 @@ fn enemy_moves_from_left_to_right() {
         .with_enemy_speed(4, 0)
         .build();
 
+    game.tick();
     game.renders_frame(vec![
         "222.......",
         "..........",
@@ -61,7 +62,7 @@ fn after_enemy_leaves_screen_start_from_the_top() {
         .with_enemy_speed(1, 2)
         .build();
 
-    game.tick();
+    game.tick_times(2);
     game.renders_frame(vec![
         "..........",
         "..........",
@@ -84,7 +85,7 @@ fn after_enemy_leaves_screen_start_from_the_top() {
 }
 
 #[test]
-fn if_enemy_is_hit_with_bullet_it_disappears() {
+fn if_enemy_is_hit_with_bullet_it_disappears_and_a_new_one_is_spawned() {
     let mut game = TestableGame::init()
         .with_dimensions(10, 6)
         .with_enemy_count(1)
@@ -95,7 +96,7 @@ fn if_enemy_is_hit_with_bullet_it_disappears() {
     game.key_is_down(KEY_SPACE);
     game.tick();
     game.renders_frame(vec![
-        ".222......",
+        "222.......",
         "..........",
         "..........",
         "..........",
@@ -106,7 +107,7 @@ fn if_enemy_is_hit_with_bullet_it_disappears() {
     game.key_is_up(KEY_SPACE);
     game.tick();
     game.renders_frame(vec![
-        "..222.....",
+        ".222......",
         "..........",
         "....11....",
         "..........",
@@ -123,4 +124,15 @@ fn if_enemy_is_hit_with_bullet_it_disappears() {
         "..........",
         "...0000..."
     ]);
+
+    game.tick();
+    game.renders_frame(vec![
+        "222.......",
+        "..........",
+        "..........",
+        "..........",
+        "..........",
+        "...0000..."
+    ]);
+
 }

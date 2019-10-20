@@ -105,31 +105,21 @@ impl GameBuilder {
             .build();
 
 
-        if self.config.enemy_count == 1 {
-            world.create_entity()
-                .with(IsEnemy)
-                .with(Geometry {
-                    x: 0,
-                    y: 0,
-                    width: self.config.enemy_dimensions.0,
-                    height: self.config.enemy_dimensions.1,
-                })
-                .with(Velocity(self.config.enemy_speed.0 as i32, self.config.enemy_speed.1 as i32))
-                .with(Sprite { id: 2 })
-                .build();
-        }
-
-
         world.insert(self.config.clone());
-        world.insert(GameState { current_tick: 1000, ..Default::default() });
+        world.insert(GameState {
+            current_tick: self.config.autofire_delay,
+            ..Default::default()
+        });
 
         let dispatcher = DispatcherBuilder::new()
             .with(HandlePlayerMovement {}, "handle_player_movement", &[])
             .with(HandlePlayerBullets {}, "handle_player_bullets", &[])
+            .with(SpawnEnemies {}, "spawn_enemies", &[])
+
             .with(
                 MoveGameObjects {},
                 "move_game_objects",
-                &["handle_player_movement", "handle_player_bullets"])
+                &["handle_player_movement", "handle_player_bullets", "spawn_enemies"])
             .with(
                 ConstrainPlayerToScreen {},
                 "constrain_player_to_screen",
