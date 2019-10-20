@@ -1,8 +1,7 @@
-use specs::{Builder, DispatcherBuilder, World, WorldExt};
-
-use crate::game::systems::*;
+use specs::{Builder, WorldExt};
 
 use super::components::*;
+use super::ecs;
 use super::Game;
 use super::GameState;
 use super::input::{InputNull, InputRef};
@@ -85,13 +84,7 @@ impl GameBuilder {
     }
 
     pub fn build(&self) -> Game {
-        let mut world = World::new();
-        world.register::<Geometry>();
-        world.register::<Velocity>();
-        world.register::<IsPlayer>();
-        world.register::<Sprite>();
-        world.register::<IsBullet>();
-        world.register::<IsEnemy>();
+        let (mut world, dispatcher) = ecs::setup();
 
         let (ship_width, ship_height) = self.config.ship_dimensions;
         let (width, height) = self.config.dimensions;
@@ -104,36 +97,11 @@ impl GameBuilder {
             .with(IsPlayer)
             .build();
 
-
         world.insert(self.config.clone());
         world.insert(GameState {
             current_tick: self.config.autofire_delay,
             ..Default::default()
         });
-
-        let dispatcher = DispatcherBuilder::new()
-            .with(HandlePlayerMovement {}, "handle_player_movement", &[])
-            .with(HandlePlayerBullets {}, "handle_player_bullets", &[])
-            .with(SpawnEnemies {}, "spawn_enemies", &[])
-
-            .with(
-                MoveGameObjects {},
-                "move_game_objects",
-                &["handle_player_movement", "handle_player_bullets", "spawn_enemies"])
-            .with(
-                ConstrainPlayerToScreen {},
-                "constrain_player_to_screen",
-                &["move_game_objects"])
-            .with(
-                ExpirePlayerBullets {},
-                "expire_player_bullets",
-                &["move_game_objects"])
-
-            .with(HandleEnemyMovement {}, "handle_enemy_movement", &["move_game_objects"])
-            .with(CollidePlayerBullets {}, "collide_player_bullets", &["move_game_objects"])
-
-            .build();
-
 
         Game::new(world, dispatcher, self.input.clone())
     }

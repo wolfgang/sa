@@ -11,6 +11,7 @@ pub mod builder;
 pub mod input;
 pub mod components;
 pub mod systems;
+pub mod ecs;
 
 #[derive(Default)]
 pub struct GameState {
